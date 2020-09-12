@@ -1,0 +1,367 @@
+---
+title: "gateR: Gating strategy for mass cytometry using kernel density estimation"
+author: 'Ian D. Buller, Ph.D., M.A. (Github: @idblr)'
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gateR: Gating strategy for mass cytometry using kernel density estimation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+  knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = FALSE,  fig.width = 7, fig.height = 7, fig.show = "hold")
+```
+
+Start with the necessary packages and seed for the vignette.
+
+```{r packages}
+  loadedPackages <- c("gateR", "graphics", "maptools", "raster", "sp", "sparr", "spatstat.core", "stats", "tibble", "utils")
+  invisible(lapply(loadedPackages, library, character.only = TRUE))
+  set.seed(1234) # for reproducibility
+```
+
+### Generate random toy data using the `spatstat.core` package
+
+Unique function to randomly generate data multivariate normal (MVN) around a central point. Parameters include the centroid coordinates (`centre`), number of observations to generate (`ncell`), and the standard deviation of the normal distribution (`scalar`). 
+
+```{r rand_mvn function}
+  rand_mvn <- function(centre, ncell, scalar) {
+    x0 <- centre[1]  
+    y0 <- centre[2]
+    x1 <- rep(x0, ncell)
+    y1 <- rep(y0, ncell)
+    x2 <- x1 + stats::rnorm(ncell, 0, scalar) 
+    y2 <- y1 + stats::rnorm(ncell, 0, scalar) 
+    x <- cbind(x2, y2)
+  }
+```
+
+#### Gate 1: Marker 1 and  Marker 2
+
+At Time 0, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.55, 0.55`) and a control centroid at (`0.40, 0.40`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.15`). 
+
+```{r gate 1 time 0}
+# Initial parameters
+  ncell <- 100000 # number of observations per group per time
+  t0_cas_center <- c(0.55, 0.55)
+  t0_con_center <- c(0.40, 0.40)
+# V1 and V2 at Time 0
+  t0_cas <- rand_mvn(centre = t0_cas_center, ncell = ncell, scalar = 0.05)
+  t0_con <- rand_mvn(centre = t0_con_center, ncell = ncell, scalar = 0.15)
+  graphics::par(pty = "s")
+  graphics::plot(t0_con,
+                 col = "blue",
+                 xlim = c(0, 1),
+                 ylim = c(0, 1),
+                 main = "Gate 1, Time 0",
+                 xlab = "V1",
+                 ylab = "V2")
+  graphics::points(t0_cas, col = "orangered4")
+```
+
+At Time 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.45, 0.45`) and a control centroid at (`0.40, 0.40`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.10`). 
+
+```{r gate 1 time 1}
+# Initial parameters
+  t1_cas_center <- c(0.45, 0.45)
+  t1_con_center <- c(0.40, 0.40)
+# V1 and V2 at Time 1
+  t1_cas <- rand_mvn(centre = t1_cas_center, ncell = ncell, scalar = 0.05)
+  t1_con <- rand_mvn(centre = t1_con_center, ncell = ncell, scalar = 0.10)
+  graphics::par(pty = "s")
+  graphics::plot(t1_con,
+                 col = "cornflowerblue",
+                 xlim = c(0, 1),
+                 ylim = c(0, 1),
+                 main = "Gate 1, Time 1",
+                 xlab = "V1",
+                 ylab = "V2")
+  graphics::points(t1_cas, col = "orangered1")
+```
+
+```{r compile data}
+# compile data
+  df_full <- tibble::tibble("id" = seq(1, ncell * 2 * 2, 1),
+                            "group" = factor(c(rep("case", ncell * 2),
+                                               rep("control", ncell * 2))),
+                            "time" = factor(c(rep("1", ncell), rep("0", ncell),
+                                              rep("1", ncell), rep("0", ncell))),
+                            "V1" = c(t1_cas[ , 1], t0_cas[ , 1], t1_con[ , 1], t0_con[ , 1]),
+                            "V2" = c(t1_cas[ , 2], t0_cas[ , 2], t1_con[ , 2], t0_con[ , 2]))
+```
+
+#### Gate 2: Marker 3 and Marker 4
+
+At Time 0, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.55, 0.55`) and a control centroid at (`0.50, 0.50`) within a unit square window `(0, 05)`, but both have the same amount of spread (`scalar = 0.10`). 
+
+```{r gate 2 time 0}
+# Initial parameters
+  t0_cas_center <- c(0.55, 0.55)
+  t0_con_center <- c(0.50, 0.50)
+# V3 and V4 at Time 0
+  t0_cas <- rand_mvn(centre = t0_cas_center, ncell = ncell, scalar = 0.05)
+  t0_con <- rand_mvn(centre = t0_con_center, ncell = ncell, scalar = 0.10)
+  graphics::par(pty = "s")
+  graphics::plot(t0_con,
+                 col = "blue",
+                 xlim = c(0, 1),
+                 ylim = c(0, 1),
+                 main = "Gate 2, Time 0",
+                 xlab = "V3",
+                 ylab = "V4")
+  graphics::points(t0_cas, col = "orangered4")
+```
+
+At Time 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly with a case centroid at (`0.65, 0.65`) and control a centroid at (`0.50, 0.50`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.10`).
+
+```{r gate 2 time 1}
+# Initial parameters
+  t1_cas_center <- c(0.65, 0.65)
+  t1_con_center <- c(0.50, 0.50)
+# V3 and V4 at Time 1
+  t1_cas <- rand_mvn(centre = t1_cas_center, ncell = ncell, scalar = 0.05)
+  t1_con <- rand_mvn(centre = t1_con_center, ncell = ncell, scalar = 0.10)
+  graphics::par(pty = "s")
+  graphics::plot(t1_con,
+                 col = "cornflowerblue",
+                 xlim = c(0, 1),
+                 ylim = c(0, 1),
+                 main = "Gate 2, Time 1",
+                 xlab = "V3",
+                 ylab = "V4")
+  graphics::points(t1_cas, col = "orangered1")
+```
+
+Compile the toy data into a data frame
+
+```{r append data}
+  df_full$V3 <-  c(t1_cas[ , 1], t0_cas[ , 1], t1_con[ , 1], t0_con[ , 1])
+  df_full$V4 <-  c(t1_cas[ , 2], t0_cas[ , 2], t1_con[ , 2], t0_con[ , 2])
+```
+
+Generate random values for two example cytokines and append to the data frame.
+
+```{r cytokines}
+# Two Cytokines
+  C1 <- stats::rchisq(ncell * 4, df = 5) # Random Chi-square distribution
+  C2 <- stats::rnorm(ncell * 4, 0, 1) # Random Gaussian distribution
+# Append to data.frame
+  df_full$C1 <- C1
+  df_full$C2 <- C2
+# Visualize histograms by the two group conditions
+  graphics::par(mfrow = c(2, 2), pty = "s")
+  graphics::plot(stats::density(df_full$C1[df_full$group == "case" 
+                                           & df_full$time == "0"]),
+                 main = "Cytokine 1 of Cases at Time 0")
+  graphics::plot(stats::density(df_full$C1[df_full$group == "case" 
+                                           & df_full$time == "1"]),
+                 main = "Cytokine 1 of Cases at Time 1")
+  graphics::plot(stats::density(df_full$C1[df_full$group == "control"
+                                           & df_full$time == "0"]),
+                 main = "Cytokine 1 of Controls at Time 0")
+  graphics::plot(stats::density(df_full$C1[df_full$group == "control"
+                                           & df_full$time == "1"]),
+                 main = "Cytokine 1 of Controls at Time 1")
+  graphics::plot(stats::density(df_full$C2[df_full$group == "case"
+                                           & df_full$time == "0"]),
+                 main = "Cytokine 2 of Cases at Time 0")
+  graphics::plot(stats::density(df_full$C2[df_full$group == "case" 
+                                           & df_full$time == "1"]),
+                 main = "Cytokine 2 of Cases at Time 1")
+  graphics::plot(stats::density(df_full$C2[df_full$group == "control" 
+                                           & df_full$time == "0"]),
+                 main = "Cytokine 2 of Controls at Time 0")
+  graphics::plot(stats::density(df_full$C2[df_full$group == "control" 
+                                           & df_full$time == "1"]),
+                 main = "Cytokine 2 of Controls at Time 1")
+```
+
+The toy data frame has nine columns (id, groups, markers, and cytokines).
+
+```{r full data}
+  df_save <- df_full # create copy for latter example
+  utils::head(df_full)
+```
+
+### For a two conditions
+
+```{r 2C}
+# Initial parameters
+  alpha <- 0.05
+  vars <- c("V1", "V2", "V3", "V4")
+  p_cor <- "uncorrelated"
+  set.seed(1234) # for reproducibility
+
+# Gates 1 and 2
+  start_time <- Sys.time() # record start time
+  out_gate <- gateR::gating(dat = df_save,
+                            vars = vars,
+                            n_condition = 2,
+                            doplot = TRUE,
+                            alpha = alpha,
+                            p_cor = p_cor)
+  end_time <- Sys.time() # record end time
+  total_time <- end_time - start_time # calculate duration of gateRR() example
+```
+
+The gating process took about `r round(total_time, digits = 1)` *seconds* on a Macbook Pro (4 variables, 2 gates, 2 cytokines, `r format(nrow(df_save), big.mark= ",")` observations). The corrected signficance level in the first gate was `r formatC(out_gate$lrr[[1]]$alpha, format = "e", digits = 2)`. The histograms for the two cytokines are the same as above.
+
+```{r 2C cytokines A}
+# Plot of Cytokine 1
+  graphics::par(mfrow = c(1, 2), pty = "s")
+  graphics::plot(stats::density(out_gate$obs$C1[out_gate$obs$group == "case"
+                                                & out_gate$obs$time == "1"]),
+                 col = "red", main = "Cytokine 1 of cases\npost-gating",
+                 xlim = c(-5, 30),
+                 ylim = c(0, 0.2))
+  graphics::plot(stats::density(out_gate$obs$C1[out_gate$obs$group == "control" 
+                                                & out_gate$obs$time == "1"]),
+                 col = "blue",
+                 main = "Cytokine 1 of controls\npost-gating",
+                 xlim = c(-5, 30),
+                 ylim = c(0, 0.2))
+# Plot of Cytokine 2
+  graphics::par(mfrow = c(1, 2), pty = "s")
+  graphics::plot(stats::density(out_gate$obs$C2[out_gate$obs$group == "case"
+                                                & out_gate$obs$time == "1"]),
+                 col = "red",
+                 main = "Cytokine 2 of cases\npost-gating",
+                 xlim = c(-5, 5),
+                 ylim = c(0, 0.5))
+  graphics::plot(stats::density(out_gate$obs$C2[out_gate$obs$group == "control" 
+                                                & out_gate$obs$time == "1"]),
+                 col = "blue",
+                 main = "Cytokine 2 of controls\npost-gating",
+                 xlim = c(-5, 5),
+                 ylim = c(0, 0.5))
+```
+
+Compare histograms before and after gating. Gating reduced the overall sample size of observations from `r format(nrow(df_save), big.mark= ",")` (cases & controls and Time 0 & Time 1) to `r format(nrow(out_gate$obs), big.mark = ",")` observations (cases & controls and Time 0 & Time 1). 
+
+```{r 2C cytokines B}
+# Plot of Cytokine 1
+  graphics::par(mfrow = c(1, 2), pty = "s")
+  graphics::plot(stats::density(df_save$C1[df_save$group == "case"
+                                 & df_save$time == "1"]),
+                 col = "black",
+                 lty = 1,
+                 main = "Cytokine 1 of cases\npre-gating",
+                 xlim = c(-5, 30),
+                 ylim = c(0, 0.2))
+  graphics::plot(stats::density(out_gate$obs$C1[out_gate$obs$group == "case"
+                                      & out_gate$obs$time == "1"]),
+                 col = "black",
+                 lty = 1,
+                 main = "Cytokine 1 of cases\npost-gating",
+                 xlim = c(-5, 30),
+                 ylim = c(0, 0.2))
+# Plot of Cytokine 2
+  graphics::par(mfrow = c(1, 2), pty = "s")
+  graphics::plot(stats::density(df_save$C2[df_save$group == "case" 
+                                           & df_save$time == "1"]),
+                 col = "black",
+                 lty = 1,
+                 main = "Cytokine 2 of cases\npre-gating",
+                 xlim = c(-5, 5),
+                 ylim = c(0, 0.5))
+  graphics::plot(stats::density(out_gate$obs$C2[out_gate$obs$group == "case" 
+                                                & out_gate$obs$time == "1"]),
+                 col = "black",
+                 lty = 1, 
+                 main = "Cytokine 2 of cases\npost-gating",
+                 xlim = c(-5 ,5),
+                 ylim = c(0, 0.5))
+```
+
+### For a one condition (using only T0)
+
+```{r 1C}
+# Data subset, only T0
+  df_sub <- df_save[df_save$time == 0, ] # For only condition Time = 0
+
+# Initial parameters
+  alpha <- 0.05
+  vars <- c("V1", "V2", "V3", "V4")
+  p_cor <- "uncorrelated"
+  set.seed(1234) # for reproducibility
+  
+# Gates 1 and 2
+  start_time <- Sys.time() # record start time
+  out_gate <- gateR::gating(dat = df_sub,
+                            vars = vars,
+                            doplot = TRUE,
+                            n_condition = 1,
+                            alpha = alpha,
+                            p_cor = p_cor)
+  end_time <- Sys.time() # record end time
+  total_time <- end_time - start_time # calculate duration of gateRR() example
+```
+
+The gating process took about `r round(total_time, digits = 1)` *seconds* on a Macbook Pro (4 variables, 2 gates, 2 cytokines, `r format(nrow(df_sub), big.mark= ",")` observations). The corrected signficance level in the first gate was `r formatC(out_gate$lrr[[1]]$alpha, format = "e", digits = 2)`. The histograms for the two cytokines are the same as above.
+
+```{r 1C cytokines A}
+# Plot of Cytokine 1
+  graphics::par(mfrow = c(1, 2), pty = "s")
+  graphics::plot(stats::density(out_gate$obs$C1[out_gate$obs$group == "case"]),
+                 col = "red",
+                 main = "Cytokine 1 of cases\npost-gating",
+                 xlim = c(-5, 30),
+                 ylim = c(0, 0.2))
+  graphics::plot(stats::density(out_gate$obs$C1[out_gate$obs$group == "control"]),
+                 col = "blue",
+                 main = "Cytokine 1 of controls\npost-gating",
+                 xlim = c(-5, 30),
+                 ylim = c(0, 0.2))
+# Plot of Cytokine 2
+  graphics::par(mfrow = c(1, 2), pty = "s")
+  graphics::plot(stats::density(out_gate$obs$C2[out_gate$obs$group == "case"]),
+                 col = "red",
+                 main = "Cytokine 2 of cases\npost-gating",
+                 xlim = c(-5, 5),
+                 ylim = c(0, 0.5))
+  graphics::plot(stats::density(out_gate$obs$C2[out_gate$obs$group == "control"]),
+                 col = "blue",
+                 main = "Cytokine 2 of controls\npost-gating",
+                 xlim = c(-5, 5),
+                 ylim = c(0, 0.5))
+```
+
+Compare histograms before and after gating. Gating reduced the overall sample size of observations from `r format(nrow(df_sub), big.mark= ",")` (cases & controls) to `r format(nrow(out_gate$obs), big.mark = ",")` observations (cases & controls). 
+
+```{r 1C cytokines B}
+# Plot of Cytokine 1
+  graphics::par(mfrow = c(1, 2), pty = "s")
+  graphics::plot(stats::density(df_save$C1[df_save$group == "case"]),
+                 col = "black",
+                 lty = 1,
+                 main = "Cytokine 1 of cases\npre-gating",
+                 xlim = c(-5, 30),
+                 ylim = c(0, 0.2))
+  graphics::plot(stats::density(out_gate$obs$C1[out_gate$obs$group == "case"]),
+                 col = "black",
+                 lty = 1,
+                 main = "Cytokine 1 of cases\npost-gating",
+                 xlim = c(-5, 30),
+                 ylim = c(0, 0.2))
+# Plot of Cytokine 2
+  graphics::par(mfrow = c(1, 2), pty = "s")
+  graphics::plot(stats::density(df_save$C2[df_save$group == "case"]),
+                 col = "black",
+                 lty = 1,
+                 main = "Cytokine 2 of cases\npre-gating",
+                 xlim = c(-5, 5),
+                 ylim = c(0, 0.5))
+  graphics::plot(stats::density(out_gate$obs$C2[out_gate$obs$group == "case"]),
+                 col = "black",
+                 lty = 1,
+                 main = "Cytokine 2 of cases\npost-gating",
+                 xlim = c(-5 ,5),
+                 ylim = c(0, 0.5))
+```
+
+### Current limitations
+
+1. Extracts observations at *all* significant clusters (either case or controls). There is no ability to select which case cluster for the next gate. 
+2. Only two dimensions (i.e., Markers) per gate.
+3. Only two group comparisons (e.g., case v. control) per gate.

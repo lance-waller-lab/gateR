@@ -1,11 +1,66 @@
-Package: gateRR
+Package: gateR
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Gating strategy for mass cytometry using kernel density estimation
+Version: 0.1.0.9000
+Date: 2020-09-12
+Authors@R: 
+    c(person(given = "Ian D.",
+             family = "Buller",
+             role = c("aut", "cre", "cph"),
+             email = "ian.buller@nih.gov",
+             comment = c(ORCID = "0000-0001-9477-8582")),
+      person(given = "Elena",
+             family = "Hsieh",
+             role = "ctb",
+             email = "elena.hsieh@cuanschutz.edu"),
+      person(given = "Debashis",
+             family = "Ghosh",
+             role = "ctb",
+             email = "debashis.ghosh@cuanschutz.edu"),
+      person(given = "Lance A.",
+             family = "Waller",
+             role = "ctb",
+             email = "lwaller@emory.edu"),
+      person(given = "NCI",
+             role = c("cph"))
+             )
+Maintainer: Ian D. Buller <ian.buller@nih.gov>
+Description: Estimates statistically significant flourescent marker combination values within
+        which one immunologically distinctive group (i.e., disease case) is more associated than
+        another group (i.e., healthy control), successively, using various combinations (i.e.,
+        "gates") of flourescent markers to examine features of cells that may be different between
+        groups. For a two group comparison, the {gateR} package uses the spatial relative risk
+        function that is estimated using the {sparr} package. Details about the {sparr} package
+        methods can be found in the tutorial: Davies et al. (2018) <doi:10.1002/sim.7577>. Details
+        about kernel density estimation can be found in J. F. Bithell (1990) <doi:10.1002/sim.4780090616>.
+        More information about relative risk functions using kernel density estimation can be
+        found in J. F. Bithell (1991) <doi:10.1002/sim.4780101112>.
+License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Depends: R (>= 3.5.0)
+Imports: 
+    fields,
+    graphics,
+    grDevices,
+    maptools,
+    raster,
+    sp,
+    sparr,
+    spatstat.core,
+    stats,
+    tibble,
+    utils
+Suggests: 
+    flowWorkspaceData,
+    knitr,
+    ncdfFlow,
+    spelling,
+    testthat
+VignetteBuilder: knitr
+Language: en-US
+URL: https://github.com/Waller-SUSAN/gateR
+BugReports: https://github.com/Waller-SUSAN/gateR/issues
+Author: Ian D. Buller [aut, cre, cph]

@@ -1,74 +1,38 @@
-gateR: Gating strategy for mass cytometry using kernel density estimation <img src="man/figures/gateR.png" width="120" align="right" />
-===================================================
+install.packages(c("devtools", "roxygen2", "testthat", "knitr"))
+library(devtools)
+devtools::has_devel()
+library(roxygen2)
+library(testthat)
 
-<h2 id="overview">
+devtools::load_all()
 
-Overview
+getOption("gateR")
 
-</h2>
+# Convert roxygen components to .Rd files
+devtools::document()
+?gateR
 
-The `gateR` package is a suite of `R` functions to identify significant spatial clustering of mass cytometry data used in immunological investigations. For a two group comparison we detect clusters using the kernel-based spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The tests are conducted in two-dimenstional space comprised of two flourescent markers. 
+# Create Vignette
+install()
+build()
 
-Examples for a single condition:
+# Testing
+use_testthat()
+use_test()
+test()
 
-1. Disease case v. healthy control
-2. Time 1 v. Time 0
+# NAMESPACE
+document()
+install()
 
-For a two group comparison for two conditions we estimate two relative risk surfaces for one condition and then a ratio of the relative risks. For example:
+# Check
+check()
 
-1. Estimate a relative risk surface for
-A. Time 1: Disease case v. healthy control
-B. Time 0: Disease case v. healthy control
-2. Estimate  relative risk surface for Time 1 v. Time 2
+# Ignore .R files from /build directory
+usethis::use_build_ignore(c("build"))
+usethis::use_build_ignore(c("figures"))
 
-Within areas where the relative risk exceeds an asymptotic normal assumption, the `gateR` package has functionality to examine the features of these cells. Basic visualization is also supported. 
-
-<h2 id="install">
-
-Installation
-
-</h2>
-
-To install the release version from CRAN:
-
-    install.packages("gateR")
-
-To install the development version from GitHub:
-
-    devtools::install_github("Waller-SUSAN/gateR")
-
-<h2 id="available-functions">
-
-Available functions
-
-</h2>
-
-<table>
-<colgroup>
-<col width="30%" />
-<col width="70%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Function</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<td><code>gating</code></td>
-<td>Main function. Conduct a gating strategy for mass cytometry data.</td>
-</tr>
-<td><code>rrs</code></td>
-<td>Called within `gating`, one condition comparison.</td>
-</tr>
-<td><code>lotrrs</code></td>
-<td>Called within `gating`, two condition comparison. </td>
-</tr>
-</tbody>
-<table>
-
-## Usage
-``` r
+# Example in README
 # ------------------ #
 # Necessary packages #
 # ------------------ #
@@ -89,7 +53,7 @@ fr1 <- ncfs[[1]]
 fr2 <- ncfs[[2]]
 
 ## Comparison of two samples (single condition) "g1"
-## Two gates (four markers) "CD4", "CD38", "CD8", and "CD3"
+## Two gates (Four markers) "CD4", "CD38", "CD8", and "CD3"
 ## Log10 Transformation for all markers
 ## Remove cells with NA and Inf values
 
@@ -158,10 +122,50 @@ obs_dat <- obs_dat[ , c(1:2,7,3:6)]
 
 ## A p-value uncorrected for multiple testing
 test_lotrrs <- gateR::lotrrs(dat = obs_dat,
+                             doplot = FALSE,
                              p_cor = "none")
-```
-![](man/figures/gate1.png)
 
-![](man/figures/gate2.png)
 
-![](man/figures/postgate.png)
+# Example in lotrrs()
+  library(flowWorkspaceData)
+  library(ncdfFlow)
+  library(stats)
+
+# Use 'extdata' from the {flowWorkspaceData} package
+  flowDataPath <- system.file("extdata", package = "flowWorkspaceData")
+  fcsFiles <- list.files(pattern = "CytoTrol", flowDataPath, full = TRUE)
+  ncfs  <- ncdfFlow::read.ncdfFlowSet(fcsFiles)
+  fr1 <- ncfs[[1]]
+  fr2 <- ncfs[[2]]
+
+## Comparison of two samples at two time points (two conditions) "g1" and "g2"
+## (Create a random binary variable for "g2")
+## One gates (Two markers) "CD4", "CD38"
+## Log10 Transformation for both markers
+## Remove cells with NA and Inf values
+
+# First sample
+  obs_dat1 <- data.frame("id" = seq(1, nrow(fr1@exprs), 1),
+                         "g1" = rep(1, nrow(fr1@exprs)),
+                         "g2" = stats::rbinom(nrow(fr1@exprs), 1, 0.5),
+                         "log10_CD4" = log(fr1@exprs[ , 5], 10),
+                         "log10_CD38" = log(fr1@exprs[ , 6], 10))
+# Second sample
+  obs_dat2 <- data.frame("id" = seq(1, nrow(fr2@exprs), 1),
+                         "g1" = rep(2, nrow(fr2@exprs)),
+                         "g2" = stats::rbinom(nrow(fr2@exprs), 1, 0.5),
+                         "log10_CD4" = log(fr2@exprs[ , 5], 10),
+                         "log10_CD38" = log(fr2@exprs[ , 6], 10))
+# Full set
+  obs_dat <- rbind(obs_dat1, obs_dat2)
+  obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
+  obs_dat <- obs_dat[is.finite(rowSums(obs_dat)),] # remove Infs
+  obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
+  obs_dat$g2 <- as.factor(obs_dat$g2) # set "g2" as binary factor
+
+# Run lotrrs() function
+  test_lotrrs <- lotrrs(dat = obs_dat, p_cor = "none")
+
+
+
+plot(out_gate$rrs[[2]])

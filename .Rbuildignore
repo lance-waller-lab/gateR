@@ -1,2 +1,7 @@
+^LICENSE\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^vignette\.Rmd$
+^build$
+^figures$
+^gator\.png$
