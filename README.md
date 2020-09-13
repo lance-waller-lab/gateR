@@ -122,17 +122,24 @@ obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
 obs_dat <- obs_dat[is.finite(rowSums(obs_dat)),] # remove Infs
 obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
 
-# --------- #
-# Run gateR #
-# --------- #
+## Create a second condition (randomly split the data)
+## In practice, use data with a measured second condition
+g2 <- stats::rbinom(nrow(obs_dat), 1, 0.5)
+obs_dat$g2 <- as.factor(g2)
+obs_dat <- obs_dat[ , c(1:2,7,3:6)]
 
-# Single Condition
+# ---------------------------- #
+# Run gateR with one condition #
+# ---------------------------- #
+
+# Single condition
 ## A p-value uncorrected for multiple testing
-test_gate <- gateR::gating(dat = obs_dat,
-                           vars = c("log10_CD4", "log10_CD38", "log10_CD8", "log10_CD3"),
-                           n_condition = 1,
-                           doplot = TRUE,
-                           p_cor = "none")
+test_gating <- gateR::gating(dat = obs_dat,
+                             vars = c("log10_CD4", "log10_CD38",
+                                      "log10_CD8", "log10_CD3"),
+                             n_condition = 1,
+                             doplot = TRUE,
+                             p_cor = "none")
 
 # -------------------- #
 # Post-gate assessment #
@@ -148,6 +155,25 @@ graphics::legend("topright",
                  legend = c("Sample 1", "Sample 2"),
                  lty = c(2, 3),
                  bty = "n")
+```
+
+![](man/figures/gate1.png)
+
+![](man/figures/gate2.png)
+
+![](man/figures/postgate.png)
+
+```r
+# ----------------------------- #
+# Run gateR with two conditions #
+# ----------------------------- #
+
+## A p-value uncorrected for multiple testing
+test_gating2 <- gateR::gating(dat = obs_dat,
+                              vars = c("log10_CD4", "log10_CD38",
+                                       "log10_CD8", "log10_CD3"),
+                              n_condition = 2,
+                              p_cor = "none")
 
 # --------------------------------------------- #
 # Perform a single gate without data extraction #
@@ -159,18 +185,7 @@ test_rrs <- gateR::rrs(dat = obs_dat,
                        p_cor = "none")
 
 # Two conditions
-## Create a second condition (randomly split the data)
-## In practice, use data with a measured second condition
-g2 <- stats::rbinom(nrow(obs_dat), 1, 0.5)
-obs_dat$g2 <- as.factor(g2)
-obs_dat <- obs_dat[ , c(1:2,7,3:6)]
-
 ## A p-value uncorrected for multiple testing
 test_lotrrs <- gateR::lotrrs(dat = obs_dat,
                              p_cor = "none")
 ```
-![](man/figures/gate1.png)
-
-![](man/figures/gate2.png)
-
-![](man/figures/postgate.png)
