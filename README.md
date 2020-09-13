@@ -59,10 +59,19 @@ Available functions
 <td>Main function. Conduct a gating strategy for mass cytometry data.</td>
 </tr>
 <td><code>rrs</code></td>
-<td>Called within `gating`, one condition comparison.</td>
+<td>Called within <code>gating</code>, one condition comparison.</td>
 </tr>
 <td><code>lotrrs</code></td>
-<td>Called within `gating`, two condition comparison. </td>
+<td>Called within <code>gating</code>, two condition comparison. </td>
+</tr>
+<td><code>pval_correct</code></td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code> , calculates a Bonferroni corrected alpha level that accounts for the spatial correlation of a relative risk surface.</td>
+</tr>
+<td><code>lrr_plot</code></td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code> , provides functionality for basic visualization of log relative risk surfaces.</td>
+</tr>
+<td><code>pval_plot</code></td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code> , provides functionality for basic visualization of p-value surfaces.</td>
 </tr>
 </tbody>
 <table>
