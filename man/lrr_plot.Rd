@@ -14,7 +14,7 @@ lrr_plot(
 )
 }
 \arguments{
-\item{input}{An object of class 'rrs' from the \code{\link{lrren}} function.}
+\item{input}{An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.}
 
 \item{midpoint}{Numeric. The value to center the diverging color palette.}
 
@@ -24,7 +24,7 @@ lrr_plot(
 
 \item{digits}{Integer. The number of significant digits for the labels using the \code{round} function (default is 1).}
 
-\item{plot_cols}{Character string of length three (3) specifying the colors for plotting: 1) presence, 2) neither, and 3) absence from the \code{\link{plot_obs}} function.}
+\item{plot_cols}{Character string of length three (3) specifying the colors for plotting: 1) numerator, 2) insignificant, and 3) denominator from the \code{\link{rrs}} or \code{\link{lotrrs}}  function.}
 }
 \value{
 An object of class 'list'. This is a named list with the following components:

@@ -7,9 +7,9 @@
 pval_plot(input, alpha)
 }
 \arguments{
-\item{input}{An object of class 'rrs' from the \code{\link{lrren}} function.}
+\item{input}{An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.}
 
-\item{alpha}{Numeric. The two-tailed alpha level for significance threshold (default in \code{\link{rrs}}, \code{\link{lotrrs}}, and \code{\link{gate}} functions is 0.05).}
+\item{alpha}{Numeric. The two-tailed alpha level for significance threshold (default in \code{\link{rrs}}, \code{\link{lotrrs}}, and \code{\link{gating}} functions is 0.05).}
 }
 \value{
 An object of class 'raster' with categorical values:
@@ -17,10 +17,10 @@ An object of class 'raster' with categorical values:
 \itemize{
 \item A value of 1: Significant numerator.
 \item A value of 2: Insignificant.
-\item A value of 3: Significant demoninator.
+\item A value of 3: Significant denominator.
 }
 }
 \description{
-Internal function to convert an object of class 'im' to values readable by \code{\link[fields]{image.plot}} function within the \code{\link{rrs}}, \code{\link{lotrrs}}, and \code{\link{gate}} functions.
+Internal function to convert an object of class 'im' to values readable by \code{\link[fields]{image.plot}} function within the \code{\link{rrs}}, \code{\link{lotrrs}}, and \code{\link{gating}} functions.
 }
 \keyword{internal}

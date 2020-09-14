@@ -190,8 +190,9 @@ The toy data frame has nine columns (id, groups, markers, and cytokines).
 # Initial parameters
   alpha <- 0.05
   vars <- c("V1", "V2", "V3", "V4")
-  p_cor <- "uncorrelated"
+  p_correct <- "uncorrelated"
   set.seed(1234) # for reproducibility
+  df_save <- as.data.frame(df_save)
 
 # Gates 1 and 2
   start_time <- Sys.time() # record start time
@@ -200,12 +201,12 @@ The toy data frame has nine columns (id, groups, markers, and cytokines).
                             n_condition = 2,
                             doplot = TRUE,
                             alpha = alpha,
-                            p_cor = p_cor)
+                            p_correct = p_correct)
   end_time <- Sys.time() # record end time
   total_time <- end_time - start_time # calculate duration of gateRR() example
 ```
 
-The gating process took about `r round(total_time, digits = 1)` *seconds* on a Macbook Pro (4 variables, 2 gates, 2 cytokines, `r format(nrow(df_save), big.mark= ",")` observations). The corrected signficance level in the first gate was `r formatC(out_gate$lrr[[1]]$alpha, format = "e", digits = 2)`. The histograms for the two cytokines are the same as above.
+The gating process took about `r round(total_time, digits = 1)` *seconds* on a Macbook Pro (4 variables, 2 gates, 2 cytokines, `r format(nrow(df_save), big.mark= ",")` observations). The corrected significance level in the first gate was `r formatC(out_gate$lrr[[1]]$alpha, format = "e", digits = 2)`. The histograms for the two cytokines are the same as above.
 
 ```{r 2C cytokines A}
 # Plot of Cytokine 1
@@ -283,7 +284,7 @@ Compare histograms before and after gating. Gating reduced the overall sample si
 # Initial parameters
   alpha <- 0.05
   vars <- c("V1", "V2", "V3", "V4")
-  p_cor <- "uncorrelated"
+  p_correct <- "uncorrelated"
   set.seed(1234) # for reproducibility
   
 # Gates 1 and 2
@@ -293,12 +294,12 @@ Compare histograms before and after gating. Gating reduced the overall sample si
                             doplot = TRUE,
                             n_condition = 1,
                             alpha = alpha,
-                            p_cor = p_cor)
+                            p_correct = p_correct)
   end_time <- Sys.time() # record end time
   total_time <- end_time - start_time # calculate duration of gateRR() example
 ```
 
-The gating process took about `r round(total_time, digits = 1)` *seconds* on a Macbook Pro (4 variables, 2 gates, 2 cytokines, `r format(nrow(df_sub), big.mark= ",")` observations). The corrected signficance level in the first gate was `r formatC(out_gate$lrr[[1]]$alpha, format = "e", digits = 2)`. The histograms for the two cytokines are the same as above.
+The gating process took about `r round(total_time, digits = 1)` *seconds* on a Macbook Pro (4 variables, 2 gates, 2 cytokines, `r format(nrow(df_sub), big.mark= ",")` observations). The corrected significance level in the first gate was `r formatC(out_gate$lrr[[1]]$alpha, format = "e", digits = 2)`. The histograms for the two cytokines are the same as above.
 
 ```{r 1C cytokines A}
 # Plot of Cytokine 1

@@ -36,8 +36,7 @@ obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
 obs_dat <- obs_dat[is.finite(rowSums(obs_dat)), ] # remove Infs
 obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
 
-## Create a second condition (randomly split the data)
-## In practice, use data with a measured second condition
+## Create a placeholder variable
 g2 <- stats::rbinom(nrow(obs_dat), 1, 0.5)
 obs_dat$g2 <- as.factor(g2)
 obs_dat <- obs_dat[ , c(1:2,5,3:4)]

@@ -5,14 +5,14 @@
 #' @param dat Input data frame flow cytometry data with four (4) features (columns): 1) ID, 2) Condition A ID, 3) Marker A as x-coordinate, 4) Marker B as y-coordinate.
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default is 0.05).
 #' @param p_correct Character string specifying whether to apply a correction for multiple comparisons including a Bonferroni correction \code{p_correct = "uncorrelated"} or a correlated Bonferroni correction \code{p_correct = "correlated"}. If \code{p_correct = "none"} then no correction is applied. 
-#' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{nbclass}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis). 
+#' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis). 
 #' @param doplot Logical. If \code{TRUE}, the output includes basic data visualizations.
 #' @param rcols Character string of length three (3) specifying the colors for: 1) Group A, 2) Neither, and 3) Group B designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
 #' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
 #'
-#' @details This function estimates a relative risk surface and computes the asymptotic p-value surface for a single gate and single condition using the \code{\link[sparr]{risk}} function. Bandwidth is fixed across both layers (numerator and demoninator spatial densities). Basic visualization is available if \code{doplot = TRUE}. 
+#' @details This function estimates a relative risk surface and computes the asymptotic p-value surface for a single gate and single condition using the \code{\link[sparr]{risk}} function. Bandwidth is fixed across both layers (numerator and denominator spatial densities). Basic visualization is available if \code{doplot = TRUE}. 
 #' 
 #' Provides functionality for a correction for multiple testing. If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 #'
@@ -66,9 +66,14 @@
 #'   obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
 #'   obs_dat <- obs_dat[is.finite(rowSums(obs_dat)), ] # remove Infs
 #'   obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
+#'   
+#' # Create a placeholder variable
+#'   g2 <- stats::rbinom(nrow(obs_dat), 1, 0.5)
+#'   obs_dat$g2 <- as.factor(g2)
+#'   obs_dat <- obs_dat[ , c(1:2,5,3:4)]
 #' 
 #' # Run rrs() function
-#'   test_rrs <- rrs(dat = obs_dat, p_correct = "none")
+#'   test_rrs <- rrs(dat = obs_dat)
 #'   
 rrs <- function(dat, 
                 alpha = 0.05, 

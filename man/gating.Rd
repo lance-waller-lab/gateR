@@ -10,7 +10,7 @@ gating(
   n_condition = c(1, 2),
   numerator = TRUE,
   alpha = 0.05,
-  p_cor = c("none", "correlated", "uncorrelated"),
+  p_correct = "none",
   nbc = NULL,
   doplot = FALSE,
   rcols = c("#FF0000", "#cccccc", "#0000FF"),
@@ -24,11 +24,15 @@ gating(
 
 \item{vars}{A vector of characters with the name of features (columns) within \code{dat} to use as markers for each gate. See details below.}
 
+\item{n_condition}{A numeric value of either 1 or 2 designating if the gating is performed with one condition or two conditions.}
+
 \item{numerator}{Logical. If \code{TRUE} (the default), cells will be extracted within all statistically significant numerator (i.e., case) clusters. If \code{FALSE}, cells will be extracted within all statistically significant denominator (i.e., control) clusters.}
 
 \item{alpha}{Numeric. The two-tailed alpha level for significance threshold (default is 0.05).}
 
-\item{nbc}{Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{nbclass}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis).}
+\item{p_correct}{Character string specifying whether to apply a correction for multiple comparisons including a Bonferroni correction \code{p_correct = "uncorrelated"} or a correlated Bonferroni correction \code{p_correct = "correlated"}. If \code{p_correct = "none"} (the default), then no correction is applied.}
+
+\item{nbc}{Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis).}
 
 \item{doplot}{Logical. If \code{TRUE}, the output includes basic data visualizations.}
 
@@ -39,10 +43,6 @@ gating(
 \item{verbose}{Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.}
 
 \item{...}{Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.}
-
-\item{n_conditions}{A numeric value of either 1 or 2 designating if the gating is performed with one condition or two conditions.}
-
-\item{p_correct}{Character string specifying whether to apply a correction for multiple comparisons including a Bonferroni correction \code{p_correct = "uncorrelated"} or a correlated Bonferroni correction \code{p_correct = "correlated"}. If \code{p_correct = "none"} then no correction is applied.}
 }
 \value{
 An object of class \code{list}. This is a named list with the following components:
@@ -63,18 +63,18 @@ The objects of class 'rrs' is similar to the output of the \code{\link[sparr]{ri
 }
 }
 \description{
-Extracts cells within statistically significant combinations of flourescent markers, successively, for a set of markers. Statistically significant combinations are idetnified using two-tailed p-values of a relative risk surface assuming asymptotic normality. This function is currently available for two-level comparisons of a single group (e.g., case/control) or two groups (e.g., case/control at time 1 and time 2). Provides functionality for basic visualization and multiple testing correction.
+Extracts cells within statistically significant combinations of fluorescent markers, successively, for a set of markers. Statistically significant combinations are identified using two-tailed p-values of a relative risk surface assuming asymptotic normality. This function is currently available for two-level comparisons of a single group (e.g., case/control) or two groups (e.g., case/control at time 1 and time 2). Provides functionality for basic visualization and multiple testing correction.
 }
 \details{
-This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two flourescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{doplot = TRUE}.
+This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{doplot = TRUE}.
 
 The \code{vars} argument must be a vector with an even-numbered length where the odd-numbered elements are the markers used on the x-axis of a gate and the even-numbered elements are the markers used on the y-axis of a gate. For example, if \code{vars = c("V1", "V2", "V3", and "V4")} then the first gate is "V1" on the x-axis and "V2" on the y-axis and then the second gate is V3" on the x-axis and "V4" on the y-axis. Makers can be repeated in successive gates.
 
-The \code{n_conditions} argument specifies if the gating strategy is performed for one condition or two conditions. If \code{n_conditions = 1}, then the function performs a one condition gating strategy using the internal \code{rrs} function, which computes the statistically significant areas (clusers) of a relative risk surface at each gate and selects the cells within the clusters specified by the \code{numerator} argument. If \code{n_conditions = 2}, then the function performs a two conditions gating strategy using the internal \code{lotrrs} function, which computes the statistically significant areas (clusers) of a ratio of relative risk surfaces at each gate and selects the cells within the clusters specified by the \code{numerator} argument. See the documentation for the internal \code{rrs} and \code{lotrrs} functions for more details.
+The \code{n_condition} argument specifies if the gating strategy is performed for one condition or two conditions. If \code{n_condition = 1}, then the function performs a one condition gating strategy using the internal \code{rrs} function, which computes the statistically significant areas (clusters) of a relative risk surface at each gate and selects the cells within the clusters specified by the \code{numerator} argument. If \code{n_condition = 2}, then the function performs a two conditions gating strategy using the internal \code{lotrrs} function, which computes the statistically significant areas (clusters) of a ratio of relative risk surfaces at each gate and selects the cells within the clusters specified by the \code{numerator} argument. See the documentation for the internal \code{rrs} and \code{lotrrs} functions for more details.
 
 The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers.
 
-Provides functionality for a correction for multiple testing.  If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"}, then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
+Provides functionality for a correction for multiple testing.  If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 }
 \examples{
   library(flowWorkspaceData)
@@ -109,7 +109,7 @@ Provides functionality for a correction for multiple testing.  If \code{p_correc
 # Full set
   obs_dat <- rbind(obs_dat1, obs_dat2)
   obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
-  obs_dat <- obs_dat[is.finite(rowSums(obs_dat)),] # remove Infs
+  obs_dat <- obs_dat[is.finite(rowSums(obs_dat)), ] # remove Infs
   obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
 
 # Run gating() function
@@ -118,6 +118,6 @@ Provides functionality for a correction for multiple testing.  If \code{p_correc
                              vars = c("log10_CD4", "log10_CD38",
                                       "log10_CD8", "log10_CD3"),
                              n_condition = 1,
-                             p_cor = "none")
+                             p_correct = "none")
 
 }

@@ -107,19 +107,7 @@ test_that("lotrrs works", {
 
   expect_named(
     lotrrs(dat = obs_dat,
-        alpha = 0.1,
-        p_correct = "none")
-  )
-
-  expect_named(
-    lotrrs(dat = obs_dat,
         alpha = 0.01,
-        p_correct = "none")
-  )
-
-  expect_named(
-    lotrrs(dat = obs_dat,
-        doplot = TRUE,
         p_correct = "none")
   )
 

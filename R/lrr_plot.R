@@ -2,8 +2,8 @@
 #'
 #' Internal function to convert an object of class 'im' to values readable by \code{\link[fields]{image.plot}} function within the \code{\link{rrs}} and \code{\link{lotrrs}} functions.
 #'
-#' @param input An object of class 'rrs' from the \code{\link{lrren}} function.
-#' @param plot_cols Character string of length three (3) specifying the colors for plotting: 1) presence, 2) neither, and 3) absence from the \code{\link{plot_obs}} function.
+#' @param input An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.
+#' @param plot_cols Character string of length three (3) specifying the colors for plotting: 1) numerator, 2) insignificant, and 3) denominator from the \code{\link{rrs}} or \code{\link{lotrrs}}  function.
 #' @param midpoint Numeric. The value to center the diverging color palette.
 #' @param thresh_up Numeric. The upper value to concatenate the color key. The default (NULL) uses the maximum value from \code{input}.
 #' @param thresh_low Numeric. The lower value to concatenate the color key. The default (NULL) uses the minimum value from \code{input}.
@@ -22,6 +22,7 @@
 #' @importFrom grDevices colorRampPalette
 #' @importFrom raster raster
 #' @importFrom sp coordinates gridded
+#' @importFrom stats na.omit
 #' @export
 #'
 #' @keywords internal
@@ -53,7 +54,7 @@ lrr_plot <- function(input,
                     "y" = ry,
                     "v" = as.vector(t(input$v)))
   out$v <- ifelse(is.infinite(out$v), NA, out$v)
-  out <- na.omit(out) # remove NAs
+  out <- stats::na.omit(out) # remove NAs
   sp::coordinates(out) <- ~ x + y # convert to spatialpixelsdataframe
   suppressMessages(suppressWarnings(sp::gridded(out) <- TRUE)) # gridded
   out <- raster::raster(out)  # create raster

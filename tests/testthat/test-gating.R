@@ -46,7 +46,6 @@ g2 <- stats::rbinom(nrow(obs_dat), 1, 0.5)
 obs_dat$g2 <- as.factor(g2)
 obs_dat <- obs_dat[ , c(1:2,7,3:6)]
 
-
 # Faulty datasets
 fubar <- obs_dat
 fubar$g1 <- as.numeric(fubar$g1)
@@ -141,55 +140,44 @@ test_that("gating works", {
 
   expect_named(
       gating(dat = obs_dat,
-             vars = c("log10_CD4", "log10_CD38",
-                      "log10_CD8", "log10_CD3"),
+             vars = c("log10_CD4", "log10_CD38"),
              n_condition = 1,
              p_correct = "none")
   )
 
   expect_named(
     gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38",
-                    "log10_CD8", "log10_CD3"),
+           vars = c("log10_CD4", "log10_CD38"),
            n_condition = 2,
            p_correct = "none")
   )
 
   expect_named(
     gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38",
-                    "log10_CD8", "log10_CD3"),
+           vars = c("log10_CD4", "log10_CD38"),
            n_condition = 1,
            p_correct = "uncorrelated")
   )
 
   expect_named(
     gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38"),
+           vars = c("log10_CD4", "log10_CD38",
+                    "log10_CD8", "log10_CD3"),
            n_condition = 1,
            p_correct = "none")
   )
 
   expect_named(
     gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38"),
+           vars = c("log10_CD4", "log10_CD38",
+                    "log10_CD8", "log10_CD3"),
            n_condition = 2,
            p_correct = "none")
   )
 
   expect_named(
     gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38",
-                    "log10_CD8", "log10_CD3"),
-           n_condition = 1,
-           alpha = 0.1,
-           p_correct = "none")
-  )
-
-  expect_named(
-    gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38",
-                    "log10_CD8", "log10_CD3"),
+           vars = c("log10_CD4", "log10_CD38"),
            n_condition = 1,
            alpha = 0.1,
            p_correct = "none")
@@ -205,37 +193,24 @@ test_that("gating works", {
 
   expect_named(
     gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38",
-                    "log10_CD8", "log10_CD3"),
+           vars = c("log10_CD4", "log10_CD38"),
            n_condition = 1,
            numerator = FALSE,
-           doplot = TRUE,
            p_correct = "none")
   )
 
   expect_named(
     gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38",
-                    "log10_CD8", "log10_CD3"),
+           vars = c("log10_CD4", "log10_CD38"),
            n_condition = 2,
-           doplot = TRUE,
-           p_correct = "none")
-  )
-
-  expect_named(
-    gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38",
-                    "log10_CD8", "log10_CD3"),
-           n_condition = 1,
            doplot = TRUE,
            rcols = c("green", "yellow", "purple"),
            p_correct = "none")
   )
-
+  
   expect_named(
     gating(dat = obs_dat,
-           vars = c("log10_CD4", "log10_CD38",
-                    "log10_CD8", "log10_CD3"),
+           vars = c("log10_CD4", "log10_CD38"),
            n_condition = 1,
            resolution = 40,
            p_correct = "correlated")

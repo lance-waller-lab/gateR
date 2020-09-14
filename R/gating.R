@@ -1,25 +1,25 @@
 #' Gating strategy for mass cytometry data using spatial relative risk functions
 #' 
-#' Extracts cells within statistically significant combinations of flourescent markers, successively, for a set of markers. Statistically significant combinations are idetnified using two-tailed p-values of a relative risk surface assuming asymptotic normality. This function is currently available for two-level comparisons of a single group (e.g., case/control) or two groups (e.g., case/control at time 1 and time 2). Provides functionality for basic visualization and multiple testing correction.
+#' Extracts cells within statistically significant combinations of fluorescent markers, successively, for a set of markers. Statistically significant combinations are identified using two-tailed p-values of a relative risk surface assuming asymptotic normality. This function is currently available for two-level comparisons of a single group (e.g., case/control) or two groups (e.g., case/control at time 1 and time 2). Provides functionality for basic visualization and multiple testing correction.
 #'
 #' @param dat Input data frame flow cytometry data with the following features (columns): 1) ID, 2) Condition A ID, 3) Condition B ID (optional), and a set of markers.
 #' @param vars A vector of characters with the name of features (columns) within \code{dat} to use as markers for each gate. See details below.
-#' @param n_conditions A numeric value of either 1 or 2 designating if the gating is performed with one condition or two conditions. 
+#' @param n_condition A numeric value of either 1 or 2 designating if the gating is performed with one condition or two conditions. 
 #' @param numerator Logical. If \code{TRUE} (the default), cells will be extracted within all statistically significant numerator (i.e., case) clusters. If \code{FALSE}, cells will be extracted within all statistically significant denominator (i.e., control) clusters. 
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default is 0.05).
 #' @param p_correct Character string specifying whether to apply a correction for multiple comparisons including a Bonferroni correction \code{p_correct = "uncorrelated"} or a correlated Bonferroni correction \code{p_correct = "correlated"}. If \code{p_correct = "none"} (the default), then no correction is applied. 
-#' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{nbclass}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis).
+#' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis).
 #' @param doplot Logical. If \code{TRUE}, the output includes basic data visualizations.
 #' @param rcols Character string of length three (3) specifying the colors for: 1) Group A, 2) Neither, and 3) Group B designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
 #' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
 #'
-#' @details This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two flourescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{doplot = TRUE}. 
+#' @details This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{doplot = TRUE}. 
 #' 
 #' The \code{vars} argument must be a vector with an even-numbered length where the odd-numbered elements are the markers used on the x-axis of a gate and the even-numbered elements are the markers used on the y-axis of a gate. For example, if \code{vars = c("V1", "V2", "V3", and "V4")} then the first gate is "V1" on the x-axis and "V2" on the y-axis and then the second gate is V3" on the x-axis and "V4" on the y-axis. Makers can be repeated in successive gates. 
 #' 
-#' The \code{n_conditions} argument specifies if the gating strategy is performed for one condition or two conditions. If \code{n_conditions = 1}, then the function performs a one condition gating strategy using the internal \code{rrs} function, which computes the statistically significant areas (clusers) of a relative risk surface at each gate and selects the cells within the clusters specified by the \code{numerator} argument. If \code{n_conditions = 2}, then the function performs a two conditions gating strategy using the internal \code{lotrrs} function, which computes the statistically significant areas (clusers) of a ratio of relative risk surfaces at each gate and selects the cells within the clusters specified by the \code{numerator} argument. See the documentation for the internal \code{rrs} and \code{lotrrs} functions for more details.
+#' The \code{n_condition} argument specifies if the gating strategy is performed for one condition or two conditions. If \code{n_condition = 1}, then the function performs a one condition gating strategy using the internal \code{rrs} function, which computes the statistically significant areas (clusters) of a relative risk surface at each gate and selects the cells within the clusters specified by the \code{numerator} argument. If \code{n_condition = 2}, then the function performs a two conditions gating strategy using the internal \code{lotrrs} function, which computes the statistically significant areas (clusters) of a ratio of relative risk surfaces at each gate and selects the cells within the clusters specified by the \code{numerator} argument. See the documentation for the internal \code{rrs} and \code{lotrrs} functions for more details.
 #' 
 #' The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers.
 #' 
@@ -107,6 +107,8 @@ gating <- function(dat,
                    win = NULL,
                    verbose = FALSE,
                    ...) {
+  
+  `%!in%` <- function(x, y)!(`%in%`(x, y)) # helpful custom function
   
   # Checks
   ## dat
