@@ -20,7 +20,7 @@
 #' 
 #' The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers. Basic visualization is available if \code{doplot = TRUE}. 
 #' 
-#' Provides functionality for a correction for multiple testing.  If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"}, then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
+#' Provides functionality for a correction for multiple testing.  If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 #'
 #' @return An object of class 'list' where each element is a object of class 'rrs' created by the \code{\link[sparr]{risk}} function with two additional components:
 #' 
@@ -74,16 +74,16 @@
 #' # Full set
 #'   obs_dat <- rbind(obs_dat1, obs_dat2)
 #'   obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
-#'   obs_dat <- obs_dat[is.finite(rowSums(obs_dat)),] # remove Infs
+#'   obs_dat <- obs_dat[is.finite(rowSums(obs_dat)), ] # remove Infs
 #'   obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
 #'   obs_dat$g2 <- as.factor(obs_dat$g2) # set "g2" as binary factor
 #' 
 #' # Run lotrrs() function
-#'   test_lotrrs <- lotrrs(dat = obs_dat, p_cor = "none")
+#'   test_lotrrs <- lotrrs(dat = obs_dat, p_correct = "none")
 #' 
 lotrrs <- function(dat, 
                    alpha = 0.05, 
-                   p_correct = c("none", "correlated", "uncorrelated"),
+                   p_correct = "none",
                    nbc = NULL,
                    doplot = FALSE, 
                    rcols = c("#FF0000", "#cccccc", "#0000FF"),
@@ -93,9 +93,28 @@ lotrrs <- function(dat,
   
   `%!in%` <- function(x, y)!(`%in%`(x, y)) # helpful custom function
   
-  # Inputs
+  # Checks
   ## dat
   if ("data.frame" %!in% class(dat)) { stop("'dat' must be class 'data.frame'") }
+  
+  ## group
+  if (nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor.") }
+  
+  if (nlevels(dat[ , 3]) != 2) { stop("The third feature of 'dat' must be a binary factor.") }
+  
+  ## p_correct
+  match.arg(p_correct, choices = c("none", "correlated", "uncorrelated"))
+  
+  ## alpha
+  if (alpha <= 0 | alpha >= 1 ) {
+    stop("The argument 'alpha' must be a numeric value between zero (0) and one (1).")
+  }
+  
+  ## rcols
+  if (length(rcols) != 3) {
+    stop("The argument 'rcols' must be a vector of length three (3).")
+  }
+  
   ## win
   if (!is.null(win) & class(win) != "owin") { stop("'win' must be class 'owin'") }
   if (is.null(win)) {
@@ -106,8 +125,6 @@ lotrrs <- function(dat,
     win <- spatstat.core::owin(poly = list(x = rev(chul_coords[ , 1]),
                                            y = rev(chul_coords[ , 2])))
   }
-  ## p-value correction
-  if (is.null(p_correct)) { p_correct <- "none" }
   
   Vnames <- names(dat) # axis names
   names(dat) <- c("id", "G1", "G2", "V1", "V2")
@@ -202,7 +219,7 @@ lotrrs <- function(dat,
   # Alpha level
   if (p_correct == "none") { out$alpha <- alpha }
   if (p_correct == "correlated") {
-    cat("Please be patient... Calculating correlated Bonferroni correction\n")
+    cat("\nPlease be patient... Calculating correlated Bonferroni correction\n")
     alpha_correct <- pval_correct(input = out$lrr, alpha = alpha, nbc = nbc)
     out$alpha <- alpha_correct$correlated 
   } 

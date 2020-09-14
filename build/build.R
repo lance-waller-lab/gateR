@@ -74,7 +74,7 @@ obs_dat2 <- data.frame("id" = seq(1, nrow(fr2@exprs), 1),
 # Full set
 obs_dat <- rbind(obs_dat1, obs_dat2)
 obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
-obs_dat <- obs_dat[is.finite(rowSums(obs_dat)),] # remove Infs
+obs_dat <- obs_dat[is.finite(rowSums(obs_dat)), ] # remove Infs
 obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
 
 ## Create a second condition (randomly split the data)
@@ -83,9 +83,9 @@ g2 <- stats::rbinom(nrow(obs_dat), 1, 0.5)
 obs_dat$g2 <- as.factor(g2)
 obs_dat <- obs_dat[ , c(1:2,7,3:6)]
 
-# --------- #
-# Run gateR #
-# --------- #
+# ---------------------------- #
+# Run gateR with one condition #
+# ---------------------------- #
 
 # Single Condition
 ## A p-value uncorrected for multiple testing
@@ -93,18 +93,17 @@ test_gating <- gateR::gating(dat = obs_dat,
                              vars = c("log10_CD4", "log10_CD38",
                                       "log10_CD8", "log10_CD3"),
                              n_condition = 1,
-                             doplot = TRUE,
-                             p_cor = "none")
+                             doplot = TRUE)
 
 # -------------------- #
 # Post-gate assessment #
 # -------------------- #
 
 # Density of log10 CD4 post-gating
-graphics::plot(stats::density(test_gate$obs[test_gate$obs$g1 == 1, 3]),
+graphics::plot(stats::density(test_gating$obs[test_gating$obs$g1 == 1, 4]),
                main = "log10 CD4",
                lty = 2)
-graphics::lines(stats::density(test_gate$obs[test_gate$obs$g1 == 2, 3]),
+graphics::lines(stats::density(test_gating$obs[test_gating$obs$g1 == 2, 4]),
                 lty = 3)
 graphics::legend("topright",
                  legend = c("Sample 1", "Sample 2"),
@@ -120,8 +119,7 @@ test_gating2 <- gateR::gating(dat = obs_dat,
                               vars = c("log10_CD4", "log10_CD38",
                                        "log10_CD8", "log10_CD3"),
                               n_condition = 2,
-                              doplot = FALSE,
-                              p_cor = "none")
+                              doplot = FALSE)
 
 # --------------------------------------------- #
 # Perform a single gate without data extraction #
@@ -129,14 +127,13 @@ test_gating2 <- gateR::gating(dat = obs_dat,
 
 # Single condition
 ## A p-value uncorrected for multiple testing
-test_rrs <- gateR::rrs(dat = obs_dat,
-                       p_cor = "none")
+## For "log10_CD4" and "log10_CD38"
+test_rrs <- gateR::rrs(dat = obs_dat[ , -7:-6])
 
 # Two conditions
 ## A p-value uncorrected for multiple testing
-test_lotrrs <- gateR::lotrrs(dat = obs_dat,
-                             doplot = FALSE,
-                             p_cor = "none")
+## For "log10_CD8" and "log10_CD3"
+test_lotrrs <- gateR::lotrrs(dat = obs_dat[ , -5:-4])
 
 
 
@@ -178,12 +175,12 @@ test_lotrrs <- gateR::lotrrs(dat = obs_dat,
 # Full set
   obs_dat <- rbind(obs_dat1, obs_dat2)
   obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
-  obs_dat <- obs_dat[is.finite(rowSums(obs_dat)),] # remove Infs
+  obs_dat <- obs_dat[is.finite(rowSums(obs_dat)), ] # remove Infs
   obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
   obs_dat$g2 <- as.factor(obs_dat$g2) # set "g2" as binary factor
 
 # Run lotrrs() function
-  test_lotrrs <- lotrrs(dat = obs_dat, p_cor = "none")
+  test_lotrrs <- lotrrs(dat = obs_dat, p_correct = "none")
 
 
 
