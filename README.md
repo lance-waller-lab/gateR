@@ -1,4 +1,4 @@
-gateR: Gating strategy for mass cytometry using kernel density estimation <img src="man/figures/gateR.png" width="120" align="right" />
+gateR: Gating strategy for mass cytometry using spatial kernel density estimation <img src="man/figures/gateR.png" width="120" align="right" />
 ===================================================
 
 <h2 id="overview">
@@ -65,16 +65,30 @@ Available functions
 <td>Called within <code>gating</code>, two condition comparison. </td>
 </tr>
 <td><code>pval_correct</code></td>
-<td>Called within <code>rrs</code> and <code>lotrrs</code> , calculates a Bonferroni corrected alpha level that accounts for the spatial correlation of a relative risk surface.</td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code>, calculates a Bonferroni corrected alpha level that accounts for the spatial correlation of a relative risk surface.</td>
 </tr>
 <td><code>lrr_plot</code></td>
-<td>Called within <code>rrs</code> and <code>lotrrs</code> , provides functionality for basic visualization of log relative risk surfaces.</td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code>, provides functionality for basic visualization of log relative risk surfaces.</td>
 </tr>
 <td><code>pval_plot</code></td>
-<td>Called within <code>rrs</code> and <code>lotrrs</code> , provides functionality for basic visualization of p-value surfaces.</td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code>, provides functionality for basic visualization of p-value surfaces.</td>
 </tr>
 </tbody>
 <table>
+
+<h2 id="authors">
+
+Authors
+
+</h2>
+
+* **Ian D. Buller** - *Environmental Health Sciences, Emory University, Atlanta, Georgia.* - [GitHub](https://github.com/idblr)
+
+See also the list of [contributors](https://github.com/Waller-SUSAN/gateR/graphs/contributors) who participated in this project. Main contributors include:
+
+* **Elena Hsieh** - *Immunology & Microbiology and Pediatrics, University of Colorado Anschutz School of Medicine* - [link](https://github.com/elenahsieh1407)
+* **Debashis Ghosh** - *Biostatistics & Informatics, Colorado School of Public Health, Aurora, Colorado.* - [GitHub](https://github.com/ghoshd)
+* **Lance A. Waller** - *Biostatistics and Bioinformatics, Emory University, Atlanta, Georgia.* - [GitHub](https://github.com/lance-waller)
 
 ## Usage
 ``` r

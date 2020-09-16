@@ -1,3 +1,5 @@
+# authorship: https://journal.r-project.org/archive/2012-1/RJournal_2012-1_Hornik~et~al.pdf
+
 install.packages(c("devtools", "roxygen2", "testthat", "knitr"))
 library(devtools)
 devtools::has_devel()

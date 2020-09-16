@@ -1,6 +1,6 @@
 Package: gateR
 Type: Package
-Title: Gating strategy for mass cytometry using kernel density estimation
+Title: Gating strategy for mass cytometry using spatial kernel density estimation
 Version: 0.1.0.9000
 Date: 2020-09-12
 Authors@R: 
@@ -22,7 +22,7 @@ Authors@R:
              role = "ctb",
              email = "lwaller@emory.edu"),
       person(given = "NCI",
-             role = c("cph"))
+             role = "cph")
              )
 Maintainer: Ian D. Buller <ian.buller@nih.gov>
 Description: Estimates statistically significant fluorescent marker combination values within

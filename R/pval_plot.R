@@ -15,7 +15,7 @@
 #'
 #' @importFrom raster cut raster
 #' @importFrom sp coordinates gridded
-#' @importFromt stats na.omit
+#' @importFrom stats na.omit
 #' @export
 #'
 #' @keywords internal
