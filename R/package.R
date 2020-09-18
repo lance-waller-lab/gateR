@@ -37,7 +37,7 @@ NULL
 #' @importFrom maptools unionSpatialPolygons
 #' @importFrom pgirmess correlog
 #' @importFrom raster cut extent raster rasterToPolygons values
-#' @importFrom sp coordinates gridded over
+#' @importFrom sp coordinates over
 #' @importFrom sparr OS risk
 #' @importFrom spatstat.core owin ppp
 #' @importFrom stats na.omit
