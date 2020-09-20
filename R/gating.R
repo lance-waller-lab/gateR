@@ -108,8 +108,6 @@ gating <- function(dat,
                    verbose = FALSE,
                    ...) {
   
-  `%!in%` <- function(x, y)!(`%in%`(x, y)) # helpful custom function
-  
   # Checks
   ## dat
   if ("data.frame" %!in% class(dat)) { stop("'dat' must be class 'data.frame'") }
