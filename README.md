@@ -82,7 +82,7 @@ Authors
 
 </h2>
 
-* **Ian D. Buller** - *Environmental Health Sciences, Emory University, Atlanta, Georgia.* - [GitHub](https://github.com/idblr)
+* **Ian D. Buller** - *Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland.* - [GitHub](https://github.com/idblr)
 
 See also the list of [contributors](https://github.com/Waller-SUSAN/gateR/graphs/contributors) who participated in this project. Main contributors include:
 
