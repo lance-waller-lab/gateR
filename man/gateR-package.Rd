@@ -17,7 +17,7 @@ Key content of the {gateR} package include:\cr
 
 \bold{Gating Strategy}
 
-\code{\link{gating}} Extracts cells within statistically significant combinations of fluorescent markers, successively, for a set of markers. Statistically significant combinations are identified using two-tailed p-values of a relative risk surface assuming asymptotic normality. This function is currently available for two-level comparisons of a single group (e.g., case/control) or two groups (e.g., case/control at time 1 and time 2). Provides functionality for basic visualization and multiple testing correction.
+\code{\link{gating}} Extracts cells within statistically significant combinations of fluorescent markers, successively, for a set of markers. Statistically significant combinations are identified using two-tailed p-values of a relative risk surface assuming asymptotic normality. This function is currently available for two-level comparisons of a single condition (e.g., case/control) or two conditions (e.g., case/control at time 1 and time 2). Provides functionality for basic visualization and multiple testing correction.
 
 \code{\link{rrs}} Estimates a relative risk surface and computes the asymptotic p-value surface for a single gate with a single condition. Includes features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas.  This function can also be used as a standalone function.
 

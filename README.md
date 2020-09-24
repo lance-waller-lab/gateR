@@ -92,10 +92,13 @@ See also the list of [contributors](https://github.com/Waller-SUSAN/gateR/graphs
 
 ## Usage
 ``` r
+set.seed(1234) # for reproducibility
+
 # ------------------ #
 # Necessary packages #
 # ------------------ #
 
+library(gateR)
 library(flowWorkspaceData)
 library(ncdfFlow)
 library(stats)
