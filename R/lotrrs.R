@@ -8,6 +8,8 @@
 #' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis). 
 #' @param doplot Logical. If \code{TRUE}, the output includes basic data visualizations.
 #' @param rcols Character string of length three (3) specifying the colors for: 1) Group A, 2) Neither, and 3) Group B designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.
+#' @param lower_lrr Optional, numeric. Lower cut-off value for the log relative risk value in the color key (typically a negative value). The default is no limit and the color key will include the minimum value of the log relative risk surface. 
+#' @param upper_lrr Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit The default is no limit and the color key will include the maximum value of the log relative risk surface.
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
 #' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
@@ -87,6 +89,8 @@ lotrrs <- function(dat,
                    nbc = NULL,
                    doplot = FALSE, 
                    rcols = c("#FF0000", "#cccccc", "#0000FF"),
+                   lower_lrr = NULL,
+                   upper_lrr = NULL,
                    win = NULL, 
                    verbose = FALSE, 
                    ...) {
@@ -229,7 +233,11 @@ lotrrs <- function(dat,
     on.exit(graphics::par(op))
     # Plotting inputs
     ## Colorkeys
-    tr_plot <- lrr_plot(input = out$lrr, cols = rcols, midpoint = 0)
+    tr_plot <- lrr_plot(input = out$lrr,
+                        cols = rcols,
+                        midpoint = 0,
+                        upper_lrr = upper_lrr,
+                        lower_lrr = lower_lrr)
     ## Extent
     blim <- as.vector(raster::extent(tr_plot$v))
     xlims <- blim[1:2]
@@ -247,7 +255,7 @@ lotrrs <- function(dat,
       pcols <- rcols
       brp <- c(1, 1.67, 2.33, 3)
       atp <- c(1.33, 2, 2.67)
-      labp <- c("Numerator", "Insignificant", "Denominator")
+      labp <- c("numerator", "insignificant", "denominator")
     }
 
     graphics::par(pty = "s", bg = "white")

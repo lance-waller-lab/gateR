@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-  knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = FALSE,  fig.width = 7, fig.height = 7, fig.show = "hold")
+  knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE,  fig.width = 7, fig.height = 7, fig.show = "hold")
 ```
 
 Start with the necessary packages and seed for the vignette.
@@ -203,7 +203,7 @@ The toy data frame has nine columns (id, groups, markers, and cytokines).
                             alpha = alpha,
                             p_correct = p_correct)
   end_time <- Sys.time() # record end time
-  total_time <- end_time - start_time # calculate duration of gateRR() example
+  total_time <- end_time - start_time # calculate duration of gating() example
 ```
 
 The gating process took about `r round(total_time, digits = 1)` *seconds* on a Macbook Pro (4 variables, 2 gates, 2 cytokines, `r format(nrow(df_save), big.mark= ",")` observations). The corrected significance level in the first gate was `r formatC(out_gate$lrr[[1]]$alpha, format = "e", digits = 2)`. The histograms for the two cytokines are the same as above.
@@ -296,7 +296,7 @@ Compare histograms before and after gating. Gating reduced the overall sample si
                             alpha = alpha,
                             p_correct = p_correct)
   end_time <- Sys.time() # record end time
-  total_time <- end_time - start_time # calculate duration of gateRR() example
+  total_time <- end_time - start_time # calculate duration of gating() example
 ```
 
 The gating process took about `r round(total_time, digits = 1)` *seconds* on a Macbook Pro (4 variables, 2 gates, 2 cytokines, `r format(nrow(df_sub), big.mark= ",")` observations). The corrected significance level in the first gate was `r formatC(out_gate$lrr[[1]]$alpha, format = "e", digits = 2)`. The histograms for the two cytokines are the same as above.

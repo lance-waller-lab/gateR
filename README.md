@@ -68,10 +68,10 @@ Available functions
 <td>Called within <code>rrs</code> and <code>lotrrs</code>, calculates a Bonferroni corrected alpha level that accounts for the spatial correlation of a relative risk surface.</td>
 </tr>
 <td><code>lrr_plot</code></td>
-<td>Called within <code>rrs</code> and <code>lotrrs</code>, provides functionality for basic visualization of log relative risk surfaces.</td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code>, provides functionality for basic visualization of a log relative risk surface.</td>
 </tr>
 <td><code>pval_plot</code></td>
-<td>Called within <code>rrs</code> and <code>lotrrs</code>, provides functionality for basic visualization of p-value surfaces.</td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code>, provides functionality for basic visualization of a significant p-value surface.</td>
 </tr>
 </tbody>
 <table>
@@ -82,13 +82,13 @@ Authors
 
 </h2>
 
-* **Ian D. Buller** - *Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland.* - [GitHub](https://github.com/idblr)
+* **Ian D. Buller** - *Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland* - [GitHub](https://github.com/idblr)
 
 See also the list of [contributors](https://github.com/Waller-SUSAN/gateR/graphs/contributors) who participated in this project. Main contributors include:
 
-* **Elena Hsieh** - *Immunology & Microbiology and Pediatrics, University of Colorado Anschutz School of Medicine* - [link](https://github.com/elenahsieh1407)
-* **Debashis Ghosh** - *Biostatistics & Informatics, Colorado School of Public Health, Aurora, Colorado.* - [GitHub](https://github.com/ghoshd)
-* **Lance A. Waller** - *Biostatistics and Bioinformatics, Emory University, Atlanta, Georgia.* - [GitHub](https://github.com/lance-waller)
+* **Elena Hsieh** - *Immunology & Microbiology and Pediatrics, University of Colorado Anschutz School of Medicine* - [GitHub](https://github.com/elenahsieh1407)
+* **Debashis Ghosh** - *Biostatistics & Informatics, Colorado School of Public Health, Aurora, Colorado* - [GitHub](https://github.com/ghoshd)
+* **Lance A. Waller** - *Biostatistics and Bioinformatics, Emory University, Atlanta, Georgia* - [GitHub](https://github.com/lance-waller)
 
 ## Usage
 ``` r
@@ -152,7 +152,9 @@ test_gating <- gateR::gating(dat = obs_dat,
                              vars = c("log10_CD4", "log10_CD38",
                                       "log10_CD8", "log10_CD3"),
                              n_condition = 1,
-                             doplot = TRUE)
+                             doplot = TRUE,
+                             upper_lrr = 1,
+                             lower_lrr = -1)
 
 # -------------------- #
 # Post-gate assessment #

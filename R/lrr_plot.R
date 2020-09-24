@@ -5,8 +5,8 @@
 #' @param input An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.
 #' @param plot_cols Character string of length three (3) specifying the colors for plotting: 1) numerator, 2) insignificant, and 3) denominator from the \code{\link{rrs}} or \code{\link{lotrrs}}  function.
 #' @param midpoint Numeric. The value to center the diverging color palette.
-#' @param thresh_up Numeric. The upper value to concatenate the color key. The default (NULL) uses the maximum value from \code{input}.
-#' @param thresh_low Numeric. The lower value to concatenate the color key. The default (NULL) uses the minimum value from \code{input}.
+#' @param lower_lrr Numeric. The lower value to concatenate the color key. The default (NULL) uses the minimum value from \code{input}.
+#' @param upper_lrr Numeric. The upper value to concatenate the color key. The default (NULL) uses the maximum value from \code{input}.
 #' @param digits Integer. The number of significant digits for the labels using the \code{round} function (default is 1).
 #'
 #' @return An object of class 'list'. This is a named list with the following components:
@@ -28,8 +28,8 @@
 lrr_plot <- function(input,
                      cols,
                      midpoint = 0,
-                     thresh_up = NULL,
-                     thresh_low = NULL,
+                     lower_lrr = NULL,
+                     upper_lrr = NULL,
                      digits = 1) {
 
   # Inputs
@@ -43,18 +43,26 @@ lrr_plot <- function(input,
 
   out <- raster::raster(input)  # create raster
 
+  min_raw_value <- min(out[is.finite(out)], na.rm = TRUE) # minimum absolute value of raster
+  max_raw_value <- max(out[is.finite(out)], na.rm = TRUE) # maximum absolute value of raster
+  
   # Restrict spurious log relative risk values
-  if (!is.null(thresh_low)) {
-    out[out <= thresh_low] <- thresh_low
+  if (!is.null(lower_lrr)) {
+    if (lower_lrr >= 0) {
+      stop("The 'lower_lrr' argument must be a numeric value less than zero")
+    }
+    out[out <= lower_lrr] <- lower_lrr
   }
-  if (!is.null(thresh_up)) {
-    out[out >= thresh_up] <- thresh_up
+  if (!is.null(upper_lrr)) {
+    if (upper_lrr <= 0) {
+      stop("The 'upper_lrr' argument must be a numeric value greater than zero")
+    }
+    out[out >= upper_lrr] <- upper_lrr
   }
 
   # Identify ramp above and below midpoint
   lowerhalf <- length(out[out < midpoint & !is.na(out)]) # values below 0
   upperhalf <- length(out[out > midpoint & !is.na(out)]) # values above 0
-  nhalf <- length(out[!is.na(out)]) / 2 # number of values at half
   min_absolute_value <- min(out[is.finite(out)], na.rm = TRUE) # minimum absolute value of raster
   max_absolute_value <- max(out[is.finite(out)], na.rm = TRUE) # maximum absolute value of raster
 
@@ -83,6 +91,10 @@ lrr_plot <- function(input,
 
   # Text for colorkey labels
   rbl <- round(rbs, digits = digits)
+  
+  if (min_raw_value < min_absolute_value) { rbl[1] <- paste("<", rbl[1], sep = "") }
+  
+  if (max_raw_value > max_absolute_value) { rbl[5] <- paste(">", rbl[5], sep = "") }
 
   # Output
   out <- list("v" = out,

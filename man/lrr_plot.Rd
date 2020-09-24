@@ -8,8 +8,8 @@ lrr_plot(
   input,
   cols,
   midpoint = 0,
-  thresh_up = NULL,
-  thresh_low = NULL,
+  lower_lrr = NULL,
+  upper_lrr = NULL,
   digits = 1
 )
 }
@@ -18,9 +18,9 @@ lrr_plot(
 
 \item{midpoint}{Numeric. The value to center the diverging color palette.}
 
-\item{thresh_up}{Numeric. The upper value to concatenate the color key. The default (NULL) uses the maximum value from \code{input}.}
+\item{lower_lrr}{Numeric. The lower value to concatenate the color key. The default (NULL) uses the minimum value from \code{input}.}
 
-\item{thresh_low}{Numeric. The lower value to concatenate the color key. The default (NULL) uses the minimum value from \code{input}.}
+\item{upper_lrr}{Numeric. The upper value to concatenate the color key. The default (NULL) uses the maximum value from \code{input}.}
 
 \item{digits}{Integer. The number of significant digits for the labels using the \code{round} function (default is 1).}
 
