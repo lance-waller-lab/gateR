@@ -32,7 +32,8 @@
 #' 
 #' \describe{
 #' \item{\code{obs}}{An object of class 'tibble' of the same features as \code{dat} that includes the information for the cells extracted with significant clusters in the final gate.}
-#' \item{\code{gate}}{An object of class 'list' of 'rrs' objects from each gate.}
+#'  \item{\code{n}}{An object of class 'list' of the sample size of cells at each gate. The length is equal to the number of successful gates plus the final result.}
+#' \item{\code{gate}}{An object of class 'list' of 'rrs' objects from each gate. The length is equal to the number of successful gates.}
 #' }
 #' 
 #' The objects of class 'rrs' is similar to the output of the \code{\link[sparr]{risk}} function with two additional components:
@@ -172,6 +173,7 @@ gating <- function(dat,
 
   # Create empty list to save output of each gate
   list_gate <- vector('list', length(n_gate))
+  n_out <- vector('list', length(n_gate))
 
   # Gating
   for (k in 1:n_gate) {
@@ -195,6 +197,8 @@ gating <- function(dat,
     # Estimate significant relative risk areas
     ## Bonferroni correction only necessary in first gate
     if (k == 1) { p_correct <- p_correct } else { p_correct <- "none"}
+    
+    n_out[[k]] <- nrow(df)
 
     if (n_condition == 2) {
     out <- lotrrs(dat = df,
@@ -234,7 +238,7 @@ gating <- function(dat,
                 "Returning results from previous gate\n",
                 sep = " "))
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
-      out_list <- list("obs" = output, "gate" = list_gate)
+      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
       return(out_list)
     }
 
@@ -251,7 +255,7 @@ gating <- function(dat,
                 "Returning results from previous gate\n",
                 sep = " "))
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
-      out_list <- list("obs" = output, "gate" = list_gate)
+      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
       return(out_list)
     }
     rm(out_pol) # conserve memory
@@ -268,7 +272,8 @@ gating <- function(dat,
     if (k == n_gate) {
       cat(paste("\nObservations within significant", type_cluster, "cluster(s) of Gate", k, "\n",sep = " "))
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
-      out_list <- list("obs" = output, "gate" = list_gate)
+      n_out[[k + 1]] <- nrow(output)
+      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
       return(out_list)
     }
   }

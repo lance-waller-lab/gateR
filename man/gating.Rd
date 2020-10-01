@@ -55,7 +55,8 @@ An object of class \code{list}. This is a named list with the following componen
 
 \describe{
 \item{\code{obs}}{An object of class 'tibble' of the same features as \code{dat} that includes the information for the cells extracted with significant clusters in the final gate.}
-\item{\code{gate}}{An object of class 'list' of 'rrs' objects from each gate.}
+\item{\code{n}}{An object of class 'list' of the sample size of cells at each gate. The length is equal to the number of successful gates plus the final result.}
+\item{\code{gate}}{An object of class 'list' of 'rrs' objects from each gate. The length is equal to the number of successful gates.}
 }
 
 The objects of class 'rrs' is similar to the output of the \code{\link[sparr]{risk}} function with two additional components:
