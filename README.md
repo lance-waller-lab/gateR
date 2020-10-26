@@ -116,23 +116,24 @@ fr2 <- ncfs[[2]]
 
 ## Comparison of two samples (single condition) "g1"
 ## Two gates (four markers) "CD4", "CD38", "CD8", and "CD3"
-## Log10 Transformation for all markers
+## Arcsinh Transformation for all markers
 ## Remove cells with NA and Inf values
 
 # First sample
 obs_dat1 <- data.frame("id" = seq(1, nrow(fr1@exprs), 1),
                        "g1" = rep(1, nrow(fr1@exprs)),
-                       "log10_CD4" = log(fr1@exprs[ , 5], 10),
-                       "log10_CD38" = log(fr1@exprs[ , 6], 10),
-                       "log10_CD8" = log(fr1@exprs[ , 7], 10),
-                       "log10_CD3" = log(fr1@exprs[ , 8], 10))
+                       "arcsinh_CD4" = asinh(fr1@exprs[ , 5]),
+                       "arcsinh_CD38" = asinh(fr1@exprs[ , 6]),
+                       "arcsinh_CD8" = asinh(fr1@exprs[ , 7]),
+                       "arcsinh_CD3" = asinh(fr1@exprs[ , 8]))
 # Second sample
 obs_dat2 <- data.frame("id" = seq(1, nrow(fr2@exprs), 1),
                        "g1" = rep(2, nrow(fr2@exprs)),
-                       "log10_CD4" = log(fr2@exprs[ , 5], 10),
-                       "log10_CD38" = log(fr2@exprs[ , 6], 10),
-                       "log10_CD8" = log(fr2@exprs[ , 7], 10),
-                       "log10_CD3" = log(fr2@exprs[ , 8], 10))
+                       "arcsinh_CD4" = asinh(fr2@exprs[ , 5]),
+                       "arcsinh_CD38" = asinh(fr2@exprs[ , 6]),
+                       "arcsinh_CD8" = asinh(fr2@exprs[ , 7]),
+                       "arcsinh_CD3" = asinh(fr2@exprs[ , 8]))
+                       
 # Full set
 obs_dat <- rbind(obs_dat1, obs_dat2)
 obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
@@ -152,8 +153,8 @@ obs_dat <- obs_dat[ , c(1:2,7,3:6)]
 # Single condition
 ## A p-value uncorrected for multiple testing
 test_gating <- gateR::gating(dat = obs_dat,
-                             vars = c("log10_CD4", "log10_CD38",
-                                      "log10_CD8", "log10_CD3"),
+                             vars = c("arcsinh_CD4", "arcsinh_CD38",
+                                      "arcsinh_CD8", "arcsinh_CD3"),
                              n_condition = 1,
                              doplot = TRUE,
                              upper_lrr = 1,
@@ -163,9 +164,9 @@ test_gating <- gateR::gating(dat = obs_dat,
 # Post-gate assessment #
 # -------------------- #
 
-# Density of log10 CD4 post-gating
+# Density of arcsinh-transformed CD4 post-gating
 graphics::plot(stats::density(test_gating$obs[test_gating$obs$g1 == 1, 4]),
-               main = "log10 CD4",
+               main = "arcsinh CD4",
                lty = 2)
 graphics::lines(stats::density(test_gating$obs[test_gating$obs$g1 == 2, 4]),
                 lty = 3)
@@ -188,8 +189,8 @@ graphics::legend("topright",
 
 ## A p-value uncorrected for multiple testing
 test_gating2 <- gateR::gating(dat = obs_dat,
-                              vars = c("log10_CD4", "log10_CD38",
-                                       "log10_CD8", "log10_CD3"),
+                              vars = c("arcsinh_CD4", "arcsinh_CD38",
+                                       "arcsinh_CD8", "arcsinh_CD3"),
                               n_condition = 2)
 
 # --------------------------------------------- #
@@ -198,11 +199,11 @@ test_gating2 <- gateR::gating(dat = obs_dat,
 
 # Single condition
 ## A p-value uncorrected for multiple testing
-## For "log10_CD4" and "log10_CD38"
+## For "arcsinh_CD4" and "arcsinh_CD38"
 test_rrs <- gateR::rrs(dat = obs_dat[ , -7:-6])
 
 # Two conditions
 ## A p-value uncorrected for multiple testing
-## For "log10_CD8" and "log10_CD3"
+## For "arcsinh_CD8" and "arcsinh_CD3"
 test_lotrrs <- gateR::lotrrs(dat = obs_dat[ , -5:-4])
 ```
