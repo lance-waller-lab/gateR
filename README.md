@@ -1,4 +1,4 @@
-gateR: Gating Strategy for Mass and Flow Cytometry using Spatial Kernel Density Estimation <img src="dev/figures/gateR.png" width="120" align="right" />
+gateR: Statistical Gating Application for Flow and Mass Cytometry Analysis via Spatial Kernel Density Estimation <img src="dev/figures/gateR.png" width="120" align="right" />
 ===================================================
 
 <h2 id="overview">
@@ -7,7 +7,7 @@ Overview
 
 </h2>
 
-The `gateR` package is a suite of `R` functions to identify significant spatial clustering of mass cytometry data used in immunological investigations. For a two-group comparison we detect clusters using the kernel-based spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The tests are conducted in two-dimensional space comprised of two fluorescent markers. 
+The `gateR` package is a suite of `R` functions to identify significant spatial clustering of flow and mass cytometry data used in immunological investigations. For a two-group comparison we detect clusters using the kernel-based spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The tests are conducted in two-dimensional space comprised of two fluorescent markers. 
 
 Examples for a single condition:
 
@@ -56,7 +56,7 @@ Available functions
 </thead>
 <tbody>
 <td><code>gating</code></td>
-<td>Main function. Conduct a gating strategy for mass cytometry data.</td>
+<td>Main function. Conduct a gating strategy for flow and mass cytometry data.</td>
 </tr>
 <td><code>rrs</code></td>
 <td>Called within <code>gating</code>, one condition comparison.</td>

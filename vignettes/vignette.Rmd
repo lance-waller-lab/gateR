@@ -1,10 +1,10 @@
 ---
-title: "gateR: Gating Strategy for Mass and Flow Cytometry using Spatial Kernel Density Estimation"
+title: "gateR: Statistical Gating Application for Flow and Mass Cytometry Analysis via Spatial Kernel Density Estimation"
 author: 'Ian D. Buller, Ph.D., M.A. (Github: @idblr)'
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{gateR: Gating Strategy for Mass and Flow Cytometry using Spatial Kernel Density Estimation}
+  %\VignetteIndexEntry{gateR: Statistical Gating Application for Flow and Mass Cytometry Analysis via Spatial Kernel Density Estimation}
   %\VignetteEngine{R.rsp::asis}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,7 +13,7 @@ vignette: >
   knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE,  fig.width = 7, fig.height = 7, fig.show = "hold")
 ```
 
-The gateR package is a suite of R functions to identify significant spatial clustering of mass cytometry data used in immunological investigations. The gateR package can be used for a panel of all surface markers, or a mixture of surface markers and functional read outs. The gateR package performs a gating technique that estimates statistically significant fluorescent marker combination values within which one immunologically distinctive group (i.e., disease case) is more associated than another group (i.e., healthy control), successively, using various combinations (i.e., "gates") of fluorescent markers to examine features of cells that may be different between groups. For a two-group comparison, the gateR package uses the spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The gates are conducted in two-dimensional space comprised of two fluorescent markers.
+The gateR package is a suite of R functions to identify significant spatial clustering of mass and flow cytometry data used in immunological investigations. The gateR package can be used for a panel of all surface markers, or a mixture of surface markers and functional read outs. The gateR package performs a gating technique that estimates statistically significant fluorescent marker combination values within which one immunologically distinctive group (i.e., disease case) is more associated than another group (i.e., healthy control), successively, using various combinations (i.e., "gates") of fluorescent markers to examine features of cells that may be different between groups. For a two-group comparison, the gateR package uses the spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The gates are conducted in two-dimensional space comprised of two fluorescent markers.
 
 Examples of a single condition with two groups:
 

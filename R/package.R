@@ -1,4 +1,4 @@
-#' The gateR Package: Gating Strategy for Mass and Flow Cytometry using Spatial Kernel Density Estimation
+#' The gateR Package: Statistical Gating Application for Flow and Mass Cytometry Analysis via Spatial Kernel Density Estimation
 #'
 #' Estimates statistically significant fluorescent marker combination values within which one immunologically distinctive group (i.e., disease case) is more associated than another group (i.e., healthy control), successively, using various combinations (i.e., "gates") of fluorescent markers to examine features of cells that may be different between groups.
 #'
