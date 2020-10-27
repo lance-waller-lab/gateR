@@ -1,8 +1,8 @@
 Package: gateR
 Type: Package
-Title: Gating strategy for mass cytometry using spatial kernel density estimation
+Title: Gating Strategy for Mass and Flow Cytometry using Spatial Kernel Density Estimation
 Version: 0.1.0.9000
-Date: 2020-10-26
+Date: 2020-10-27
 Authors@R: 
     c(person(given = "Ian D.",
              family = "Buller",
@@ -31,8 +31,8 @@ Description: Estimates statistically significant fluorescent marker combination 
         which one immunologically distinctive group (i.e., disease case) is more associated than
         another group (i.e., healthy control), successively, using various combinations (i.e.,
         "gates") of fluorescent markers to examine features of cells that may be different between
-        groups. For a two-group comparison, the {gateR} package uses the spatial relative risk
-        function that is estimated using the {sparr} package. Details about the {sparr} package
+        groups. For a two-group comparison, the 'gateR' package uses the spatial relative risk
+        function that is estimated using the 'sparr' package. Details about the 'sparr' package
         methods can be found in the tutorial: Davies et al. (2018) <doi:10.1002/sim.7577>. Details
         about kernel density estimation can be found in J. F. Bithell (1990) <doi:10.1002/sim.4780090616>.
         More information about relative risk functions using kernel density estimation can be
@@ -52,7 +52,7 @@ Imports:
     raster,
     sp,
     sparr,
-    spatstat.core,
+    spatstat,
     stats,
     tibble,
     utils
@@ -60,10 +60,10 @@ Suggests:
     flowWorkspaceData,
     knitr,
     ncdfFlow,
+    R.rsp,
     spelling,
     testthat
-VignetteBuilder: knitr
+VignetteBuilder: R.rsp
 Language: en-US
 URL: https://github.com/Waller-SUSAN/gateR
 BugReports: https://github.com/Waller-SUSAN/gateR/issues
-Author: Ian D. Buller [aut, cre, cph]

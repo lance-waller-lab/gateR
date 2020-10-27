@@ -1,4 +1,4 @@
-gateR: Gating strategy for mass cytometry using spatial kernel density estimation <img src="man/figures/gateR.png" width="120" align="right" />
+gateR: Gating Strategy for Mass and Flow Cytometry using Spatial Kernel Density Estimation <img src="dev/figures/gateR.png" width="120" align="right" />
 ===================================================
 
 <h2 id="overview">
@@ -176,11 +176,11 @@ graphics::legend("topright",
                  bty = "n")
 ```
 
-![](man/figures/gate1.png)
+![](dev/figures/gate1.png)
 
-![](man/figures/gate2.png)
+![](dev/figures/gate2.png)
 
-![](man/figures/postgate.png)
+![](dev/figures/postgate.png)
 
 ```r
 # ----------------------------- #

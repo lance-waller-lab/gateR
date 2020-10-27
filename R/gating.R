@@ -50,14 +50,12 @@
 #' @importFrom maptools unionSpatialPolygons
 #' @importFrom raster rasterToPolygons values
 #' @importFrom sp coordinates over
-#' @importFrom spatstat.core owin
+#' @importFrom spatstat owin
 #' @importFrom tibble add_column
 #' @export
 #' 
 #' @examples
-#'   library(flowWorkspaceData)
-#'   library(ncdfFlow)
-#' 
+#' \donttest{
 #' # Use 'extdata' from the {flowWorkspaceData} package
 #'   flowDataPath <- system.file("extdata", package = "flowWorkspaceData")
 #'   fcsFiles <- list.files(pattern = "CytoTrol", flowDataPath, full = TRUE)
@@ -97,6 +95,7 @@
 #'                                       "log10_CD8", "log10_CD3"),
 #'                              n_condition = 1,
 #'                              p_correct = "none")
+#' }                              
 #' 
 gating <- function(dat,
                    vars,
@@ -191,7 +190,7 @@ gating <- function(dat,
     # Create custom window with a convex hull
     chul <- grDevices::chull(df[ , 4:5])
     chul_coords <- df[ , 4:5][c(chul, chul[1]), ]
-    win_gate <- spatstat.core::owin(poly = list(x = rev(chul_coords[ , 1]),
+    win_gate <- spatstat::owin(poly = list(x = rev(chul_coords[ , 1]),
                                                 y = rev(chul_coords[ , 2])))
 
     # Estimate significant relative risk areas

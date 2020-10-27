@@ -33,14 +33,12 @@
 #' @importFrom graphics close.screen par screen split.screen 
 #' @importFrom grDevices chull
 #' @importFrom raster extent values
-#' @importFrom spatstat.core owin ppp
+#' @importFrom spatstat owin ppp
 #' @importFrom sparr OS risk
 #' @export 
 #'
 #' @examples
-#'   library(flowWorkspaceData)
-#'   library(ncdfFlow)
-#' 
+#' if (interactive()) {
 #' # Use 'extdata' from the {flowWorkspaceData} package
 #'   flowDataPath <- system.file("extdata", package = "flowWorkspaceData")
 #'   fcsFiles <- list.files(pattern = "CytoTrol", flowDataPath, full = TRUE)
@@ -76,6 +74,7 @@
 #' 
 #' # Run rrs() function
 #'   test_rrs <- rrs(dat = obs_dat)
+#' }
 #'   
 rrs <- function(dat, 
                 alpha = 0.05, 
@@ -116,7 +115,7 @@ rrs <- function(dat,
     dat <- dat[!is.na(dat[ , 4]) & !is.na(dat[ , 5]) , ]
     chul <- grDevices::chull(dat[ , 4:5])
     chul_coords <- dat[ , 4:5][c(chul, chul[1]), ]
-    win <- spatstat.core::owin(poly = list(x = rev(chul_coords[ , 1]),
+    win <- spatstat::owin(poly = list(x = rev(chul_coords[ , 1]),
                                            y = rev(chul_coords[ , 2])))
   }
   
@@ -125,7 +124,7 @@ rrs <- function(dat,
   levels(dat$G1) <- c("case", "control")
   
   # Create PPP
-  suppressMessages(suppressWarnings(c1_ppp <- spatstat.core::ppp(x = dat$V1,
+  suppressMessages(suppressWarnings(c1_ppp <- spatstat::ppp(x = dat$V1,
                                                                  y = dat$V2,
                                                                  marks = dat$G1,
                                                                  window = win)))

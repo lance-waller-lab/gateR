@@ -14,7 +14,7 @@
 #' }
 #'
 #' @importFrom raster cut raster
-#' @importFrom spatstat.core as.im
+#' @importFrom spatstat as.im
 #' @export
 #'
 #' @keywords internal
@@ -27,7 +27,7 @@ pval_plot <- function(input,
     stop("The 'input' argument must be an object of class 'im'")
   }
 
-  out <- raster::raster(spatstat.core::as.im(input))  # create raster
+  out <- raster::raster(spatstat::as.im(input))  # create raster
   out <- raster::cut(out,
                      breaks = c(-Inf, alpha / 2, 1 - alpha / 2, Inf),
                      right = FALSE)

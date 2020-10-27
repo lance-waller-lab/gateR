@@ -39,15 +39,12 @@
 #' @importFrom graphics close.screen par screen split.screen 
 #' @importFrom grDevices chull
 #' @importFrom raster extent values
-#' @importFrom spatstat.core owin ppp
+#' @importFrom spatstat owin ppp
 #' @importFrom sparr OS risk
 #' @export 
 #'
 #' @examples
-#'   library(flowWorkspaceData)
-#'   library(ncdfFlow)
-#'   library(stats)
-#' 
+#' if (interactive()) {
 #' # Use 'extdata' from the {flowWorkspaceData} package
 #'   flowDataPath <- system.file("extdata", package = "flowWorkspaceData")
 #'   fcsFiles <- list.files(pattern = "CytoTrol", flowDataPath, full = TRUE)
@@ -82,6 +79,7 @@
 #' 
 #' # Run lotrrs() function
 #'   test_lotrrs <- lotrrs(dat = obs_dat, p_correct = "none")
+#' }   
 #' 
 lotrrs <- function(dat, 
                    alpha = 0.05, 
@@ -124,7 +122,7 @@ lotrrs <- function(dat,
     dat <- dat[!is.na(dat[ , 4]) & !is.na(dat[ , 5]) , ]
     chul <- grDevices::chull(dat[ , 4:5])
     chul_coords <- dat[ , 4:5][c(chul, chul[1]), ]
-    win <- spatstat.core::owin(poly = list(x = rev(chul_coords[ , 1]),
+    win <- spatstat::owin(poly = list(x = rev(chul_coords[ , 1]),
                                            y = rev(chul_coords[ , 2])))
   }
   
@@ -136,15 +134,15 @@ lotrrs <- function(dat,
   # Create two PPPs
   t0_df <- dat[dat$G2 == "0", ]
   t1_df <- dat[dat$G2 == "1", ]
-  suppressMessages(suppressWarnings(t_ppp <- spatstat.core::ppp(x = dat$V1,
+  suppressMessages(suppressWarnings(t_ppp <- spatstat::ppp(x = dat$V1,
                                                                 y = dat$V2,
                                                                 marks = dat$G1,
                                                                 window = win)))
-  suppressMessages(suppressWarnings(t0_ppp <- spatstat.core::ppp(x = t0_df$V1,
+  suppressMessages(suppressWarnings(t0_ppp <- spatstat::ppp(x = t0_df$V1,
                                                                  y = t0_df$V2,
                                                                  marks = t0_df$G1,
                                                                  window = win)))
-  suppressMessages(suppressWarnings(t1_ppp <- spatstat.core::ppp(x = t1_df$V1,
+  suppressMessages(suppressWarnings(t1_ppp <- spatstat::ppp(x = t1_df$V1,
                                                                  y = t1_df$V2,
                                                                  marks = t1_df$G1,
                                                                  window = win)))

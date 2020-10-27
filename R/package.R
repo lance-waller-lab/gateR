@@ -1,14 +1,12 @@
-#' The gateR Package: Gating strategy for mass cytometry using spatial kernel density estimation
+#' The gateR Package: Gating Strategy for Mass and Flow Cytometry using Spatial Kernel Density Estimation
 #'
 #' Estimates statistically significant fluorescent marker combination values within which one immunologically distinctive group (i.e., disease case) is more associated than another group (i.e., healthy control), successively, using various combinations (i.e., "gates") of fluorescent markers to examine features of cells that may be different between groups.
 #'
-#' @details
+#' @details For a two-group comparison, the 'gateR' package uses the spatial relative risk function that is estimated using the {sparr} package. Details about the {sparr} package methods can be found in the tutorial: Davies et al. (2018) \url{https://doi.org/10.1002/sim.7577}. Details about kernel density estimation can be found in J. F. Bithell (1990) \url{https://doi.org/10.1002/sim.4780090616}. More information about relative risk functions using kernel density estimation can be found in J. F. Bithell (1991) \url{https://doi.org/10.1002/sim.4780101112}.
 #' 
-#' For a two-group comparison, the {gateR} package uses the spatial relative risk function that is estimated using the {sparr} package. Details about the {sparr} package methods can be found in the tutorial: Davies et al. (2018) <doi:10.1002/sim.7577>. Details about kernel density estimation can be found in J. F. Bithell (1990) <doi:10.1002/sim.4780090616>. More information about relative risk functions using kernel density estimation can be found in J. F. Bithell (1991) <doi:10.1002/sim.4780101112>.
+#' This package provides a function to perform a gating strategy for flow cytometry data. The 'gateR' package also provides basic visualization for each gate.
 #' 
-#' This package provides a function to perform a gating strategy for flow cytometry data. The {gateR} package also provides basic visualization for each gate.
-#' 
-#' Key content of the {gateR} package include:\cr
+#' Key content of the 'gateR' package include:\cr
 #' 
 #' \bold{Gating Strategy}
 #' 
@@ -22,7 +20,7 @@
 #' @aliases gateR-package gateR
 #' @docType package
 #' 
-#' @section Dependencies: The {gateR} package relies heavily upon \code{\link{sparr}}, \code{\link{sp}}, and \code{\link{raster}}. For a two-level comparison, the spatial relative risk function uses the \code{\link[sparr]{risk}} function. The \code{gating} function extracts cells within significant clusters using the \code{\link[raster]{rasterToPolygons}}, \code{\link[maptools]{unionSpatialPolygons}}, and \code{\link[sp]{over}} functions. The calculation of a Bonferroni correction for multiple testing accounting for the spatial correlation of the estimated surface uses the \code{\link[pgirmess]{correlog}} function. Basic visualizations rely on the \code{\link[fields]{image.plot}} function.
+#' @section Dependencies: The 'gateR' package relies heavily upon \code{\link{sparr}}, \code{\link{sp}}, and \code{\link{raster}}. For a two-level comparison, the spatial relative risk function uses the \code{\link[sparr]{risk}} function. The \code{gating} function extracts cells within significant clusters using the \code{\link[raster]{rasterToPolygons}}, \code{\link[maptools]{unionSpatialPolygons}}, and \code{\link[sp]{over}} functions. The calculation of a Bonferroni correction for multiple testing accounting for the spatial correlation of the estimated surface uses the \code{\link[pgirmess]{correlog}} function. Basic visualizations rely on the \code{\link[fields]{image.plot}} function.
 #' 
 #' @author Ian D. Buller\cr \emph{Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland, USA.}
 #' 
@@ -39,7 +37,7 @@ NULL
 #' @importFrom raster cut extent raster rasterToPolygons values
 #' @importFrom sp coordinates over
 #' @importFrom sparr OS risk
-#' @importFrom spatstat.core as.im owin ppp 
+#' @importFrom spatstat as.im owin ppp 
 #' @importFrom stats na.omit
 #' @importFrom tibble add_column
 #' @importFrom fields image.plot
