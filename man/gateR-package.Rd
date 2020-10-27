@@ -9,7 +9,7 @@
 Estimates statistically significant fluorescent marker combination values within which one immunologically distinctive group (i.e., disease case) is more associated than another group (i.e., healthy control), successively, using various combinations (i.e., "gates") of fluorescent markers to examine features of cells that may be different between groups.
 }
 \details{
-For a two group comparison, the {gateR} package uses the spatial relative risk function that is estimated using the {sparr} package. Details about the {sparr} package methods can be found in the tutorial: Davies et al. (2018) \url{doi:10.1002/sim.7577}. Details about kernel density estimation can be found in J. F. Bithell (1990) \url{doi:10.1002/sim.4780090616}. More information about relative risk functions using kernel density estimation can be found in J. F. Bithell (1991) \url{doi:10.1002/sim.4780101112}.
+For a two-group comparison, the {gateR} package uses the spatial relative risk function that is estimated using the {sparr} package. Details about the {sparr} package methods can be found in the tutorial: Davies et al. (2018) \url{doi:10.1002/sim.7577}. Details about kernel density estimation can be found in J. F. Bithell (1990) \url{doi:10.1002/sim.4780090616}. More information about relative risk functions using kernel density estimation can be found in J. F. Bithell (1991) \url{doi:10.1002/sim.4780101112}.
 
 This package provides a function to perform a gating strategy for flow cytometry data. The {gateR} package also provides basic visualization for each gate.
 

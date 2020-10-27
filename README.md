@@ -7,19 +7,19 @@ Overview
 
 </h2>
 
-The `gateR` package is a suite of `R` functions to identify significant spatial clustering of mass cytometry data used in immunological investigations. For a two group comparison we detect clusters using the kernel-based spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The tests are conducted in two-dimensional space comprised of two fluorescent markers. 
+The `gateR` package is a suite of `R` functions to identify significant spatial clustering of mass cytometry data used in immunological investigations. For a two-group comparison we detect clusters using the kernel-based spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The tests are conducted in two-dimensional space comprised of two fluorescent markers. 
 
 Examples for a single condition:
 
 1. Disease case v. healthy control
-2. Time 1 v. Time 0
+2. Time 2 v. Time 1
 
-For a two group comparison for two conditions we estimate two relative risk surfaces for one condition and then a ratio of the relative risks. For example:
+For a two-group comparison for two conditions we estimate two relative risk surfaces for one condition and then a ratio of the relative risks. For example:
 
-1. Estimate a relative risk surface for
-A. Time 1: Disease case v. healthy control
-B. Time 0: Disease case v. healthy control
-2. Estimate  relative risk surface for Time 1 v. Time 2
+1. Estimate a relative risk surface for:
+    1. Time 1: Disease case v. healthy control
+    2. Time 2: Disease case v. healthy control
+2. Estimate  relative risk surface for Time 2 v. Time 1
 
 Within areas where the relative risk exceeds an asymptotic normal assumption, the `gateR` package has functionality to examine the features of these cells. Basic visualization is also supported. 
 

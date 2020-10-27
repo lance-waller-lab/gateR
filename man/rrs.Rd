@@ -29,7 +29,7 @@ rrs(
 
 \item{doplot}{Logical. If \code{TRUE}, the output includes basic data visualizations.}
 
-\item{rcols}{Character string of length three (3) specifying the colors for: 1) group A (numertor), 2) neither, and 3) group B (denominator) designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.}
+\item{rcols}{Character string of length three (3) specifying the colors for: 1) group A (numerator), 2) neither, and 3) group B (denominator) designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.}
 
 \item{lower_lrr}{Optional, numeric. Lower cut-off value for the log relative risk value in the color key (typically a negative value). The default is no limit and the color key will include the minimum value of the log relative risk surface.}
 

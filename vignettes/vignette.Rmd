@@ -13,7 +13,25 @@ vignette: >
   knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE,  fig.width = 7, fig.height = 7, fig.show = "hold")
 ```
 
-Start with the necessary packages and seed for the vignette.
+The gateR package is a suite of R functions to identify significant spatial clustering of mass cytometry data used in immunological investigations. The gateR package can be used for a panel of all surface markers, or a mixture of surface markers and functional read outs. The gateR package performs a gating technique that estimates statistically significant fluorescent marker combination values within which one immunologically distinctive group (i.e., disease case) is more associated than another group (i.e., healthy control), successively, using various combinations (i.e., "gates") of fluorescent markers to examine features of cells that may be different between groups. For a two-group comparison, the gateR package uses the spatial relative risk function that is estimated using the [sparr](https://cran.r-project.org/web/packages/sparr/index.html) package. The gates are conducted in two-dimensional space comprised of two fluorescent markers.
+
+Examples of a single condition with two groups:
+
+1. Disease case v. healthy control
+2. Time 2 v. Time 1
+
+For a two-group comparison for two conditions we estimate two relative risk surfaces for one condition and then a ratio of the relative risks. For example:
+
+1. Estimate a relative risk surface for:
+    1. Time 1: Disease case v. healthy control
+    2. Time 0: Disease case v. healthy control
+2. Estimate relative risk surface for Time 1 v. Time 2
+
+Within areas where the relative risk exceeds an asymptotic normal assumption, the gateR package has functionality to examine the features of these cells.
+
+This vignette provides an implementation of the gateR package using a randomly generated data set. Please see the README.md file within the [gateR GitHub repository](https://github.com/Waller-SUSAN/gateR) for an example using publicly available flow cytometry data from the [flowWorkspaceData](https://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html) package available via [Bioconductor](https://bioconductor.org/). Here, we generate data with two conditions, four markers, and two additional features.
+
+We start with the necessary packages and seed for the vignette.
 
 ```{r packages}
   loadedPackages <- c("gateR", "graphics", "maptools", "raster", "sp", "sparr", "spatstat.core", "stats", "tibble", "utils")
@@ -39,14 +57,14 @@ Unique function to randomly generate data multivariate normal (MVN) around a cen
 
 #### Gate 1: Marker 1 and  Marker 2
 
-At Time 0, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.55, 0.55`) and a control centroid at (`0.40, 0.40`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.15`). 
+At Condition 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.55, 0.55`) and a control centroid at (`0.40, 0.40`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.15`). 
 
 ```{r gate 1 time 0}
 # Initial parameters
   ncell <- 100000 # number of observations per group per time
   t0_cas_center <- c(0.55, 0.55)
   t0_con_center <- c(0.40, 0.40)
-# V1 and V2 at Time 0
+# V1 and V2 at Condition 1
   t0_cas <- rand_mvn(centre = t0_cas_center, ncell = ncell, scalar = 0.05)
   t0_con <- rand_mvn(centre = t0_con_center, ncell = ncell, scalar = 0.15)
   graphics::par(pty = "s")
@@ -54,19 +72,19 @@ At Time 0, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  ra
                  col = "blue",
                  xlim = c(0, 1),
                  ylim = c(0, 1),
-                 main = "Gate 1, Time 0",
+                 main = "Gate 1, Condition 1",
                  xlab = "V1",
                  ylab = "V2")
   graphics::points(t0_cas, col = "orangered4")
 ```
 
-At Time 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.45, 0.45`) and a control centroid at (`0.40, 0.40`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.10`). 
+At Condition 2, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.45, 0.45`) and a control centroid at (`0.40, 0.40`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.10`). 
 
 ```{r gate 1 time 1}
 # Initial parameters
   t1_cas_center <- c(0.45, 0.45)
   t1_con_center <- c(0.40, 0.40)
-# V1 and V2 at Time 1
+# V1 and V2 at Condition 2
   t1_cas <- rand_mvn(centre = t1_cas_center, ncell = ncell, scalar = 0.05)
   t1_con <- rand_mvn(centre = t1_con_center, ncell = ncell, scalar = 0.10)
   graphics::par(pty = "s")
@@ -74,7 +92,7 @@ At Time 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  ra
                  col = "cornflowerblue",
                  xlim = c(0, 1),
                  ylim = c(0, 1),
-                 main = "Gate 1, Time 1",
+                 main = "Gate 1, Condition 2",
                  xlab = "V1",
                  ylab = "V2")
   graphics::points(t1_cas, col = "orangered1")
@@ -93,13 +111,13 @@ At Time 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  ra
 
 #### Gate 2: Marker 3 and Marker 4
 
-At Time 0, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.55, 0.55`) and a control centroid at (`0.50, 0.50`) within a unit square window `(0, 05)`, but both have the same amount of spread (`scalar = 0.10`). 
+At Condition 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly MVN with a case centroid at (`0.55, 0.55`) and a control centroid at (`0.50, 0.50`) within a unit square window `(0, 05)`, but both have the same amount of spread (`scalar = 0.10`). 
 
 ```{r gate 2 time 0}
 # Initial parameters
   t0_cas_center <- c(0.55, 0.55)
   t0_con_center <- c(0.50, 0.50)
-# V3 and V4 at Time 0
+# V3 and V4 at Condition 1
   t0_cas <- rand_mvn(centre = t0_cas_center, ncell = ncell, scalar = 0.05)
   t0_con <- rand_mvn(centre = t0_con_center, ncell = ncell, scalar = 0.10)
   graphics::par(pty = "s")
@@ -107,19 +125,19 @@ At Time 0, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  ra
                  col = "blue",
                  xlim = c(0, 1),
                  ylim = c(0, 1),
-                 main = "Gate 2, Time 0",
+                 main = "Gate 2, Condition 1",
                  xlab = "V3",
                  ylab = "V4")
   graphics::points(t0_cas, col = "orangered4")
 ```
 
-At Time 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly with a case centroid at (`0.65, 0.65`) and control a centroid at (`0.50, 0.50`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.10`).
+At Condition 2, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  randomly with a case centroid at (`0.65, 0.65`) and control a centroid at (`0.50, 0.50`) within a unit square window `(0, 1)`, and cases have a more focal cluster (`scalar = 0.05`) than controls (`scalar = 0.10`).
 
 ```{r gate 2 time 1}
 # Initial parameters
   t1_cas_center <- c(0.65, 0.65)
   t1_con_center <- c(0.50, 0.50)
-# V3 and V4 at Time 1
+# V3 and V4 at Condition 2
   t1_cas <- rand_mvn(centre = t1_cas_center, ncell = ncell, scalar = 0.05)
   t1_con <- rand_mvn(centre = t1_con_center, ncell = ncell, scalar = 0.10)
   graphics::par(pty = "s")
@@ -127,7 +145,7 @@ At Time 1, we generate 100,000 cases and 100,000 controls (`ncell = 100000`)  ra
                  col = "cornflowerblue",
                  xlim = c(0, 1),
                  ylim = c(0, 1),
-                 main = "Gate 2, Time 1",
+                 main = "Gate 2, Condition 2",
                  xlab = "V3",
                  ylab = "V4")
   graphics::points(t1_cas, col = "orangered1")
@@ -153,28 +171,28 @@ Generate random values for two example cytokines and append to the data frame.
   graphics::par(mfrow = c(2, 2), pty = "s")
   graphics::plot(stats::density(df_full$C1[df_full$group == "case" 
                                            & df_full$time == "0"]),
-                 main = "Cytokine 1 of Cases at Time 0")
+                 main = "Cytokine 1 of Cases at Condition 1")
   graphics::plot(stats::density(df_full$C1[df_full$group == "case" 
                                            & df_full$time == "1"]),
-                 main = "Cytokine 1 of Cases at Time 1")
+                 main = "Cytokine 1 of Cases at Condition 2")
   graphics::plot(stats::density(df_full$C1[df_full$group == "control"
                                            & df_full$time == "0"]),
-                 main = "Cytokine 1 of Controls at Time 0")
+                 main = "Cytokine 1 of Controls at Condition 1")
   graphics::plot(stats::density(df_full$C1[df_full$group == "control"
                                            & df_full$time == "1"]),
-                 main = "Cytokine 1 of Controls at Time 1")
+                 main = "Cytokine 1 of Controls at Condition 2")
   graphics::plot(stats::density(df_full$C2[df_full$group == "case"
                                            & df_full$time == "0"]),
-                 main = "Cytokine 2 of Cases at Time 0")
+                 main = "Cytokine 2 of Cases at Condition 1")
   graphics::plot(stats::density(df_full$C2[df_full$group == "case" 
                                            & df_full$time == "1"]),
-                 main = "Cytokine 2 of Cases at Time 1")
+                 main = "Cytokine 2 of Cases at Condition 2")
   graphics::plot(stats::density(df_full$C2[df_full$group == "control" 
                                            & df_full$time == "0"]),
-                 main = "Cytokine 2 of Controls at Time 0")
+                 main = "Cytokine 2 of Controls at Condition 1")
   graphics::plot(stats::density(df_full$C2[df_full$group == "control" 
                                            & df_full$time == "1"]),
-                 main = "Cytokine 2 of Controls at Time 1")
+                 main = "Cytokine 2 of Controls at Condition 2")
 ```
 
 The toy data frame has nine columns (id, groups, markers, and cytokines).
@@ -184,7 +202,7 @@ The toy data frame has nine columns (id, groups, markers, and cytokines).
   utils::head(df_full)
 ```
 
-### For a two conditions
+### For two conditions
 
 ```{r 2C}
 # Initial parameters
@@ -238,7 +256,7 @@ The gating process took about `r round(total_time, digits = 1)` *seconds* on a M
                  ylim = c(0, 0.5))
 ```
 
-Compare histograms before and after gating. Gating reduced the overall sample size of observations from `r format(nrow(df_save), big.mark= ",")` (cases & controls and Time 0 & Time 1) to `r format(nrow(out_gate$obs), big.mark = ",")` observations (cases & controls and Time 0 & Time 1). 
+Compare histograms before and after gating. Gating reduced the overall sample size of observations from `r format(nrow(df_save), big.mark= ",")` (cases & controls and Condition 1 & Condition 2) to `r format(nrow(out_gate$obs), big.mark = ",")` observations (cases & controls and Condition 1 & Condition 2). 
 
 ```{r 2C cytokines B}
 # Plot of Cytokine 1
@@ -363,6 +381,9 @@ Compare histograms before and after gating. Gating reduced the overall sample si
 
 ### Current limitations
 
-1. Extracts observations at *all* significant clusters (either case or controls). There is no ability to select which case cluster for the next gate. 
-2. Only two dimensions (i.e., Markers) per gate.
-3. Only two group comparisons (e.g., case v. control) per gate.
+1. Extracts observations at *all* significant clusters (either case or controls) and there is currently no functionality to select cells within a specific (set of) cluster(s) for the next gate. 
+2. Only two dimensions (i.e., markers) per gate because the spatial relative risk function is a two-dimensional spatial statistic.
+3. Only two-group comparisons (e.g., case v. control) per gate because the spatial relative risk function is a ratio by nature.
+4. Only comparisons of one condition or comparisons of two conditions are possible.
+5. Large computational expense (i.e., run-time) to calculate the correlated Bonferroni correction.
+6. A large sample size of observations (i.e., cells) may overload the gateR process. We are evaluating this potential limitation and developing a possible solution (e.g., randomly subsetting the data to estimate the clusters at each gate).
