@@ -16,7 +16,7 @@
 library(hexSticker)
 
 # Image file
-path_image <- "./man/figures/gator.png"
+path_image <- "./dev/gator.png"
 
 # Create hexSticker
 ## the alligator palette https://www.color-hex.com/color-palette/33955
