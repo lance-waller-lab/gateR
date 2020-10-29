@@ -76,7 +76,7 @@ if (interactive()) {
   fr1 <- ncfs[[1]]
   fr2 <- ncfs[[2]]
 
-## Comparison of two samples at two time points (two conditions) "g1" and "g2"
+# Comparison of two samples at two time points (two conditions) "g1" and "g2"
 ## (Create a random binary variable for "g2")
 ## One gate (two markers) "CD4", "CD38"
 ## Log10 Transformation for both markers

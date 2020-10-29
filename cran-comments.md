@@ -27,7 +27,7 @@ There was 1 NOTE:
 0 errors | 0 warnings | 0 notes
 
 * Duration
-  * local OS X install, R 3.6.3: 99 seconds
+  * local OS X install, R 3.6.3: 97 seconds
   * win-builder, devel: 584 seconds (under 10 minutes)
   * win-builder, oldrelease: 530 seconds
   * win-builder, release: 620 seconds

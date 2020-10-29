@@ -70,7 +70,7 @@ if (interactive()) {
   fr1 <- ncfs[[1]]
   fr2 <- ncfs[[2]]
 
-## Comparison of two samples (single condition) "g1"
+# Comparison of two samples (single condition) "g1"
 ## One gate (two markers) "CD4", "CD38"
 ## Log10 Transformation for both markers
 ## Remove cells with NA and Inf values
