@@ -24,7 +24,7 @@ use_test()
 test()
 
 # NAMESPACE
-document()
+devtools::document()
 install()
 
 # Check

@@ -70,7 +70,6 @@ test_that("lotrrs throws error with invalid arguments", {
            p_correct = "none")
   )
   
-  
   # Incorrectly specified alpha
   expect_error(
     lotrrs(dat = obs_dat,
@@ -89,22 +88,22 @@ test_that("lotrrs throws error with invalid arguments", {
 
 test_that("lotrrs works", {
 
-  expect_named(
-    lotrrs(dat = obs_dat,
-        p_correct = "none")
-  )
+  # expect_named(
+  #   lotrrs(dat = obs_dat,
+  #       p_correct = "none")
+  # )
 
   expect_named(
     lotrrs(dat = obs_dat,
         p_correct = "uncorrelated")
   )
 
-  expect_named(
-    lotrrs(dat = obs_dat,
-        resolution = 40,
-        p_correct = "correlated")
-  )
-
+  # expect_named(
+  #   lotrrs(dat = obs_dat,
+  #       resolution = 40,
+  #       p_correct = "correlated")
+  # )
+  # 
   # expect_named(
   #   lotrrs(dat = obs_dat,
   #       alpha = 0.1,

@@ -80,22 +80,22 @@ test_that("rrs throws error with invalid arguments", {
 
 test_that("rrs works", {
 
-  expect_named(
-    rrs(dat = obs_dat,
-        p_correct = "none")
-  )
+  # expect_named(
+  #   rrs(dat = obs_dat,
+  #       p_correct = "none")
+  # )
 
   expect_named(
     rrs(dat = obs_dat,
         p_correct = "uncorrelated")
   )
 
-  expect_named(
-    rrs(dat = obs_dat,
-        resolution = 40,
-        p_correct = "correlated")
-  )
-
+  # expect_named(
+  #   rrs(dat = obs_dat,
+  #       resolution = 40,
+  #       p_correct = "correlated")
+  # )
+  #
   # expect_named(
   #   rrs(dat = obs_dat,
   #       alpha = 0.1,
