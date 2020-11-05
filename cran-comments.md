@@ -1,9 +1,8 @@
-## This is the first resubmission
+## This is the second resubmission
 
-* Actions taken regarding feedback from CRAN teams' auto-check service
-  * Reduced overall checktime by changing example in gating() by changing from \donttest{} to if (interactive()) {}
-  * Reduced overall checktime by streamlining the number of "[it] works" tests in testthat for gating(), lotrrs(), and rrs()
-  * Note about "Possibly mis-spelled words in DESCRIPTION" can be safely ignored
+* Actions taken regarding feedback from Gregor Seyer:
+  * Reduced the length of the title to less than 65 characters
+  * Replaced cat() with message() in gating(), lotrrs(), and rrs() functions to allow for suppressable information messages
 
 ## Test environments
 * local OS X install, R 3.6.3
@@ -27,9 +26,9 @@ There was 1 NOTE:
 0 errors | 0 warnings | 0 notes
 
 * Duration
-  * local OS X install, R 3.6.3: 97 seconds
-  * win-builder, devel: 584 seconds (under 10 minutes)
-  * win-builder, oldrelease: 530 seconds
-  * win-builder, release: 620 seconds
+  * local OS X install, R 3.6.3: 99 seconds
+  * win-builder, devel: 341 seconds
+  * win-builder, oldrelease: 282 seconds
+  * win-builder, release: 330 seconds
 
 ## Submitted by Maintainer

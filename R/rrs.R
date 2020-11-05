@@ -140,7 +140,7 @@ rrs <- function(dat,
                                                        ...)))
   
   if (all(is.na(out$rr$v))) { 
-    cat("relative risk unable to be estimated")
+    message("relative risk unable to be estimated")
     return(out)
   }
   
@@ -150,7 +150,7 @@ rrs <- function(dat,
   # Alpha level
   if (p_correct == "none") { out$alpha <- alpha }
   if (p_correct == "correlated") {
-    cat("\nPlease be patient... Calculating correlated Bonferroni correction\n")
+    message("Please be patient... Calculating correlated Bonferroni correction")
     alpha_correct <- pval_correct(input = out$lrr, alpha = alpha, nbc = nbc)
     out$alpha <- alpha_correct$correlated 
   } 

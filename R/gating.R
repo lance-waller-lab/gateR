@@ -233,8 +233,8 @@ gating <- function(dat,
 
     # Go back one gate if current gate has no significant area and produce output of previous gate
     if (all(raster::values(Ps)[!is.na(raster::values(Ps))] == 2) | all(is.na(raster::values(Ps)))) {
-      cat(paste("\nGate", k, "yeilded no significant", type_cluster, "cluster(s)...",
-                "Returning results from previous gate\n",
+      message(paste("Gate", k, "yeilded no significant", type_cluster, "cluster(s)...",
+                "Returning results from previous gate",
                 sep = " "))
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
       out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
@@ -250,8 +250,8 @@ gating <- function(dat,
     pols <- try(maptools::unionSpatialPolygons(out_pol[out_pol$layer == v, ],
                                                IDs = rep(1, length(out_pol[out_pol$layer == v, ]))), silent = TRUE)
     if("try-error" %in% class(pols)) {
-      cat(paste("Gate", k, "yeilded no significant", type_cluster, "cluster(s)...",
-                "Returning results from previous gate\n",
+      message(paste("Gate", k, "yeilded no significant", type_cluster, "cluster(s)...",
+                "Returning results from previous gate",
                 sep = " "))
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
       out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
@@ -269,7 +269,7 @@ gating <- function(dat,
 
     # Output for the final gate
     if (k == n_gate) {
-      cat(paste("\nObservations within significant", type_cluster, "cluster(s) of Gate", k, "\n",sep = " "))
+      message(paste("Observations within significant", type_cluster, "cluster(s) of Gate", k, sep = " "))
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
       n_out[[k + 1]] <- nrow(output)
       out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)

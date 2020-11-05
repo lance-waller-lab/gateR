@@ -1,10 +1,10 @@
 ---
-title: "gateR: Statistical Gating Application for Flow and Mass Cytometry Analysis via Spatial Kernel Density Estimation"
+title: "gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation"
 author: 'Ian D. Buller, Ph.D., M.A. (Github: @idblr)'
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{gateR: Statistical Gating Application for Flow and Mass Cytometry Analysis via Spatial Kernel Density Estimation}
+  %\VignetteIndexEntry{gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation}
   %\VignetteEngine{R.rsp::asis}
   %\VignetteEncoding{UTF-8}
 ---
