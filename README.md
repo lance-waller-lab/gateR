@@ -1,4 +1,4 @@
-gateR: Statistical Gating Application for Flow and Mass Cytometry Analysis via Spatial Kernel Density Estimation <img src="man/figures/gateR.png" width="120" align="right" />
+gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation <img src="man/figures/gateR.png" width="120" align="right" />
 ===================================================
 
 <h2 id="overview">
