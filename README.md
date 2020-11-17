@@ -9,17 +9,19 @@ Overview
 
 The `gateR` package is a suite of `R` functions to identify significant spatial clustering of flow and mass cytometry data used in immunological investigations. For a two-group comparison we detect clusters using the kernel-based spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The tests are conducted in two-dimensional space comprised of two fluorescent markers. 
 
-Examples for a single condition:
+Examples of a single condition with two groups:
 
 1. Disease case v. healthy control
-2. Time 2 v. Time 1
+2. Time 2 v. Time 1 (baseline)
 
-For a two-group comparison for two conditions we estimate two relative risk surfaces for one condition and then a ratio of the relative risks. For example:
+For a two-group comparison of two conditions we estimate two relative risk surfaces for one condition and then a ratio of the relative risks. For example:
 
 1. Estimate a relative risk surface for:
-    1. Time 1: Disease case v. healthy control
-    2. Time 2: Disease case v. healthy control
-2. Estimate  relative risk surface for Time 2 v. Time 1
+    1. Condition 2B v. Condition 2A
+    2. Condition 1B v. Condition 1A
+2. Estimate relative risk surface for the ratio:
+
+$$\frac{(\frac{Condtion2B}{Condition2A})}{(\frac{Condition1B}{Condition1A})}$$
 
 Within areas where the relative risk exceeds an asymptotic normal assumption, the `gateR` package has functionality to examine the features of these cells. Basic visualization is also supported. 
 
@@ -95,7 +97,7 @@ Available sample data sets
 </thead>
 <tbody>
 <td><code>randCyto</code></td>
-<td>A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the {flowWorkspaceData} package found on [Bioconductor](http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html) and formated for {gateR} input.</td>
+<td>A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the [flowWorkspaceData](https://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html) package found on [Bioconductor](https://bioconductor.org) and formated for `gateR` input.</td>
 </tr>
 </tbody>
 <table>
