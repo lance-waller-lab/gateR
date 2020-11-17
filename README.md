@@ -21,7 +21,7 @@ For a two-group comparison of two conditions we estimate two relative risk surfa
     2. Condition 1B v. Condition 1A
 2. Estimate relative risk surface for the ratio:
 
-$$\frac{(\frac{Condtion2B}{Condition2A})}{(\frac{Condition1B}{Condition1A})}$$
+![equation](https://latex.codecogs.com/gif.latex?%5Cfrac%7B%28%5Cfrac%7BCondtion2B%7D%7BCondition2A%7D%29%7D%7B%28%5Cfrac%7BCondition1B%7D%7BCondition1A%7D%29%7D)
 
 Within areas where the relative risk exceeds an asymptotic normal assumption, the `gateR` package has functionality to examine the features of these cells. Basic visualization is also supported. 
 
@@ -97,7 +97,7 @@ Available sample data sets
 </thead>
 <tbody>
 <td><code>randCyto</code></td>
-<td>A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the [flowWorkspaceData](https://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html) package found on [Bioconductor](https://bioconductor.org) and formated for `gateR` input.</td>
+<td>A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the <a href="https://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html">flowWorkspaceData</a> package found on <a href="https://bioconductor.org">Bioconductor</a> and formated for `gateR` input.</td>
 </tr>
 </tbody>
 <table>
