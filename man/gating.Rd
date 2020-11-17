@@ -85,45 +85,12 @@ Provides functionality for a correction for multiple testing.  If \code{p_correc
 }
 \examples{
 if (interactive()) {
-# Use 'extdata' from the {flowWorkspaceData} package
-  flowDataPath <- system.file("extdata", package = "flowWorkspaceData")
-  fcsFiles <- list.files(pattern = "CytoTrol", flowDataPath, full = TRUE)
-  ncfs  <- ncdfFlow::read.ncdfFlowSet(fcsFiles)
-  fr1 <- ncfs[[1]]
-  fr2 <- ncfs[[2]]
-
-# Comparison of two samples (single condition) "g1"
-## Two gates (four markers) "CD4", "CD38", "CD8", and "CD3"
-## Log10 Transformation for both markers
-## Remove cells with NA and Inf values
-
-# First sample
-  obs_dat1 <- data.frame("id" = seq(1, nrow(fr1@exprs), 1),
-                         "g1" = rep(1, nrow(fr1@exprs)),
-                         "log10_CD4" = log(fr1@exprs[ , 5], 10),
-                         "log10_CD38" = log(fr1@exprs[ , 6], 10),
-                         "log10_CD8" = log(fr1@exprs[ , 7], 10),
-                         "log10_CD3" = log(fr1@exprs[ , 8], 10))
-# Second sample
-  obs_dat2 <- data.frame("id" = seq(1, nrow(fr2@exprs), 1),
-                         "g1" = rep(2, nrow(fr2@exprs)),
-                         "log10_CD4" = log(fr2@exprs[ , 5], 10),
-                         "log10_CD38" = log(fr2@exprs[ , 6], 10),
-                         "log10_CD8" = log(fr2@exprs[ , 7], 10),
-                         "log10_CD3" = log(fr2@exprs[ , 8], 10))
-# Full set
-  obs_dat <- rbind(obs_dat1, obs_dat2)
-  obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
-  obs_dat <- obs_dat[is.finite(rowSums(obs_dat)), ] # remove Infs
-  obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
-
-# Run gating() function
 ## Single condition, no multiple testing correction
-  test_gate <- gateR::gating(dat = obs_dat,
-                             vars = c("log10_CD4", "log10_CD38",
-                                      "log10_CD8", "log10_CD3"),
+  test_gate <- gateR::gating(dat = randCyto,
+                             vars = c("arcsinh_CD4", "arcsinh_CD38",
+                                      "arcsinh_CD8", "arcsinh_CD3"),
                              n_condition = 1,
                              p_correct = "none")
-}                              
+}
 
 }

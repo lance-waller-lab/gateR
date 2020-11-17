@@ -76,6 +76,30 @@ Available functions
 </tbody>
 <table>
 
+<h2 id="available-data">
+
+Available sample data sets
+
+</h2>
+
+<table>
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<td><code>randCyto</code></td>
+<td>A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the {flowWorkspaceData} package found on [Bioconductor](http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html) and formated for {gateR} input.</td>
+</tr>
+</tbody>
+<table>
+
 <h2 id="authors">
 
 Authors
@@ -99,6 +123,7 @@ set.seed(1234) # for reproducibility
 # ------------------ #
 
 library(gateR)
+library(dplyr)
 library(flowWorkspaceData)
 library(ncdfFlow)
 library(stats)
@@ -145,6 +170,9 @@ obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
 g2 <- stats::rbinom(nrow(obs_dat), 1, 0.5)
 obs_dat$g2 <- as.factor(g2)
 obs_dat <- obs_dat[ , c(1:2,7,3:6)]
+
+# Export 'randCyto' data for CRAN examples
+randCyto <- dplyr::sample_frac(obs_dat, size = 0.1) # random subsample
 
 # ---------------------------- #
 # Run gateR with one condition #

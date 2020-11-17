@@ -16,6 +16,10 @@
 #' 
 #' \code{\link{lotrrs}} Estimates a ratio of relative risk surfaces and computes the asymptotic p-value surface for a single gate with two conditions. Includes features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas. This function can also be used as a standalone function.
 #' 
+#' \bold{Flow Cytometry Data}
+#' 
+#' \code{\link{randCyto}} A sample dataset containing information about flow cytometry data with two binary categorical variables. The data are a random subset of the 'extdata' data in the 'flowWorkspaceData' package found on Bioconductor \url{http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html} and formated for gateR input.
+#' 
 #' @name gateR-package
 #' @aliases gateR-package gateR
 #' @docType package

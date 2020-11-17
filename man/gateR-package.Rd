@@ -22,6 +22,10 @@ Key content of the 'gateR' package include:\cr
 \code{\link{rrs}} Estimates a relative risk surface and computes the asymptotic p-value surface for a single gate with a single condition. Includes features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas.  This function can also be used as a standalone function.
 
 \code{\link{lotrrs}} Estimates a ratio of relative risk surfaces and computes the asymptotic p-value surface for a single gate with two conditions. Includes features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas. This function can also be used as a standalone function.
+
+\bold{Flow Cytometry Data}
+
+\code{\link{randCyto}} A sample dataset containing information about flow cytometry data with two binary categorical variables. The data are a random subset of the 'extdata' data in the 'flowWorkspaceData' package found on Bioconductor \url{http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html} and formated for gateR input.
 }
 \section{Dependencies}{
  The 'gateR' package relies heavily upon \code{\link{sparr}}, \code{\link{sp}}, and \code{\link{raster}}. For a two-level comparison, the spatial relative risk function uses the \code{\link[sparr]{risk}} function. The \code{gating} function extracts cells within significant clusters using the \code{\link[raster]{rasterToPolygons}}, \code{\link[maptools]{unionSpatialPolygons}}, and \code{\link[sp]{over}} functions. The calculation of a Bonferroni correction for multiple testing accounting for the spatial correlation of the estimated surface uses the \code{\link[pgirmess]{correlog}} function. Basic visualizations rely on the \code{\link[fields]{image.plot}} function.

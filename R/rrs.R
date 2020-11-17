@@ -37,44 +37,8 @@
 #' @importFrom sparr OS risk
 #' @export 
 #'
-#' @examples
-#' if (interactive()) {
-#' # Use 'extdata' from the {flowWorkspaceData} package
-#'   flowDataPath <- system.file("extdata", package = "flowWorkspaceData")
-#'   fcsFiles <- list.files(pattern = "CytoTrol", flowDataPath, full = TRUE)
-#'   ncfs  <- ncdfFlow::read.ncdfFlowSet(fcsFiles)
-#'   fr1 <- ncfs[[1]]
-#'   fr2 <- ncfs[[2]]
-#' 
-#' # Comparison of two samples (single condition) "g1"
-#' ## One gate (two markers) "CD4", "CD38"
-#' ## Log10 Transformation for both markers
-#' ## Remove cells with NA and Inf values
-#' 
-#' # First sample
-#'   obs_dat1 <- data.frame("id" = seq(1, nrow(fr1@exprs), 1),
-#'                          "g1" = rep(1, nrow(fr1@exprs)),
-#'                          "log10_CD4" = log(fr1@exprs[ , 5], 10),
-#'                          "log10_CD38" = log(fr1@exprs[ , 6], 10))
-#' # Second sample
-#'   obs_dat2 <- data.frame("id" = seq(1, nrow(fr2@exprs), 1),
-#'                          "g1" = rep(2, nrow(fr2@exprs)),
-#'                          "log10_CD4" = log(fr2@exprs[ , 5], 10),
-#'                          "log10_CD38" = log(fr2@exprs[ , 6], 10))
-#' # Full set
-#'   obs_dat <- rbind(obs_dat1, obs_dat2)
-#'   obs_dat <- obs_dat[complete.cases(obs_dat), ] # remove NAs
-#'   obs_dat <- obs_dat[is.finite(rowSums(obs_dat)), ] # remove Infs
-#'   obs_dat$g1 <- as.factor(obs_dat$g1) # set "g1" as binary factor
-#'   
-#' # Create a placeholder variable
-#'   g2 <- stats::rbinom(nrow(obs_dat), 1, 0.5)
-#'   obs_dat$g2 <- as.factor(g2)
-#'   obs_dat <- obs_dat[ , c(1:2,5,3:4)]
-#' 
-#' # Run rrs() function
-#'   test_rrs <- rrs(dat = obs_dat)
-#' }
+#' @examples 
+#' test_rrs <- rrs(dat = randCyto)
 #'   
 rrs <- function(dat, 
                 alpha = 0.05, 

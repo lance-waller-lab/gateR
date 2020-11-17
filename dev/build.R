@@ -4,6 +4,7 @@ install.packages(c("devtools", "roxygen2", "testthat", "knitr"))
 library(devtools)
 devtools::has_devel()
 library(roxygen2)
+library(rhub)
 library(testthat)
 
 devtools::load_all()
@@ -35,7 +36,7 @@ usethis::use_build_ignore(c("build"))
 usethis::use_build_ignore(c("figures"))
 
 # rhub
-devtools::check_rhub()
+#devtools::check_rhub()
 rhub::check_for_cran()
 
 # Check on windows
