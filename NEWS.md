@@ -1,5 +1,9 @@
 # gateR (development version)
 
+# gateR v0.1.4.9000
+  * Added documentation to lotrrs(), rrs(), and gating() about the levels of condition(s)
+  * Fixed bug in lotrrs() that was mislabeling numerator and denominator levels of second condition
+
 # gateR v0.1.3
   * Removed 'ncdFlow', 'flowWorkspaceData', and 'knitr' from Suggests
   * Created a random data set 'randCyto' and all documentation

@@ -23,6 +23,8 @@
 #' The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers. Basic visualization is available if \code{doplot = TRUE}. 
 #' 
 #' Provides functionality for a correction for multiple testing.  If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
+#' 
+#' The two condition variables (Condition A and Condition B) within \code{dat} must be of class 'factor' with two levels. The first level in each variable is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value.
 #'
 #' @return An object of class 'list' where each element is a object of class 'rrs' created by the \code{\link[sparr]{risk}} function with two additional components:
 #' 
@@ -94,87 +96,87 @@ lotrrs <- function(dat,
   Vnames <- names(dat) # axis names
   names(dat) <- c("id", "G1", "G2", "V1", "V2")
   levels(dat$G1) <- c("case", "control")
-  levels(dat$G2) <- c("0", "1")
+  levels(dat$G2) <- c("case", "control")
   
   # Create two PPPs
-  t0_df <- dat[dat$G2 == "0", ]
-  t1_df <- dat[dat$G2 == "1", ]
-  suppressMessages(suppressWarnings(t_ppp <- spatstat::ppp(x = dat$V1,
+  numer_df <- dat[dat$G2 == "case", ]
+  denom_df <- dat[dat$G2 == "control", ]
+  suppressMessages(suppressWarnings(both_ppp <- spatstat::ppp(x = dat$V1,
                                                                 y = dat$V2,
                                                                 marks = dat$G1,
                                                                 window = win)))
-  suppressMessages(suppressWarnings(t0_ppp <- spatstat::ppp(x = t0_df$V1,
-                                                                 y = t0_df$V2,
-                                                                 marks = t0_df$G1,
+  suppressMessages(suppressWarnings(denom_ppp <- spatstat::ppp(x = denom_df$V1,
+                                                                 y = denom_df$V2,
+                                                                 marks = denom_df$G1,
                                                                  window = win)))
-  suppressMessages(suppressWarnings(t1_ppp <- spatstat::ppp(x = t1_df$V1,
-                                                                 y = t1_df$V2,
-                                                                 marks = t1_df$G1,
+  suppressMessages(suppressWarnings(numer_ppp <- spatstat::ppp(x = numer_df$V1,
+                                                                 y = numer_df$V2,
+                                                                 marks = numer_df$G1,
                                                                  window = win)))
   
   # Estimate two SRRs
-  t_h0 <- sparr::OS(t_ppp, "geometric")
-  rm(t_ppp) # conserve memory
-  t0_rr <- sparr::risk(t0_ppp,
-                       h0 = t_h0,
-                       log = FALSE,
-                       edge = "diggle",
-                       verbose = verbose,
-                       ...)
-  t1_rr <- sparr::risk(t1_ppp,
-                       h0 = t_h0,
-                       log = FALSE,
-                       edge = "diggle",
-                       verbose = verbose,
-                       ...)
+  both_h0 <- sparr::OS(both_ppp, "geometric")
+  rm(both_ppp) # conserve memory
+  denom_rr <- sparr::risk(denom_ppp,
+                          h0 = both_h0,
+                          log = FALSE,
+                          edge = "diggle",
+                          verbose = verbose,
+                          ...)
+  numer_rr <- sparr::risk(numer_ppp,
+                          h0 = both_h0,
+                          log = FALSE,
+                          edge = "diggle",
+                          verbose = verbose,
+                          ...)
   
   # Create objects of class 'bivden'
-  t0_bd <- sparr::bivariate.density(t0_ppp,
-                                    h0 = t_h0,
-                                    edge = "diggle",
-                                    verbose = FALSE,
-                                    ...)
-  t1_bd <- sparr::bivariate.density(t1_ppp,
-                                    h0 = t_h0,
-                                    edge = "diggle",
-                                    verbose = FALSE,
-                                    ...)
-  t0_rr_bd <- list("z" = t0_rr$rr,
-                   "h0" = t0_rr$f$h0,
-                   "hp" = t0_rr$f$hp,
-                   "h" = t0_rr$f$h,
-                   "him" = t0_rr$f$him,
-                   "q" = t0_bd$q,
-                   "gamma" = t0_rr$f$gamma,
-                   "geometric" = t0_rr$f$geometric,
-                   "pp" = t0_ppp)
-  t1_rr_bd <- list("z" = t1_rr$rr,
-                   "h0" = t1_rr$f$h0,
-                   "hp" = t1_rr$f$hp,
-                   "h" = t1_rr$f$h,
-                   "him" = t1_rr$f$him,
-                   "q" = t1_bd$q,
-                   "gamma" = t1_rr$f$gamma,
-                   "geometric" = t1_rr$f$geometric,
-                   "pp" = t1_ppp)
-  class(t0_rr_bd) <- "bivden"
-  class(t1_rr_bd) <- "bivden"
-  rm(t0_ppp, t1_ppp, t0_bd, t1_bd) # conserve memory
+  denom_bd <- sparr::bivariate.density(denom_ppp,
+                                       h0 = both_h0,
+                                       edge = "diggle",
+                                       verbose = FALSE,
+                                       ...)
+  numer_bd <- sparr::bivariate.density(numer_ppp,
+                                       h0 = both_h0,
+                                       edge = "diggle",
+                                       verbose = FALSE,
+                                       ...)
+  denom_rr_bd <- list("z" = denom_rr$rr,
+                      "h0" = denom_rr$f$h0,
+                      "hp" = denom_rr$f$hp,
+                      "h" = denom_rr$f$h,
+                      "him" = denom_rr$f$him,
+                      "q" = denom_bd$q,
+                      "gamma" = denom_rr$f$gamma,
+                      "geometric" = denom_rr$f$geometric,
+                       "pp" = denom_ppp)
+  numer_rr_bd <- list("z" = numer_rr$rr,
+                      "h0" = numer_rr$f$h0,
+                      "hp" = numer_rr$f$hp,
+                      "h" = numer_rr$f$h,
+                      "him" = numer_rr$f$him,
+                      "q" = numer_bd$q,
+                      "gamma" = numer_rr$f$gamma,
+                      "geometric" = numer_rr$f$geometric,
+                      "pp" = numer_ppp)
+  class(denom_rr_bd) <- "bivden"
+  class(numer_rr_bd) <- "bivden"
+  rm(denom_ppp, numer_ppp, denom_bd, numer_bd) # conserve memory
   
   # Estimate the spatial relative risk surface of the two spatial relative risks
   ## Also estimate the asymptotic p-value surface
-  suppressMessages(suppressWarnings(out <- sparr::risk(f = t1_rr_bd,
-                                                         g = t0_rr_bd,
-                                                         h0 = t_h0,
-                                                         tolerate = TRUE,
-                                                         edge = "diggle",
-                                                         verbose = verbose,
-                                                         log = FALSE,
-                                                         ...)))
+  suppressMessages(suppressWarnings(out <- sparr::risk(f = numer_rr_bd,
+                                                       g = denom_rr_bd,
+                                                       h0 = both_h0,
+                                                       tolerate = TRUE,
+                                                       edge = "diggle",
+                                                       verbose = verbose,
+                                                       log = FALSE,
+                                                       ...)))
   
-  suppressMessages(suppressWarnings(out$rr <- t1_rr_bd$z/t0_rr_bd$z))
-  suppressMessages(suppressWarnings(out$lrr <- log(t1_rr_bd$z) - log(t0_rr_bd$z)))
-  rm(t0_rr_bd, t1_rr_bd) # conserve memory
+  suppressMessages(suppressWarnings(out$rr <- numer_rr_bd$z/denom_rr_bd$z))
+  suppressMessages(suppressWarnings(out$lrr <- log(numer_rr_bd$z) - log(denom_rr_bd$z)))
+  rm(denom_rr_bd, numer_rr_bd) # conserve memory
   
   if (all(is.na(out$rr$v))) { 
     message("relative risk unable to be estimated")
@@ -240,7 +242,7 @@ lotrrs <- function(dat,
                                         labels = tr_plot$labels,
                                         cex.axis = 0.67),
                        main = paste("log of the\nrelative risk surfaces\n(bandwidth:",
-                                    round(t_h0, digits = 3),
+                                    round(both_h0, digits = 3),
                                     "units)",
                                     sep = " "))
     par(bg = "transparent")
