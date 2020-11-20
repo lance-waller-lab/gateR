@@ -42,7 +42,7 @@ NULL
 #' @importFrom sp coordinates over
 #' @importFrom sparr OS risk
 #' @importFrom spatstat as.im owin ppp 
-#' @importFrom stats na.omit
+#' @importFrom stats na.omit relevel
 #' @importFrom tibble add_column
 #' @importFrom fields image.plot
 NULL

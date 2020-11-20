@@ -38,6 +38,7 @@
 #' @importFrom raster extent values
 #' @importFrom spatstat owin ppp
 #' @importFrom sparr OS risk
+#' @importFrom stats relevel
 #' @export 
 #'
 #' @examples 
