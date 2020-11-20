@@ -10,6 +10,8 @@
 #' @param rcols Character string of length three (3) specifying the colors for: 1) group A (numerator), 2) neither, and 3) group B (denominator) designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.
 #' @param lower_lrr Optional, numeric. Lower cut-off value for the log relative risk value in the color key (typically a negative value). The default is no limit and the color key will include the minimum value of the log relative risk surface. 
 #' @param upper_lrr Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit and the color key will include the maximum value of the log relative risk surface.
+#' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
+#' @param c2n Optional, character. The name of the level for the numerator of condition B. The default is null and the first level is treated as the numerator.
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
 #' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
@@ -24,7 +26,7 @@
 #' 
 #' Provides functionality for a correction for multiple testing.  If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 #' 
-#' The two condition variables (Condition A and Condition B) within \code{dat} must be of class 'factor' with two levels. The first level in each variable is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value.
+#' The two condition variables (Condition A and Condition B) within \code{dat} must be of class 'factor' with two levels. The first level in each variable is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value. The levels can also be specified using the \code{c1n} and \code{c2n} parameters.
 #'
 #' @return An object of class 'list' where each element is a object of class 'rrs' created by the \code{\link[sparr]{risk}} function with two additional components:
 #' 
@@ -56,8 +58,10 @@ lotrrs <- function(dat,
                    rcols = c("#FF0000", "#cccccc", "#0000FF"),
                    lower_lrr = NULL,
                    upper_lrr = NULL,
+                   c1n = NULL,
+                   c2n = NULL,
                    win = NULL, 
-                   verbose = FALSE, 
+                   verbose = FALSE,
                    ...) {
   
   # Checks
@@ -95,12 +99,18 @@ lotrrs <- function(dat,
   
   Vnames <- names(dat) # axis names
   names(dat) <- c("id", "G1", "G2", "V1", "V2")
-  levels(dat$G1) <- c("case", "control")
-  levels(dat$G2) <- c("case", "control")
+  
+  if (!is.null(c1n)) {
+    dat$G1 <- stats::relevel(dat$G1, c1n)
+  }
+  
+  if (!is.null(c2n)) {
+    dat$G2 <- stats::relevel(dat$G2, c2n)
+  }
   
   # Create two PPPs
-  numer_df <- dat[dat$G2 == "case", ]
-  denom_df <- dat[dat$G2 == "control", ]
+  numer_df <- dat[dat$G2 == levels(dat$G2)[1], ]
+  denom_df <- dat[dat$G2 == levels(dat$G2)[2], ]
   suppressMessages(suppressWarnings(both_ppp <- spatstat::ppp(x = dat$V1,
                                                                 y = dat$V2,
                                                                 marks = dat$G1,

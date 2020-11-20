@@ -13,6 +13,8 @@
 #' @param rcols Character string of length three (3) specifying the colors for: 1) group A (numerator), 2) neither, and 3) group B (denominator) designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.
 #' @param lower_lrr Optional, numeric. Lower cut-off value for the log relative risk value in the color key (typically a negative value). The default is no limit and the color key will include the minimum value of the log relative risk surface. 
 #' @param upper_lrr Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit and the color key will include the maximum value of the log relative risk surface.
+#' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
+#' @param c2n Optional, character. The name of the level for the numerator of condition B. The default is null and the first level is treated as the numerator.
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
 #' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
@@ -21,7 +23,7 @@
 #' 
 #' The \code{vars} argument must be a vector with an even-numbered length where the odd-numbered elements are the markers used on the x-axis of a gate and the even-numbered elements are the markers used on the y-axis of a gate. For example, if \code{vars = c("V1", "V2", "V3", and "V4")} then the first gate is "V1" on the x-axis and "V2" on the y-axis and then the second gate is V3" on the x-axis and "V4" on the y-axis. Makers can be repeated in successive gates. 
 #' 
-#' The \code{n_condition} argument specifies if the gating strategy is performed for one condition or two conditions. If \code{n_condition = 1}, then the function performs a one condition gating strategy using the internal \code{rrs} function, which computes the statistically significant areas (clusters) of a relative risk surface at each gate and selects the cells within the clusters specified by the \code{numerator} argument. If \code{n_condition = 2}, then the function performs a two conditions gating strategy using the internal \code{lotrrs} function, which computes the statistically significant areas (clusters) of a ratio of relative risk surfaces at each gate and selects the cells within the clusters specified by the \code{numerator} argument. The condition variable(s) within \code{dat} must be of class 'factor' with two levels. The first level is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value. See the documentation for the internal \code{rrs} and \code{lotrrs} functions for more details.
+#' The \code{n_condition} argument specifies if the gating strategy is performed for one condition or two conditions. If \code{n_condition = 1}, then the function performs a one condition gating strategy using the internal \code{rrs} function, which computes the statistically significant areas (clusters) of a relative risk surface at each gate and selects the cells within the clusters specified by the \code{numerator} argument. If \code{n_condition = 2}, then the function performs a two conditions gating strategy using the internal \code{lotrrs} function, which computes the statistically significant areas (clusters) of a ratio of relative risk surfaces at each gate and selects the cells within the clusters specified by the \code{numerator} argument. The condition variable(s) within \code{dat} must be of class 'factor' with two levels. The first level is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value. The levels can also be specified using the \code{c1n} and \code{c2n} parameters. See the documentation for the internal \code{rrs} and \code{lotrrs} functions for more details.
 #' 
 #' The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers.
 #' 
@@ -75,6 +77,8 @@ gating <- function(dat,
                    rcols = c("#FF0000", "#cccccc", "#0000FF"),
                    lower_lrr = NULL,
                    upper_lrr = NULL,
+                   c1n = NULL,
+                   c2n = NULL,
                    win = NULL,
                    verbose = FALSE,
                    ...) {
@@ -176,6 +180,8 @@ gating <- function(dat,
                   rcols = rcols,
                   lower_lrr = lower_lrr,
                   upper_lrr = upper_lrr,
+                  c1n = c1n,
+                  c2n = c2n,
                   verbose = verbose,
                   ...)
     } else {
@@ -188,6 +194,7 @@ gating <- function(dat,
                rcols = rcols,
                lower_lrr = lower_lrr,
                upper_lrr = upper_lrr,
+               c1n = c1n,
                verbose = verbose,
                ...)
     }

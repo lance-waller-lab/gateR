@@ -13,6 +13,7 @@ rrs(
   rcols = c("#FF0000", "#cccccc", "#0000FF"),
   lower_lrr = NULL,
   upper_lrr = NULL,
+  c1n = NULL,
   win = NULL,
   verbose = FALSE,
   ...
@@ -34,6 +35,8 @@ rrs(
 \item{lower_lrr}{Optional, numeric. Lower cut-off value for the log relative risk value in the color key (typically a negative value). The default is no limit and the color key will include the minimum value of the log relative risk surface.}
 
 \item{upper_lrr}{Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit and the color key will include the maximum value of the log relative risk surface.}
+
+\item{c1n}{Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator.}
 
 \item{win}{Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data.}
 
@@ -61,7 +64,7 @@ This function estimates a relative risk surface and computes the asymptotic p-va
 
 Provides functionality for a correction for multiple testing. If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 
-The condition variable (Condition A) within \code{dat} must be of class 'factor' with two levels. The first level is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value.
+The condition variable (Condition A) within \code{dat} must be of class 'factor' with two levels. The first level is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value. The level can also be specified using the \code{c1n} parameter.
 }
 \examples{
 test_rrs <- rrs(dat = randCyto)
