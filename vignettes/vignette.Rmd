@@ -225,7 +225,9 @@ The toy data frame has nine columns (id, groups, markers, and cytokines).
                             n_condition = 2,
                             doplot = TRUE,
                             alpha = alpha,
-                            p_correct = p_correct)
+                            p_correct = p_correct,
+                            c1n = "case", # level "case" as the numerator of first condition
+                            c2n = "2") # level "2" as the numerator of second condition
   end_time <- Sys.time() # record end time
   total_time <- end_time - start_time # calculate duration of gating() example
 ```
@@ -318,7 +320,8 @@ Compare histograms before and after gating. Gating reduced the overall sample si
                             doplot = TRUE,
                             n_condition = 1,
                             alpha = alpha,
-                            p_correct = p_correct)
+                            p_correct = p_correct,
+                            c1n = "case") # level "case" as the numerator of first condition
   end_time <- Sys.time() # record end time
   total_time <- end_time - start_time # calculate duration of gating() example
 ```
