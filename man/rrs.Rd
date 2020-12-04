@@ -9,7 +9,10 @@ rrs(
   alpha = 0.05,
   p_correct = "none",
   nbc = NULL,
-  doplot = FALSE,
+  plot_gate = FALSE,
+  save_gate = FALSE,
+  name_gate = NULL,
+  path_gate = NULL,
   rcols = c("#FF0000", "#cccccc", "#0000FF"),
   lower_lrr = NULL,
   upper_lrr = NULL,
@@ -28,7 +31,13 @@ rrs(
 
 \item{nbc}{Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis).}
 
-\item{doplot}{Logical. If \code{TRUE}, the output includes basic data visualizations.}
+\item{plot_gate}{Logical. If \code{TRUE}, the output includes basic data visualization.}
+
+\item{save_gate}{Logical. If \code{TRUE}, the output saves the visualization as a separate PNG file.}
+
+\item{name_gate}{Optional, character. The filename of the visualization. The default is "gate".}
+
+\item{path_gate}{Optional, character. The path of the visualization. The default is the current working directory.}
 
 \item{rcols}{Character string of length three (3) specifying the colors for: 1) group A (numerator), 2) neither, and 3) group B (denominator) designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.}
 
@@ -60,7 +69,7 @@ An object of class 'list' where each element is a object of class 'rrs' created 
 Estimates a relative risk surface and computes the asymptotic p-value surface for a single gate with a single condition. Includes features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas.  This function can also be used as a standalone function.
 }
 \details{
-This function estimates a relative risk surface and computes the asymptotic p-value surface for a single gate and single condition using the \code{\link[sparr]{risk}} function. Bandwidth is fixed across both layers (numerator and denominator spatial densities). Basic visualization is available if \code{doplot = TRUE}.
+This function estimates a relative risk surface and computes the asymptotic p-value surface for a single gate and single condition using the \code{\link[sparr]{risk}} function. Bandwidth is fixed across both layers (numerator and denominator spatial densities). Basic visualization is available if \code{plot_gate = TRUE}.
 
 Provides functionality for a correction for multiple testing. If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 

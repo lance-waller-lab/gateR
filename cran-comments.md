@@ -1,9 +1,8 @@
-## This is the fourth resubmission
+## This is the fifth resubmission
 
 * Actions taken since previous resubmission:
-  * Added documentation to lotrrs(), rrs(), and gating() about the levels of condition(s)
-  * Fixed bug in lotrrs() that was mislabeling numerator and denominator levels of second condition
-  * Added parameters 'c1n' and 'c2n' in lotrrs(), rrs(), and gating() to specify the numerator level
+  * Added arguments 'save_gate', 'name_gate', and 'path_gate' in lotrrs(), rrs(), and gating() to save plots as PNG files as output
+  * Renamed 'doplot' argument as 'plot_gate' for consistency with new plotting arguments
   
 ## Test environments
 * local OS X install, R 3.6.3

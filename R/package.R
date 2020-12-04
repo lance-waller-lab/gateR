@@ -18,7 +18,7 @@
 #' 
 #' \bold{Flow Cytometry Data}
 #' 
-#' \code{\link{randCyto}} A sample dataset containing information about flow cytometry data with two binary categorical variables. The data are a random subset of the 'extdata' data in the 'flowWorkspaceData' package found on Bioconductor \url{http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html} and formated for gateR input.
+#' \code{\link{randCyto}} A sample dataset containing information about flow cytometry data with two binary categorical variables. The data are a random subset of the 'extdata' data in the 'flowWorkspaceData' package found on Bioconductor \url{http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html} and formatted for gateR input.
 #' 
 #' @name gateR-package
 #' @aliases gateR-package gateR
@@ -35,7 +35,7 @@ NULL
 
 #' @importFrom fields image.plot
 #' @importFrom graphics close.screen par screen split.screen 
-#' @importFrom grDevices chull colorRampPalette
+#' @importFrom grDevices chull colorRampPalette dev.off png
 #' @importFrom maptools unionSpatialPolygons
 #' @importFrom pgirmess correlog
 #' @importFrom raster cut extent raster rasterToPolygons values

@@ -9,7 +9,10 @@
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default is 0.05).
 #' @param p_correct Character string specifying whether to apply a correction for multiple comparisons including a Bonferroni correction \code{p_correct = "uncorrelated"} or a correlated Bonferroni correction \code{p_correct = "correlated"}. If \code{p_correct = "none"} (the default), then no correction is applied. 
 #' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis).
-#' @param doplot Logical. If \code{TRUE}, the output includes basic data visualizations.
+#' @param plot_gate Logical. If \code{TRUE}, the output includes basic data visualizations.
+#' @param save_gate Logical. If \code{TRUE}, the output saves each visualization as a separate PNG file.
+#' @param name_gate Optional, character. The filename of the visualization(s). The default is "gate_k" where "k" is the gate number.
+#' @param path_gate Optional, character. The path of the visualization(s). The default is the current working directory.
 #' @param rcols Character string of length three (3) specifying the colors for: 1) group A (numerator), 2) neither, and 3) group B (denominator) designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.
 #' @param lower_lrr Optional, numeric. Lower cut-off value for the log relative risk value in the color key (typically a negative value). The default is no limit and the color key will include the minimum value of the log relative risk surface. 
 #' @param upper_lrr Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit and the color key will include the maximum value of the log relative risk surface.
@@ -19,7 +22,7 @@
 #' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
 #'
-#' @details This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{doplot = TRUE}. 
+#' @details This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{plot_gate = TRUE}. 
 #' 
 #' The \code{vars} argument must be a vector with an even-numbered length where the odd-numbered elements are the markers used on the x-axis of a gate and the even-numbered elements are the markers used on the y-axis of a gate. For example, if \code{vars = c("V1", "V2", "V3", and "V4")} then the first gate is "V1" on the x-axis and "V2" on the y-axis and then the second gate is V3" on the x-axis and "V4" on the y-axis. Makers can be repeated in successive gates. 
 #' 
@@ -73,7 +76,10 @@ gating <- function(dat,
                    alpha = 0.05,
                    p_correct = "none",
                    nbc = NULL,
-                   doplot = FALSE,
+                   plot_gate = FALSE,
+                   save_gate = FALSE,
+                   name_gate = NULL,
+                   path_gate = NULL,
                    rcols = c("#FF0000", "#cccccc", "#0000FF"),
                    lower_lrr = NULL,
                    upper_lrr = NULL,
@@ -169,11 +175,15 @@ gating <- function(dat,
     if (k == 1) { p_correct <- p_correct } else { p_correct <- "none"}
     
     n_out[[k]] <- nrow(df)
+    name_gate <- paste("gate", k, sep = "_")
 
     if (n_condition == 2) {
     out <- lotrrs(dat = df,
                   win = win_gate,
-                  doplot = doplot,
+                  plot_gate = plot_gate,
+                  save_gate = save_gate,
+                  name_gate = name_gate,
+                  path_gate = path_gate,
                   alpha = alpha,
                   p_correct = p_correct,
                   nbc = nbc,
@@ -187,7 +197,10 @@ gating <- function(dat,
     } else {
     out <- rrs(dat = df,
                win = win_gate,
-               doplot = doplot,
+               plot_gate = plot_gate,
+               save_gate = save_gate,
+               name_gate = name_gate,
+               path_gate = path_gate,
                alpha = alpha,
                p_correct = p_correct,
                nbc = nbc,

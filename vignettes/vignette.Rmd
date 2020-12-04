@@ -27,7 +27,7 @@ For a two-group comparison of two conditions we estimate two relative risk surfa
     2. Condition 1B v. Condition 1A
 2. Estimate relative risk surface for the ratio:
 
-$$\frac{(\frac{Condtion2B}{Condition2A})}{(\frac{Condition1B}{Condition1A})}$$
+$$\frac{(\frac{Condition2B}{Condition2A})}{(\frac{Condition1B}{Condition1A})}$$
 
 Within areas where the relative risk exceeds an asymptotic normal assumption, the gateR package has functionality to examine the features of these cells.
 
@@ -223,7 +223,7 @@ The toy data frame has nine columns (id, groups, markers, and cytokines).
   out_gate <- gateR::gating(dat = df_full,
                             vars = vars,
                             n_condition = 2,
-                            doplot = TRUE,
+                            plot_gate = TRUE,
                             alpha = alpha,
                             p_correct = p_correct,
                             c1n = "case", # level "case" as the numerator of first condition
@@ -317,7 +317,7 @@ Compare histograms before and after gating. Gating reduced the overall sample si
   start_time <- Sys.time() # record start time
   out_gate <- gateR::gating(dat = df_sub,
                             vars = vars,
-                            doplot = TRUE,
+                            plot_gate = TRUE,
                             n_condition = 1,
                             alpha = alpha,
                             p_correct = p_correct,

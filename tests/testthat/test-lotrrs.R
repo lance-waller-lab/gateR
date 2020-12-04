@@ -80,13 +80,13 @@ test_that("lotrrs works", {
   # 
   # expect_named(
   #   lotrrs(dat = randCyto,
-  #       doplot = TRUE,
+  #       plot_gate = TRUE,
   #       p_correct = "none")
   # )
   # 
   # expect_named(
   #   lotrrs(dat = randCyto,
-  #       doplot = TRUE,
+  #       plot_gate = TRUE,
   #       rcols = c("green", "yellow", "purple"),
   #       p_correct = "none")
   # )

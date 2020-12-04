@@ -161,7 +161,7 @@ test_that("gating works", {
   #   gating(dat = randCyto,
   #          vars = c("arcsinh_CD4", "arcsinh_CD38"),
   #          n_condition = 2,
-  #          doplot = TRUE,
+  #          plot_gate = TRUE,
   #          rcols = c("green", "yellow", "purple"),
   #          p_correct = "none")
   # )

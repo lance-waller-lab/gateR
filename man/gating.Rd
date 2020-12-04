@@ -12,7 +12,10 @@ gating(
   alpha = 0.05,
   p_correct = "none",
   nbc = NULL,
-  doplot = FALSE,
+  plot_gate = FALSE,
+  save_gate = FALSE,
+  name_gate = NULL,
+  path_gate = NULL,
   rcols = c("#FF0000", "#cccccc", "#0000FF"),
   lower_lrr = NULL,
   upper_lrr = NULL,
@@ -38,7 +41,13 @@ gating(
 
 \item{nbc}{Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis).}
 
-\item{doplot}{Logical. If \code{TRUE}, the output includes basic data visualizations.}
+\item{plot_gate}{Logical. If \code{TRUE}, the output includes basic data visualizations.}
+
+\item{save_gate}{Logical. If \code{TRUE}, the output saves each visualization as a separate PNG file.}
+
+\item{name_gate}{Optional, character. The filename of the visualization(s). The default is "gate_k" where "k" is the gate number.}
+
+\item{path_gate}{Optional, character. The path of the visualization(s). The default is the current working directory.}
 
 \item{rcols}{Character string of length three (3) specifying the colors for: 1) group A (numerator), 2) neither, and 3) group B (denominator) designations. The defaults are \code{c("#FF0000", "#cccccc", "#0000FF")} or \code{c("red", "grey80", "blue")}.}
 
@@ -79,7 +88,7 @@ The objects of class 'rrs' is similar to the output of the \code{\link[sparr]{ri
 Extracts cells within statistically significant combinations of fluorescent markers, successively, for a set of markers. Statistically significant combinations are identified using two-tailed p-values of a relative risk surface assuming asymptotic normality. This function is currently available for two-level comparisons of a single condition (e.g., case/control) or two conditions (e.g., case/control at time 1 and time 2). Provides functionality for basic visualization and multiple testing correction.
 }
 \details{
-This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{doplot = TRUE}.
+This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{plot_gate = TRUE}.
 
 The \code{vars} argument must be a vector with an even-numbered length where the odd-numbered elements are the markers used on the x-axis of a gate and the even-numbered elements are the markers used on the y-axis of a gate. For example, if \code{vars = c("V1", "V2", "V3", and "V4")} then the first gate is "V1" on the x-axis and "V2" on the y-axis and then the second gate is V3" on the x-axis and "V4" on the y-axis. Makers can be repeated in successive gates.
 

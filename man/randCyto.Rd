@@ -23,7 +23,7 @@ A data frame with 11763 rows and 7 variables:
 randCyto
 }
 \description{
-A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the 'flowWorkspaceData' package found on Bioconductor \url{http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html} and formated for 'gateR' input. The selected markers are arcsinh transformed.
+A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the 'flowWorkspaceData' package found on Bioconductor \url{http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html} and formatted for 'gateR' input. The selected markers are arcsinh transformed.
 }
 \examples{
 head(randCyto)
