@@ -1,8 +1,9 @@
 # gateR (development version)
 
-# gateR v0.1.5.9000
+# gateR v0.1.5
   * Added arguments 'save_gate', 'name_gate', and 'path_gate' in lotrrs(), rrs(), and gating() to save plots as PNG files as output
   * Renamed 'doplot' argument as 'plot_gate' for consistency with new plotting arguments
+  * Added a stop (and return no results) if no significant clusters detected during first gate
 
 # gateR v0.1.4
   * Added documentation to lotrrs(), rrs(), and gating() about the levels of condition(s)

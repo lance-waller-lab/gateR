@@ -220,12 +220,16 @@ gating <- function(dat,
 
     # Go back one gate if current gate has no significant area and produce output of previous gate
     if (all(raster::values(Ps)[!is.na(raster::values(Ps))] == 2) | all(is.na(raster::values(Ps)))) {
+      if (k > 1) {
       message(paste("Gate", k, "yeilded no significant", type_cluster, "cluster(s)...",
-                "Returning results from previous gate",
+                "Returning results from Gate", k-1,
                 sep = " "))
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
       out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
       return(out_list)
+      } else {
+        stop(paste("Gate 1 yeilded no significant", type_cluster, "cluster(s)... Returning no results", sep = " "))
+      }
     }
 
     # convert categorized raster to gridded polygons
@@ -237,12 +241,16 @@ gating <- function(dat,
     pols <- try(maptools::unionSpatialPolygons(out_pol[out_pol$layer == v, ],
                                                IDs = rep(1, length(out_pol[out_pol$layer == v, ]))), silent = TRUE)
     if("try-error" %in% class(pols)) {
+      if (k > 1) {
       message(paste("Gate", k, "yeilded no significant", type_cluster, "cluster(s)...",
-                "Returning results from previous gate",
+                "Returning results from Gate", k-1,
                 sep = " "))
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
       out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
       return(out_list)
+      } else {
+        stop(paste("Gate 1 yeilded no significant", type_cluster, "cluster(s)... Returning no results", sep = " "))
+      }
     }
     rm(out_pol) # conserve memory
 

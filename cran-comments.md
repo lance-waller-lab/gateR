@@ -3,6 +3,7 @@
 * Actions taken since previous resubmission:
   * Added arguments 'save_gate', 'name_gate', and 'path_gate' in lotrrs(), rrs(), and gating() to save plots as PNG files as output
   * Renamed 'doplot' argument as 'plot_gate' for consistency with new plotting arguments
+  * Added a stop (and return no results) if no significant clusters detected during first gate
   
 ## Test environments
 * local OS X install, R 3.6.3
