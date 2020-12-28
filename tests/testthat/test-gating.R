@@ -90,6 +90,14 @@ test_that("gating throws error with invalid arguments", {
                     "arcsinh_CD8", "arcsinh_CD3"),
            p_correct = "none")
   )
+  
+  # no results in Gate 1
+  expect_error(
+    gating(dat = randCyto,
+           vars = c("arcsinh_CD4", "arcsinh_CD38"),
+           n_condition = 1,
+           p_correct = "uncorrelated")
+  )
 
 }
 )
@@ -114,6 +122,7 @@ test_that("gating works", {
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38"),
            n_condition = 1,
+           numerator = FALSE,
            p_correct = "uncorrelated")
   )
 
