@@ -32,7 +32,7 @@ pval_correct <- function(input,
 
 # Inputs
   if (class(input) != "im") {
-    stop("The 'input' argument must be of class 'im' from an 'rrs' object.")
+    stop("The 'input' argument must be of class 'im' from an 'rrs' object")
   }
 
 # Calculate correlated Bonferroni correction

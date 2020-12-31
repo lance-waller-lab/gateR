@@ -16,7 +16,6 @@
 #' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
 #' @param c2n Optional, character. The name of the level for the numerator of condition B. The default is null and the first level is treated as the numerator.
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
-#' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
 #'
 #' @details This function estimates a ratio of relative risk surfaces and computes the asymptotic p-value surface for a single gate with two conditions using three successive \code{\link[sparr]{risk}} functions. A relative risk surface is estimated for Condition A at each level of Condition B and then a ratio of the two relative risk surfaces is computed. 
@@ -68,7 +67,6 @@ lotrrs <- function(dat,
                    c1n = NULL,
                    c2n = NULL,
                    win = NULL, 
-                   verbose = FALSE,
                    ...) {
   
   # Checks
@@ -76,21 +74,21 @@ lotrrs <- function(dat,
   if ("data.frame" %!in% class(dat)) { stop("'dat' must be class 'data.frame'") }
   
   ## group
-  if (nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor.") }
+  if (nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor") }
   
-  if (nlevels(dat[ , 3]) != 2) { stop("The third feature of 'dat' must be a binary factor.") }
+  if (nlevels(dat[ , 3]) != 2) { stop("The third feature of 'dat' must be a binary factor") }
   
   ## p_correct
   match.arg(p_correct, choices = c("none", "correlated", "uncorrelated"))
   
   ## alpha
   if (alpha <= 0 | alpha >= 1 ) {
-    stop("The argument 'alpha' must be a numeric value between zero (0) and one (1).")
+    stop("The argument 'alpha' must be a numeric value between zero (0) and one (1)")
   }
   
   ## rcols
   if (length(rcols) != 3) {
-    stop("The argument 'rcols' must be a vector of length three (3).")
+    stop("The argument 'rcols' must be a vector of length three (3)")
   }
   
   ## win
@@ -108,11 +106,21 @@ lotrrs <- function(dat,
   names(dat) <- c("id", "G1", "G2", "V1", "V2")
   
   if (!is.null(c1n)) {
-    dat$G1 <- stats::relevel(dat$G1, c1n)
+    if (!is.character(c1n)) { stop("The argument 'c1n' must be class 'character'") }
+    if ("try-error" %in% class(try(stats::relevel(dat$G1, c1n), silent = T))) {
+      stop("The argument 'c1n' must be an existing level within condition A")
+    } else {
+      dat$G1 <- stats::relevel(dat$G1, c1n)
+    }
   }
   
   if (!is.null(c2n)) {
-    dat$G2 <- stats::relevel(dat$G2, c2n)
+    if (!is.character(c2n)) { stop("The argument 'c2n' must be class 'character'") }
+    if ("try-error" %in% class(try(stats::relevel(dat$G2, c2n), silent = T))) {
+      stop("The argument 'c2n' must be an existing level within condition B")
+    } else {
+      dat$G2 <- stats::relevel(dat$G2, c2n)
+    }
   }
   
   # Create two PPPs
@@ -138,13 +146,13 @@ lotrrs <- function(dat,
                           h0 = both_h0,
                           log = FALSE,
                           edge = "diggle",
-                          verbose = verbose,
+                          verbose = FALSE,
                           ...)
   numer_rr <- sparr::risk(numer_ppp,
                           h0 = both_h0,
                           log = FALSE,
                           edge = "diggle",
-                          verbose = verbose,
+                          verbose = FALSE,
                           ...)
   
   # Create objects of class 'bivden'
@@ -187,7 +195,7 @@ lotrrs <- function(dat,
                                                        h0 = both_h0,
                                                        tolerate = TRUE,
                                                        edge = "diggle",
-                                                       verbose = verbose,
+                                                       verbose = FALSE,
                                                        log = FALSE,
                                                        ...)))
   

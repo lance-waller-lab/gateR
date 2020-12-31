@@ -4,6 +4,10 @@
   * Added arguments 'save_gate', 'name_gate', and 'path_gate' in lotrrs(), rrs(), and gating() to save plots as PNG files as output
   * Renamed 'doplot' argument as 'plot_gate' for consistency with new plotting arguments
   * Added a stop (and return no results) if no significant clusters detected during first gate
+  * Removed 'verbose' argument in gating(), rrs(), and lotrrs()
+  * Added try() error catches in rrs() and lotrrs() for 'c1n' and 'c2n' arguments
+  * Changed the 'right' argument in cut() in pval_plot() to "TRUE" (the default)
+  * Removed fullstop in error messages
   
 ## Test environments
 * local OS X install, R 3.6.3

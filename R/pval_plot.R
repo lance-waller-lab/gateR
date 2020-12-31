@@ -29,7 +29,6 @@ pval_plot <- function(input,
 
   out <- raster::raster(spatstat::as.im(input))  # create raster
   out <- raster::cut(out,
-                     breaks = c(-Inf, alpha / 2, 1 - alpha / 2, Inf),
-                     right = FALSE)
+                     breaks = c(-Inf, alpha / 2, 1 - alpha / 2, Inf))
   return(out)
 }

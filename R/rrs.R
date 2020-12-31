@@ -15,7 +15,6 @@
 #' @param upper_lrr Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit and the color key will include the maximum value of the log relative risk surface.
 #' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
-#' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
 #'
 #' @details This function estimates a relative risk surface and computes the asymptotic p-value surface for a single gate and single condition using the \code{\link[sparr]{risk}} function. Bandwidth is fixed across both layers (numerator and denominator spatial densities). Basic visualization is available if \code{plot_gate = TRUE}. 
@@ -60,7 +59,6 @@ rrs <- function(dat,
                 upper_lrr = NULL,
                 c1n = NULL,
                 win = NULL,
-                verbose = FALSE,
                 ...) {
   
   # Checks
@@ -68,19 +66,19 @@ rrs <- function(dat,
   if ("data.frame" %!in% class(dat)) { stop("'dat' must be class 'data.frame'") }
   
   ## group
-  if (nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor.") }
+  if (nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor") }
   
   ## p_correct
   match.arg(p_correct, choices = c("none", "correlated", "uncorrelated"))
   
   ## alpha
   if (alpha <= 0 | alpha >= 1 ) {
-    stop("The argument 'alpha' must be a numeric value between zero (0) and one (1).")
+    stop("The argument 'alpha' must be a numeric value between zero (0) and one (1)")
   }
   
   ## rcols
   if (length(rcols) != 3) {
-    stop("The argument 'rcols' must be a vector of length three (3).")
+    stop("The argument 'rcols' must be a vector of length three (3)")
   }
   
   ## win
@@ -98,7 +96,12 @@ rrs <- function(dat,
   names(dat) <- c("id", "G1", "G2", "V1", "V2")
   
   if (!is.null(c1n)) {
-    dat$G1 <- stats::relevel(dat$G1, c1n)
+    if (!is.character(c1n)) { stop("The argument 'c1n' must be class 'character'") }
+    if ("try-error" %in% class(try(stats::relevel(dat$G1, c1n), silent = T))) {
+      stop("The argument 'c1n' must be an existing level within condition A")
+    } else {
+      dat$G1 <- stats::relevel(dat$G1, c1n)
+    }
   }
 
   # Create PPP
@@ -113,7 +116,7 @@ rrs <- function(dat,
                                                        h0 = c1_h0,
                                                        tolerate = TRUE,
                                                        edge = "diggle",
-                                                       verbose = verbose,
+                                                       verbose = FALSE,
                                                        log = FALSE,
                                                        ...)))
   

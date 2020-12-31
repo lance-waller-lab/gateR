@@ -19,7 +19,6 @@
 #' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
 #' @param c2n Optional, character. The name of the level for the numerator of condition B. The default is null and the first level is treated as the numerator.
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
-#' @param verbose Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
 #'
 #' @details This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{plot_gate = TRUE}. 
@@ -86,7 +85,6 @@ gating <- function(dat,
                    c1n = NULL,
                    c2n = NULL,
                    win = NULL,
-                   verbose = FALSE,
                    ...) {
   
   # Checks
@@ -95,11 +93,11 @@ gating <- function(dat,
   
   ## vars
   if (!all(vars %in% names(dat))) {
-    stop("All elements in the argument 'vars' must match named features of 'dat'." )
+    stop("All elements in the argument 'vars' must match named features of 'dat'" )
   }
   
   if ((length(vars) %% 2) != 0 ) {
-    stop("The argument 'vars' must be a character vector with an even-numbered length.")
+    stop("The argument 'vars' must be a character vector with an even-numbered length")
   }
   
   ## n_condition
@@ -116,12 +114,12 @@ gating <- function(dat,
   
   ## alpha
   if (alpha <= 0 | alpha >= 1 ) {
-    stop("The argument 'alpha' must be a numeric value between zero (0) and one (1).")
+    stop("The argument 'alpha' must be a numeric value between zero (0) and one (1)")
   }
   
   ## rcols
   if (length(rcols) != 3) {
-    stop("The argument 'rcols' must be a vector of length three (3).")
+    stop("The argument 'rcols' must be a vector of length three (3)")
   }
   
   ## win
@@ -131,11 +129,11 @@ gating <- function(dat,
   dat <- dat[!is.na(dat[ , which(colnames(dat) %in% vars[1])]) &
                !is.na(dat[ , which(colnames(dat) %in% vars[2])]), ]
 
-  if (n_condition == 1 & nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor.") }
+  if (n_condition == 1 & nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor") }
   
-  if (n_condition == 2 & nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor.") }
+  if (n_condition == 2 & nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor") }
   
-  if (n_condition == 2 & nlevels(dat[ , 3]) != 2) { stop("The third feature of 'dat' must be a binary factor.") }
+  if (n_condition == 2 & nlevels(dat[ , 3]) != 2) { stop("The third feature of 'dat' must be a binary factor") }
   
   if (n_condition == 2) { dat_gate <- dat[ , c(1:3, which(colnames(dat) %in% vars))]
   } else {
@@ -192,7 +190,6 @@ gating <- function(dat,
                   upper_lrr = upper_lrr,
                   c1n = c1n,
                   c2n = c2n,
-                  verbose = verbose,
                   ...)
     } else {
     out <- rrs(dat = df,
@@ -208,7 +205,6 @@ gating <- function(dat,
                lower_lrr = lower_lrr,
                upper_lrr = upper_lrr,
                c1n = c1n,
-               verbose = verbose,
                ...)
     }
 

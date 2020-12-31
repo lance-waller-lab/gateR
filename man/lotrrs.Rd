@@ -19,7 +19,6 @@ lotrrs(
   c1n = NULL,
   c2n = NULL,
   win = NULL,
-  verbose = FALSE,
   ...
 )
 }
@@ -51,8 +50,6 @@ lotrrs(
 \item{c2n}{Optional, character. The name of the level for the numerator of condition B. The default is null and the first level is treated as the numerator.}
 
 \item{win}{Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data.}
-
-\item{verbose}{Logical. If \code{TRUE} will print function progress during execution. If \code{FALSE} (the default), will not print.}
 
 \item{...}{Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.}
 }
