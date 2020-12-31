@@ -92,7 +92,10 @@ gating <- function(dat,
   if ("data.frame" %!in% class(dat)) { stop("'dat' must be class 'data.frame'") }
   
   ## vars
-  if (!all(vars %in% names(dat))) {
+  vars <- make.names(vars, unique = TRUE)
+  colnames(dat) <- make.names(colnames(dat), unique = TRUE)
+  
+  if (!all(vars %in% colnames(dat))) {
     stop("All elements in the argument 'vars' must match named features of 'dat'" )
   }
   
