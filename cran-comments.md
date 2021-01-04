@@ -8,6 +8,7 @@
   * Added try() error catches in rrs() and lotrrs() for 'c1n' and 'c2n' arguments
   * Changed the 'right' argument in cut() in pval_plot() to "TRUE" (the default)
   * Removed fullstop in error messages
+  * Added a make.names() check for vars and colnames(dat) in gating()
   
 ## Test environments
 * local OS X install, R 3.6.3

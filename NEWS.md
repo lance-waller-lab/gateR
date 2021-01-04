@@ -8,6 +8,7 @@
   * Added try() error catches in rrs() and lotrrs() for 'c1n' and 'c2n' arguments
   * Changed the 'right' argument in cut() in pval_plot() to "TRUE" (the default)
   * Removed fullstop in error messages
+  * Added a make.names() check for vars and colnames(dat) in gating()
 
 # gateR v0.1.4
   * Added documentation to lotrrs(), rrs(), and gating() about the levels of condition(s)
