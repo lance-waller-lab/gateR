@@ -1,5 +1,9 @@
 # gateR (development version)
 
+# gateR v0.1.6
+  * Updated URLs in gateR-package.Rd
+  * Updated year in DESCRIPTION
+
 # gateR v0.1.5
   * Added arguments 'save_gate', 'name_gate', and 'path_gate' in lotrrs(), rrs(), and gating() to save plots as PNG files as output
   * Renamed 'doplot' argument as 'plot_gate' for consistency with new plotting arguments
