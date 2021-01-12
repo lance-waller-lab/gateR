@@ -1,6 +1,16 @@
 gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation <img src="man/figures/gateR.png" width="120" align="right" />
 ===================================================
 
+<!-- badges: start -->
+
+[![CRAN
+version](https://www.r-pkg.org/badges/version-ago/gateR)](https://cran.r-project.org/package=gateR)
+[![CRAN RStudio mirror
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/gateR?color=blue)](https://r-pkg.org/pkg/gateR)
+![license](https://img.shields.io/badge/license-apache-yellow)
+
+<!-- badges: end -->
+
 <h2 id="overview">
 
 Overview
