@@ -1,6 +1,6 @@
 #' Calculate p-value corrections
 #'
-#' Internal function to calculate various p-value corrections including a False Discovery rate, an spatially correlated Bonferroni correction, and an uncorrelated Bonferroni correction for use within the \code{\link{rrs}} and \code{\link{lotrrs}} functions.
+#' Internal function to calculate various p-value corrections for use within the \code{\link{rrs}} and \code{\link{lotrrs}} functions.
 #'
 #' @param input An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.
 #' @param type Character string specifying which correction for multiple comparisons. Options include a False Discovery Rate \code{p_correct = "FDR"}, a spatiall dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, and an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}.

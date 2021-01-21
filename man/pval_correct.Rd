@@ -25,7 +25,7 @@ pval_correct(
 An object of class 'numeric' with the corrected alpha level.
 }
 \description{
-Internal function to calculate various p-value corrections including a False Discovery rate, an spatially correlated Bonferroni correction, and an uncorrelated Bonferroni correction for use within the \code{\link{rrs}} and \code{\link{lotrrs}} functions.
+Internal function to calculate various p-value corrections for use within the \code{\link{rrs}} and \code{\link{lotrrs}} functions.
 }
 \details{
 This function provides functionality for multiple testing correction in five ways:
