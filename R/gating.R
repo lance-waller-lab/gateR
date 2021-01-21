@@ -7,7 +7,7 @@
 #' @param n_condition A numeric value of either 1 or 2 designating if the gating is performed with one condition or two conditions. 
 #' @param numerator Logical. If \code{TRUE} (the default), cells will be extracted within all statistically significant numerator (i.e., case) clusters. If \code{FALSE}, cells will be extracted within all statistically significant denominator (i.e., control) clusters. 
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default is 0.05).
-#' @param p_correct Character string specifying whether to apply a correction for multiple comparisons including a Bonferroni correction \code{p_correct = "uncorrelated"} or a correlated Bonferroni correction \code{p_correct = "correlated"}. If \code{p_correct = "none"} (the default), then no correction is applied. 
+#' @param p_correct Character string specifying whether to apply a correction for multiple comparisons including a False Discovery Rate \code{p_correct = "FDR"}, a spatiall dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, and an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}. If \code{p_correct = "none"} (the default), then no correction is applied.
 #' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis).
 #' @param plot_gate Logical. If \code{TRUE}, the output includes basic data visualizations.
 #' @param save_gate Logical. If \code{TRUE}, the output saves each visualization as a separate PNG file.
@@ -29,8 +29,7 @@
 #' 
 #' The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers.
 #' 
-#' Provides functionality for a correction for multiple testing.  If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
-#' 
+#' Provides functionality for a correction for multiple testing. If \code{p_correct = "FDR"}, calculates a False Discovery Rate by Benjamini and Hochberg. If \code{p_correct = "uncorrelated Sidak"}, calculates an independent Sidak correction. If \code{p_correct = "uncorrelated Bonferroni"}, calculates an independent Bonferroni correction. If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, then the corrections take into account the into account the spatial correlation of the surface. (NOTE: If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, it may take a considerable amount of computation resources and time to calculate). If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 #'
 #' @return An object of class \code{list}. This is a named list with the following components:
 #' 
@@ -54,7 +53,7 @@
 #' @importFrom maptools unionSpatialPolygons
 #' @importFrom raster rasterToPolygons values
 #' @importFrom sp coordinates over
-#' @importFrom spatstat owin
+#' @importFrom spatstat.geom owin
 #' @importFrom tibble add_column
 #' @export
 #' 
@@ -64,8 +63,7 @@
 #'   test_gate <- gateR::gating(dat = randCyto,
 #'                              vars = c("arcsinh_CD4", "arcsinh_CD38",
 #'                                       "arcsinh_CD8", "arcsinh_CD3"),
-#'                              n_condition = 1,
-#'                              p_correct = "none")
+#'                              n_condition = 1)
 #' }
 #' 
 gating <- function(dat,
@@ -79,7 +77,7 @@ gating <- function(dat,
                    save_gate = FALSE,
                    name_gate = NULL,
                    path_gate = NULL,
-                   rcols = c("#FF0000", "#cccccc", "#0000FF"),
+                   rcols = c("#FF0000", "#CCCCCC", "#0000FF"),
                    lower_lrr = NULL,
                    upper_lrr = NULL,
                    c1n = NULL,
@@ -107,7 +105,7 @@ gating <- function(dat,
   match.arg(as.character(n_condition), choices = 1:2)
   
   ## p_correct
-  match.arg(p_correct, choices = c("none", "correlated", "uncorrelated"))
+  match.arg(p_correct, choices = c("none", "FDR", "correlated Sidak", "correlated Bonferroni", "uncorrelated Sidak", "uncorrelated Bonferroni"))
   
   ## numerator
   if (numerator == TRUE) { type_cluster <- "numerator" 
@@ -168,7 +166,7 @@ gating <- function(dat,
     # Create custom window with a convex hull
     chul <- grDevices::chull(df[ , 4:5])
     chul_coords <- df[ , 4:5][c(chul, chul[1]), ]
-    win_gate <- spatstat::owin(poly = list(x = rev(chul_coords[ , 1]),
+    win_gate <- spatstat.geom::owin(poly = list(x = rev(chul_coords[ , 1]),
                                                 y = rev(chul_coords[ , 2])))
 
     # Estimate significant relative risk areas

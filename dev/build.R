@@ -200,3 +200,34 @@ test_lotrrs <- gateR::lotrrs(dat = obs_dat[ , -5:-4])
 
 
 plot(out_gate$rrs[[2]])
+
+
+# FDR
+n = 50
+delta = .3
+sigma = 1
+
+# simulation
+tstats = replicate(100000, t.test(rnorm(n, sigma*delta, sigma))$statistic)
+pvals = 1 - pf(tstats^2, df1 = 1, df2 = n - 1)
+
+sort_pvals <- sort(pvals, decreasing = TRUE)
+alpha <- 0.05
+
+i <- NULL
+fdr <- function(pvals, alpha) {
+  m <- length(pvals)
+  for (i in 1:length(pvals)) {
+    if (pvals[i] <= (i/m) * alpha) { return(pvals[i]) }
+  }
+}
+
+fdr(sort_pvals, alpha)
+
+sort_pvals <- sort(test_gating$gate[[1]]$P$v, decreasing = TRUE)
+m <- length(sort_pvals)
+
+i <- 13312
+sort_pvals[i] <= (i/m) * alpha
+
+

@@ -57,7 +57,17 @@ test_that("lotrrs works", {
 
   expect_named(
     lotrrs(dat = randCyto,
-        p_correct = "uncorrelated")
+           p_correct = "FDR")
+  )
+  
+  expect_named(
+    lotrrs(dat = randCyto,
+           p_correct = "uncorrelated Sidak")
+  )
+  
+  expect_named(
+    lotrrs(dat = randCyto,
+        p_correct = "uncorrelated Bonferroni")
   )
 
   # expect_named(

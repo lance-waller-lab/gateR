@@ -4,7 +4,7 @@
 #'
 #' @param dat Input data frame flow cytometry data with five (5) features (columns): 1) ID, 2) Condition A ID, 3) Condition B ID, 4) Marker A as x-coordinate, 5) Marker B as y-coordinate.
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default is 0.05).
-#' @param p_correct Character string specifying whether to apply a correction for multiple comparisons including a Bonferroni correction \code{p_correct = "uncorrelated"} or a correlated Bonferroni correction \code{p_correct = "correlated"}. If \code{p_correct = "none"} then no correction is applied. 
+#' @param p_correct Character string specifying whether to apply a correction for multiple comparisons including a False Discovery Rate \code{p_correct = "FDR"}, a spatiall dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, and an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}. If \code{p_correct = "none"} (the default), then no correction is applied. 
 #' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}}. The default is the average number of gridded knots in one-dimension (i.e., x-axis). 
 #' @param plot_gate Logical. If \code{TRUE}, the output includes basic data visualization.
 #' @param save_gate Logical. If \code{TRUE}, the output saves the visualization as a separate PNG file.
@@ -26,7 +26,7 @@
 #' 
 #' The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers. Basic visualization is available if \code{plot_gate = TRUE}. 
 #' 
-#' Provides functionality for a correction for multiple testing.  If \code{p_correct = "uncorrelated"}, then a conventional Bonferroni correction is calculated by dividing the \code{alpha} level by the number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function. If \code{p_correct = "correlated"} (NOTE: May take a considerable amount of computation resources and time), then a Bonferroni correction that takes into account the spatial correlation of the surface is calculated within the internal \code{pval_correct} function. The \code{alpha} level is divided by the minimum number of knots that are not spatially correlated. The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. If \code{p_correct = "none"}, then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
+#' Provides functionality for a correction for multiple testing. If \code{p_correct = "FDR"}, calculates a False Discovery Rate by Benjamini and Hochberg. If \code{p_correct = "uncorrelated Sidak"}, calculates an independent Sidak correction. If \code{p_correct = "uncorrelated Bonferroni"}, calculates an independent Bonferroni correction. If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, then the corrections take into account the into account the spatial correlation of the surface. (NOTE: If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, it may take a considerable amount of computation resources and time to calculate). If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 #' 
 #' The two condition variables (Condition A and Condition B) within \code{dat} must be of class 'factor' with two levels. The first level in each variable is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value. The levels can also be specified using the \code{c1n} and \code{c2n} parameters.
 #'
@@ -45,7 +45,7 @@
 #' @importFrom graphics close.screen par screen split.screen 
 #' @importFrom grDevices chull dev.off png
 #' @importFrom raster extent values
-#' @importFrom spatstat owin ppp
+#' @importFrom spatstat.geom owin ppp 
 #' @importFrom sparr OS risk
 #' @importFrom stats relevel
 #' @export 
@@ -61,7 +61,7 @@ lotrrs <- function(dat,
                    save_gate = FALSE,
                    name_gate = NULL,
                    path_gate = NULL,
-                   rcols = c("#FF0000", "#cccccc", "#0000FF"),
+                   rcols = c("#FF0000", "#CCCCCC", "#0000FF"),
                    lower_lrr = NULL,
                    upper_lrr = NULL,
                    c1n = NULL,
@@ -79,7 +79,7 @@ lotrrs <- function(dat,
   if (nlevels(dat[ , 3]) != 2) { stop("The third feature of 'dat' must be a binary factor") }
   
   ## p_correct
-  match.arg(p_correct, choices = c("none", "correlated", "uncorrelated"))
+  match.arg(p_correct, choices = c("none", "FDR", "correlated Sidak", "correlated Bonferroni", "uncorrelated Sidak", "uncorrelated Bonferroni"))
   
   ## alpha
   if (alpha <= 0 | alpha >= 1 ) {
@@ -98,7 +98,7 @@ lotrrs <- function(dat,
     dat <- dat[!is.na(dat[ , 4]) & !is.na(dat[ , 5]) , ]
     chul <- grDevices::chull(dat[ , 4:5])
     chul_coords <- dat[ , 4:5][c(chul, chul[1]), ]
-    win <- spatstat::owin(poly = list(x = rev(chul_coords[ , 1]),
+    win <- spatstat.geom::owin(poly = list(x = rev(chul_coords[ , 1]),
                                            y = rev(chul_coords[ , 2])))
   }
   
@@ -126,18 +126,18 @@ lotrrs <- function(dat,
   # Create two PPPs
   numer_df <- dat[dat$G2 == levels(dat$G2)[1], ]
   denom_df <- dat[dat$G2 == levels(dat$G2)[2], ]
-  suppressMessages(suppressWarnings(both_ppp <- spatstat::ppp(x = dat$V1,
-                                                                y = dat$V2,
-                                                                marks = dat$G1,
-                                                                window = win)))
-  suppressMessages(suppressWarnings(denom_ppp <- spatstat::ppp(x = denom_df$V1,
-                                                                 y = denom_df$V2,
-                                                                 marks = denom_df$G1,
-                                                                 window = win)))
-  suppressMessages(suppressWarnings(numer_ppp <- spatstat::ppp(x = numer_df$V1,
-                                                                 y = numer_df$V2,
-                                                                 marks = numer_df$G1,
-                                                                 window = win)))
+  suppressMessages(suppressWarnings(both_ppp <- spatstat.geom::ppp(x = dat$V1,
+                                                                   y = dat$V2,
+                                                                   marks = dat$G1,
+                                                                   window = win)))
+  suppressMessages(suppressWarnings(denom_ppp <- spatstat.geom::ppp(x = denom_df$V1,
+                                                                    y = denom_df$V2,
+                                                                    marks = denom_df$G1,
+                                                                    window = win)))
+  suppressMessages(suppressWarnings(numer_ppp <- spatstat.geom::ppp(x = numer_df$V1,
+                                                                    y = numer_df$V2,
+                                                                    marks = numer_df$G1,
+                                                                    window = win)))
   
   # Estimate two SRRs
   both_h0 <- sparr::OS(both_ppp, "geometric")
@@ -209,14 +209,28 @@ lotrrs <- function(dat,
   }
   
   # Alpha level
-  if (p_correct == "none") { out$alpha <- alpha }
-  if (p_correct == "correlated") {
-    message("Please be patient... Calculating correlated Bonferroni correction")
-    alpha_correct <- pval_correct(input = out$lrr, alpha = alpha, nbc = nbc)
-    out$alpha <- alpha_correct$correlated 
+  if (p_correct == "none") { alpha_correct <- alpha }
+  if (p_correct == "FDR") { 
+    alpha_correct <- pval_correct(input = out, type = "FDR", alpha = alpha, nbc = nbc)
+  }
+  if (p_correct == "correlated Sidak") {
+    message("Please be patient... Calculating spatially dependent Sidak correction")
+    alpha_correct <- pval_correct(input = out, type = "correlated Sidak", alpha = alpha, nbc = nbc)
   } 
-  if (p_correct == "uncorrelated") { out$alpha <- alpha / prod(out$rr$dim) }
+  if (p_correct == "correlated Bonferroni") {
+    message("Please be patient... Calculating spatially dependent Bonferroni correction")
+    alpha_correct <- pval_correct(input = out, type = "correlated Bonferroni", alpha = alpha, nbc = nbc)
+  }
+  if (p_correct == "uncorrelated Sidak") { 
+    alpha_correct <- pval_correct(input = out, type = "uncorrelated Sidak", alpha = alpha, nbc = nbc)
+  }
+  
+  if (p_correct == "uncorrelated Bonferroni") { 
+    alpha_correct <- pval_correct(input = out, type = "uncorrelated Bonferroni", alpha = alpha, nbc = nbc)
+  }
 
+  out$alpha <- alpha_correct
+  
   if (plot_gate == TRUE) {
     # Graphics
     op <- graphics::par(no.readonly = TRUE)

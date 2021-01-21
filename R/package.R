@@ -41,7 +41,7 @@ NULL
 #' @importFrom raster cut extent raster rasterToPolygons values
 #' @importFrom sp coordinates over
 #' @importFrom sparr OS risk
-#' @importFrom spatstat as.im owin ppp 
+#' @importFrom spatstat.geom as.im owin ppp 
 #' @importFrom stats na.omit relevel
 #' @importFrom tibble add_column
 #' @importFrom fields image.plot

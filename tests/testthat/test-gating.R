@@ -96,7 +96,7 @@ test_that("gating throws error with invalid arguments", {
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38"),
            n_condition = 1,
-           p_correct = "uncorrelated")
+           p_correct = "uncorrelated Bonferroni")
   )
 
 }
@@ -123,7 +123,23 @@ test_that("gating works", {
            vars = c("arcsinh_CD4", "arcsinh_CD38"),
            n_condition = 1,
            numerator = FALSE,
-           p_correct = "uncorrelated")
+           p_correct = "FDR")
+  )
+  
+  expect_named(
+    gating(dat = randCyto,
+           vars = c("arcsinh_CD4", "arcsinh_CD38"),
+           n_condition = 1,
+           numerator = FALSE,
+           p_correct = "uncorrelated Sidak")
+  )
+  
+  expect_named(
+    gating(dat = randCyto,
+           vars = c("arcsinh_CD4", "arcsinh_CD38"),
+           n_condition = 1,
+           numerator = FALSE,
+           p_correct = "uncorrelated Bonferroni")
   )
 
   expect_named(

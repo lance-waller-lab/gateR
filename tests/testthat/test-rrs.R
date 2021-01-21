@@ -46,10 +46,20 @@ test_that("rrs works", {
     rrs(dat = randCyto,
         p_correct = "none")
   )
+  
+  expect_named(
+    rrs(dat = randCyto,
+        p_correct = "FDR")
+  )
 
   expect_named(
     rrs(dat = randCyto,
-        p_correct = "uncorrelated")
+        p_correct = "uncorrelated Sidak")
+  )
+  
+  expect_named(
+    rrs(dat = randCyto,
+        p_correct = "uncorrelated Bonferroni")
   )
 
   # expect_named(
