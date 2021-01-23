@@ -5,7 +5,7 @@
 #' @param input An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.
 #' @param type Character string specifying which correction for multiple comparisons. Options include a False Discovery Rate \code{p_correct = "FDR"}, a spatially dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, and an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}.
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default in \code{\link{rrs}} and \code{\link{lotrrs}} functions is 0.05).
-#' @param nbc Integer. The number of bins. Similar to \code{nbclass} argument in \code{\link[pgirmess]{correlog}} function. The default is the average number of gridded knots in one-dimension (i.e., x-axis). 
+#' @param nbc Integer. The number of bins. Similar to \code{nbclass} argument in \code{\link[SpatialPack]{modified.ttest}} function. The default is 30. 
 #' 
 #' @details This function provides functionality for multiple testing correction in five ways:
 #' 
@@ -13,13 +13,13 @@
 #' \item Computes a False Discovery Rate by Benjamini and Hochberg \doi{10.1111/j.2517-6161.1995.tb02031.x} (\code{p_correct = "FDR"}) by: 1) sorting the p-values (p_i) of each knot in ascending order (p_1 <= p_2 <= ... <= p_m), 2) starting from p_m find the first p_i for which p_i <= (i/m) * alpha.
 #' \item Computes an independent Sidak correction \doi{10.2307/2283989} (\code{p_correct = "uncorrelated Sidak"}) by 1 - (1 - \code{alpha}) ^ (1 / total number of gridded knots across the estimated surface). The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function.
 #' \item Computes an independent Bonferroni correction (\code{p_correct = "uncorrelated Bonferroni"}) by \code{alpha} / total number of gridded knots across the estimated surface. The default in the \code{\link[sparr]{risk}} function is a resolution of 128 x 128 or n = 16,384 knots and a custom resolution can be specified using the \code{resolution} argument within the \code{\link[sparr]{risk}} function.
-#' \item Computes a spatially dependent Sidak correction (\code{p_correct = "correlated Sidak"}) by taking into account the spatial correlation of the relative risk surface values (if using the \code{rrs} function for a single condition gate) or the ratio of relative risk surfaces values (if using the \code{lotrrs} function for a two condition gate). The correction use the minimum number of knots that are not spatially correlated instead of the total number of knots.The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. 
-#' \item Computes a spatially dependent Bonferroni correction (\code{p_correct = "correlated Bonferroni"}) by taking into account the spatial correlation of the relative risk surface values (if using the \code{rrs} function for a single condition gate) or the ratio of relative risk surfaces values (if using the \code{lotrrs} function for a two condition gate). The correction use the minimum number of knots that are not spatially correlated instead of the total number of knots.The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[pgirmess]{correlog}} function. 
+#' \item Computes a spatially dependent Sidak correction (\code{p_correct = "correlated Sidak"}) by taking into account the spatial correlation of the relative risk surface values (if using the \code{rrs} function for a single condition gate) or the ratio of relative risk surfaces values (if using the \code{lotrrs} function for a two condition gate). The correction use the minimum number of knots that are not spatially correlated instead of the total number of knots.The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[SpatialPack]{modified.ttest}} function. 
+#' \item Computes a spatially dependent Bonferroni correction (\code{p_correct = "correlated Bonferroni"}) by taking into account the spatial correlation of the relative risk surface values (if using the \code{rrs} function for a single condition gate) or the ratio of relative risk surfaces values (if using the \code{lotrrs} function for a two condition gate). The correction use the minimum number of knots that are not spatially correlated instead of the total number of knots.The minimum number of knots that are not spatially correlated is computed by counting the knots that are a distance apart that exceeds the minimum distance of non-significant spatial correlation based on a correlogram using the \code{\link[SpatialPack]{modified.ttest}} function. 
 #' }
 #' 
 #' @return An object of class 'numeric' with the corrected alpha level.
 #'
-#' @importFrom pgirmess correlog
+#' @importFrom SpatialPack modified.ttest
 #' @export
 #'
 #' @keywords internal
@@ -61,18 +61,26 @@ pval_correct <- function(input,
   out$v <- ifelse(is.infinite(out$v), NA, out$v) # omit inifite values
   out <- out[!is.na(out$v),] # omit NA values
 
-  if(is.null(nbc)) { nbc <- round(mean(length(input$lrr$xcol), length(input$lrr$yrow)))}
+  if(is.null(nbc)) { nbc <- 30 }
 
+# ## Estimate spatial correlation
+#   out_cor <- pgirmess::correlog(coords = out[ , 1:2],
+#                                 z = out[ , 3],
+#                                 method = "Moran",
+#                                 randomisation = FALSE,
+#                                 nbclass = nbc)
+# ## Find shortest distance without significant correlation
+#   corr_eff <- out_cor[ , 1][min(which(out_cor[ , 3] >= alpha))]
+  
 ## Estimate spatial correlation
-  out_cor <- pgirmess::correlog(coords = out[ , 1:2],
-                                z = out[ , 3],
-                                method = "Moran",
-                                randomisation = FALSE,
-                                nbclass = nbc)
+  out_cor <- SpatialPack::modified.ttest(x = out[ , 3],
+                                         y = out[ , 3],
+                                         coords = out[ , 1:2],
+                                         nclass = nbc)
 
-## Find shortest distance without significant correlation
-  corr_eff <- out_cor[ , 1][min(which(out_cor[ , 3] >= alpha))]
-
+# Find shortest distance without significant correlation
+  corr_eff <- out_cor$upper.bounds[min(which(out_cor$imoran[, 1] <= 0))]
+    
 ## Bonferroni
   x_kern <- length(input$lrr$xcol) # number of kernels in x-axis
   y_kern <- length(input$lrr$yrow) # number of kernels in y-axis

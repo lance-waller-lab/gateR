@@ -3,6 +3,7 @@
 # gateR v0.1.7
   * Updated {spatstat} dependency to new packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). {spatstat.geom} replaces {spatstat} in Imports
   * Added additional multiple testing corrections, including False Discovery Rate, spatially dependent Sidak correction, and independent Sidak correction
+  * Updated the calculation of the spatial correlogram in internal pval_correct() function from the correlog() function in the {pgrimess} package to the modified.ttest() function in the {SpatialPack} package
 
 # gateR v0.1.6
   * Updated URLs in gateR-package.Rd
