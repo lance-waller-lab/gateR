@@ -5,9 +5,10 @@
 #' @param dat Input data frame flow cytometry data with the following features (columns): 1) ID, 2) Condition A ID, 3) Condition B ID (optional), and a set of markers.
 #' @param vars A vector of characters with the name of features (columns) within \code{dat} to use as markers for each gate. See details below.
 #' @param n_condition A numeric value of either 1 or 2 designating if the gating is performed with one condition or two conditions. 
-#' @param numerator Logical. If \code{TRUE} (the default), cells will be extracted within all statistically significant numerator (i.e., case) clusters. If \code{FALSE}, cells will be extracted within all statistically significant denominator (i.e., control) clusters. 
+#' @param numerator Logical. If \code{TRUE} (the default), cells will be extracted within all statistically significant numerator (i.e., case) clusters. If \code{FALSE}, cells will be extracted within all statistically significant denominator (i.e., control) clusters.
+#' @param bandw Optional, numeric. Fixed bandwidth for the kernel density estimation. Default is based on the internal \code{[sparr]{OS}} function.
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default is 0.05).
-#' @param p_correct Optional. Character string specifying whether to apply a correction for multiple comparisons including a False Discovery Rate \code{p_correct = "FDR"}, a spatially dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, and an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}. If \code{p_correct = "none"} (the default), then no correction is applied.
+#' @param p_correct Optional. Character string specifying whether to apply a correction for multiple comparisons including a False Discovery Rate \code{p_correct = "FDR"}, a spatially dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}, and a correction based on Random Field Theory using an equation by Adler and Hasofer \code{p_correct = "Adler and Hasofer"} or an equation by Friston et al. \code{p_correct = "Friston"}. If \code{p_correct = "none"} (the default), then no correction is applied.
 #' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[SpatialPack]{modified.ttest}}. The default is 30.
 #' @param plot_gate Logical. If \code{TRUE}, the output includes basic data visualizations.
 #' @param save_gate Logical. If \code{TRUE}, the output saves each visualization as a separate PNG file.
@@ -19,7 +20,7 @@
 #' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
 #' @param c2n Optional, character. The name of the level for the numerator of condition B. The default is null and the first level is treated as the numerator.
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
-#' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
+#' @param ... Arguments passed to \code{\link[sparr]{risk}} to select resolution.
 #'
 #' @details This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{plot_gate = TRUE}. 
 #' 
@@ -29,7 +30,7 @@
 #' 
 #' The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers.
 #' 
-#' Provides functionality for a correction for multiple testing. If \code{p_correct = "FDR"}, calculates a False Discovery Rate by Benjamini and Hochberg. If \code{p_correct = "uncorrelated Sidak"}, calculates an independent Sidak correction. If \code{p_correct = "uncorrelated Bonferroni"}, calculates an independent Bonferroni correction. If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, then the corrections take into account the into account the spatial correlation of the surface. (NOTE: If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, it may take a considerable amount of computation resources and time to calculate). If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
+#' Provides functionality for a correction for multiple testing. If \code{p_correct = "FDR"}, calculates a False Discovery Rate by Benjamini and Hochberg. If \code{p_correct = "uncorrelated Sidak"}, calculates an independent Sidak correction. If \code{p_correct = "uncorrelated Bonferroni"}, calculates an independent Bonferroni correction. If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, then the corrections take into account the into account the spatial correlation of the surface. (NOTE: If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, it may take a considerable amount of computation resources and time to calculate). If \code{p_correct = "Adler and Hasofer"} or if \code{p_correct = "Friston"}, then calculates a correction based on Random Field Theory. If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 #'
 #' @return An object of class \code{list}. This is a named list with the following components:
 #' 
@@ -70,6 +71,7 @@ gating <- function(dat,
                    vars,
                    n_condition = c(1, 2),
                    numerator = TRUE,
+                   bandw = NULL,
                    alpha = 0.05,
                    p_correct = "none",
                    nbc = NULL,
@@ -105,7 +107,7 @@ gating <- function(dat,
   match.arg(as.character(n_condition), choices = 1:2)
   
   ## p_correct
-  match.arg(p_correct, choices = c("none", "FDR", "correlated Sidak", "correlated Bonferroni", "uncorrelated Sidak", "uncorrelated Bonferroni"))
+  match.arg(p_correct, choices = c("none", "FDR", "correlated Sidak", "correlated Bonferroni", "uncorrelated Sidak", "uncorrelated Bonferroni", "Adler and Hasofer", "Friston"))
   
   ## numerator
   if (numerator == TRUE) { type_cluster <- "numerator" 
@@ -178,6 +180,7 @@ gating <- function(dat,
 
     if (n_condition == 2) {
     out <- lotrrs(dat = df,
+                  bandw = bandw,
                   win = win_gate,
                   plot_gate = plot_gate,
                   save_gate = save_gate,
@@ -194,6 +197,7 @@ gating <- function(dat,
                   ...)
     } else {
     out <- rrs(dat = df,
+               bandw = bandw,
                win = win_gate,
                plot_gate = plot_gate,
                save_gate = save_gate,

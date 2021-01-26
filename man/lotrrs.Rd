@@ -6,6 +6,7 @@
 \usage{
 lotrrs(
   dat,
+  bandw = NULL,
   alpha = 0.05,
   p_correct = "none",
   nbc = NULL,
@@ -25,9 +26,11 @@ lotrrs(
 \arguments{
 \item{dat}{Input data frame flow cytometry data with five (5) features (columns): 1) ID, 2) Condition A ID, 3) Condition B ID, 4) Marker A as x-coordinate, 5) Marker B as y-coordinate.}
 
+\item{bandw}{Optional, numeric. Fixed bandwidth for the kernel density estimation. Default is based on the internal \code{[sparr]{OS}} function.}
+
 \item{alpha}{Numeric. The two-tailed alpha level for significance threshold (default is 0.05).}
 
-\item{p_correct}{Optional. Character string specifying whether to apply a correction for multiple comparisons including a False Discovery Rate \code{p_correct = "FDR"}, a spatially dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, and an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}. If \code{p_correct = "none"} (the default), then no correction is applied.}
+\item{p_correct}{Optional. Character string specifying whether to apply a correction for multiple comparisons including a False Discovery Rate \code{p_correct = "FDR"}, a spatially dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}, and a correction based on Random Field Theory using an equation by Adler and Hasofer \code{p_correct = "Adler and Hasofer"} or an equation by Friston et al. \code{p_correct = "Friston"}. If \code{p_correct = "none"} (the default), then no correction is applied.}
 
 \item{nbc}{Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[SpatialPack]{modified.ttest}}. The default is 30.}
 
@@ -51,7 +54,7 @@ lotrrs(
 
 \item{win}{Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data.}
 
-\item{...}{Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.}
+\item{...}{Arguments passed to \code{\link[sparr]{risk}} to select resolution.}
 }
 \value{
 An object of class 'list' where each element is a object of class 'rrs' created by the \code{\link[sparr]{risk}} function with two additional components:
@@ -77,7 +80,7 @@ This function estimates a ratio of relative risk surfaces and computes the asymp
 
 The p-value surface of the ratio of relative risk surfaces is estimated assuming asymptotic normality of the ratio value at each gridded knot. The bandwidth is fixed across all layers. Basic visualization is available if \code{plot_gate = TRUE}.
 
-Provides functionality for a correction for multiple testing. If \code{p_correct = "FDR"}, calculates a False Discovery Rate by Benjamini and Hochberg. If \code{p_correct = "uncorrelated Sidak"}, calculates an independent Sidak correction. If \code{p_correct = "uncorrelated Bonferroni"}, calculates an independent Bonferroni correction. If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, then the corrections take into account the into account the spatial correlation of the surface. (NOTE: If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, it may take a considerable amount of computation resources and time to calculate). If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
+Provides functionality for a correction for multiple testing. If \code{p_correct = "FDR"}, calculates a False Discovery Rate by Benjamini and Hochberg. If \code{p_correct = "uncorrelated Sidak"}, calculates an independent Sidak correction. If \code{p_correct = "uncorrelated Bonferroni"}, calculates an independent Bonferroni correction. If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, then the corrections take into account the into account the spatial correlation of the surface. (NOTE: If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, it may take a considerable amount of computation resources and time to calculate). If \code{p_correct = "Adler and Hasofer"} or if \code{p_correct = "Friston"}, then calculates a correction based on Random Field Theory. If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 
 The two condition variables (Condition A and Condition B) within \code{dat} must be of class 'factor' with two levels. The first level in each variable is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value. The levels can also be specified using the \code{c1n} and \code{c2n} parameters.
 }

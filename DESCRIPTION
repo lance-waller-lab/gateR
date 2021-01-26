@@ -2,7 +2,7 @@ Package: gateR
 Type: Package
 Title: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation
 Version: 0.1.7
-Date: 2021-01-22
+Date: 2021-01-25
 Authors@R: 
     c(person(given = "Ian D.",
              family = "Buller",

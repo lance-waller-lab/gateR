@@ -42,7 +42,7 @@ NULL
 #' @importFrom sparr OS risk
 #' @importFrom SpatialPack modified.ttest
 #' @importFrom spatstat.geom as.im owin ppp 
-#' @importFrom stats na.omit relevel
+#' @importFrom stats na.omit pnorm relevel
 #' @importFrom tibble add_column
 #' @importFrom fields image.plot
 NULL

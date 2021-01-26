@@ -3,8 +3,9 @@
 #' Estimates a relative risk surface and computes the asymptotic p-value surface for a single gate with a single condition. Includes features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas.  This function can also be used as a standalone function.
 #'
 #' @param dat Input data frame flow cytometry data with four (4) features (columns): 1) ID, 2) Condition A ID, 3) Marker A as x-coordinate, 4) Marker B as y-coordinate.
+#' @param bandw Optional, numeric. Fixed bandwidth for the kernel density estimation. Default is based on the internal \code{[sparr]{OS}} function.
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default is 0.05).
-#' @param p_correct Optional. Character string specifying whether to apply a correction for multiple comparisons including a False Discovery Rate \code{p_correct = "FDR"}, a spatially dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, and an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}. If \code{p_correct = "none"} (the default), then no correction is applied.
+#' @param p_correct Optional. Character string specifying whether to apply a correction for multiple comparisons including a False Discovery Rate \code{p_correct = "FDR"}, a spatially dependent Sidak correction \code{p_correct = "correlated Sidak"}, a spatially dependent Bonferroni correction \code{p_correct = "correlated Bonferroni"}, an independent Sidak correction \code{p_correct = "uncorrelated Sidak"}, an independent Bonferroni correction \code{p_correct = "uncorrelated Bonferroni"}, and a correction based on Random Field Theory using an equation by Adler and Hasofer \code{p_correct = "Adler and Hasofer"} or an equation by Friston et al. \code{p_correct = "Friston"}. If \code{p_correct = "none"} (the default), then no correction is applied.
 #' @param nbc Optional. An integer for the number of bins when \code{p_correct = "correlated"}. Similar to \code{nbclass} argument in \code{\link[SpatialPack]{modified.ttest}}. The default is 30. 
 #' @param plot_gate Logical. If \code{TRUE}, the output includes basic data visualization.
 #' @param save_gate Logical. If \code{TRUE}, the output saves the visualization as a separate PNG file.
@@ -15,11 +16,11 @@
 #' @param upper_lrr Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit and the color key will include the maximum value of the log relative risk surface.
 #' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
 #' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
-#' @param ... Arguments passed to \code{\link[sparr]{risk}} to select bandwidth, edge correction, and resolution.
+#' @param ... Arguments passed to \code{\link[sparr]{risk}} to select resolution.
 #'
 #' @details This function estimates a relative risk surface and computes the asymptotic p-value surface for a single gate and single condition using the \code{\link[sparr]{risk}} function. Bandwidth is fixed across both layers (numerator and denominator spatial densities). Basic visualization is available if \code{plot_gate = TRUE}. 
 #' 
-#' Provides functionality for a correction for multiple testing. If \code{p_correct = "FDR"}, calculates a False Discovery Rate by Benjamini and Hochberg. If \code{p_correct = "uncorrelated Sidak"}, calculates an independent Sidak correction. If \code{p_correct = "uncorrelated Bonferroni"}, calculates an independent Bonferroni correction. If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, then the corrections take into account the into account the spatial correlation of the surface. (NOTE: If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, it may take a considerable amount of computation resources and time to calculate). If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
+#' Provides functionality for a correction for multiple testing. If \code{p_correct = "FDR"}, calculates a False Discovery Rate by Benjamini and Hochberg. If \code{p_correct = "uncorrelated Sidak"}, calculates an independent Sidak correction. If \code{p_correct = "uncorrelated Bonferroni"}, calculates an independent Bonferroni correction. If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, then the corrections take into account the into account the spatial correlation of the surface. (NOTE: If \code{p_correct = "correlated Sidak"} or if \code{p_correct = "correlated Bonferroni"}, it may take a considerable amount of computation resources and time to calculate). If \code{p_correct = "Adler and Hasofer"} or if \code{p_correct = "Friston"}, then calculates a correction based on Random Field Theory. If \code{p_correct = "none"} (the default), then the function does not account for multiple testing and uses the uncorrected \code{alpha} level. See the internal \code{pval_correct} function documentation for more details.
 #' 
 #' The condition variable (Condition A) within \code{dat} must be of class 'factor' with two levels. The first level is considered the numerator (i.e., "case") value and the second level is considered the denominator (i.e., "control") value. The level can also be specified using the \code{c1n} parameter.
 #'
@@ -46,7 +47,8 @@
 #' @examples 
 #' test_rrs <- rrs(dat = randCyto)
 #'   
-rrs <- function(dat, 
+rrs <- function(dat,
+                bandw = NULL,
                 alpha = 0.05, 
                 p_correct = "none",
                 nbc = NULL,
@@ -69,7 +71,7 @@ rrs <- function(dat,
   if (nlevels(dat[ , 2]) != 2) { stop("The second feature of 'dat' must be a binary factor") }
   
   ## p_correct
-  match.arg(p_correct, choices = c("none", "FDR", "correlated Sidak", "correlated Bonferroni", "uncorrelated Sidak", "uncorrelated Bonferroni"))
+  match.arg(p_correct, choices = c("none", "FDR", "correlated Sidak", "correlated Bonferroni", "uncorrelated Sidak", "uncorrelated Bonferroni", "Adler and Hasofer", "Friston"))
   
   ## alpha
   if (alpha <= 0 | alpha >= 1 ) {
@@ -111,9 +113,10 @@ rrs <- function(dat,
                                                                  window = win)))
   
   # Estimate SRR and p-values
-  c1_h0 <- sparr::OS(c1_ppp, "geometric")
+  if (is.null(bandw)){ bandw <- sparr::OS(c1_ppp, "geometric") }
+  
   suppressMessages(suppressWarnings(out <- sparr::risk(f = c1_ppp,
-                                                       h0 = c1_h0,
+                                                       h0 = bandw,
                                                        tolerate = TRUE,
                                                        edge = "diggle",
                                                        verbose = FALSE,
@@ -129,27 +132,32 @@ rrs <- function(dat,
   suppressMessages(suppressWarnings(out$lrr <- log(out$rr)))
   
   # Alpha level
-  if (p_correct == "none") { alpha_correct <- alpha }
+  if (p_correct == "none") { p_critical <- alpha }
   if (p_correct == "FDR") { 
-    alpha_correct <- pval_correct(input = out, type = "FDR", alpha = alpha, nbc = nbc)
+    p_critical <- pval_correct(input = out, type = "FDR", alpha = alpha, nbc = nbc)
   }
   if (p_correct == "correlated Sidak") {
     message("Please be patient... Calculating spatially dependent Sidak correction")
-    alpha_correct <- pval_correct(input = out, type = "correlated Sidak", alpha = alpha, nbc = nbc)
+    p_critical <- pval_correct(input = out, type = "correlated Sidak", alpha = alpha, nbc = nbc)
   } 
   if (p_correct == "correlated Bonferroni") {
     message("Please be patient... Calculating spatially dependent Bonferroni correction")
-    alpha_correct <- pval_correct(input = out, type = "correlated Bonferroni", alpha = alpha, nbc = nbc)
+    p_critical <- pval_correct(input = out, type = "correlated Bonferroni", alpha = alpha, nbc = nbc)
   }
   if (p_correct == "uncorrelated Sidak") { 
-    alpha_correct <- pval_correct(input = out, type = "uncorrelated Sidak", alpha = alpha, nbc = nbc)
+    p_critical <- pval_correct(input = out, type = "uncorrelated Sidak", alpha = alpha, nbc = nbc)
   }
-  
   if (p_correct == "uncorrelated Bonferroni") { 
-    alpha_correct <- pval_correct(input = out, type = "uncorrelated Bonferroni", alpha = alpha, nbc = nbc)
+    p_critical <- pval_correct(input = out, type = "uncorrelated Bonferroni", alpha = alpha, nbc = nbc)
+  }
+  if (p_correct == "Adler and Hasofer") { 
+    p_critical <- pval_correct(input = out, type = "Adler and Hasofer", alpha = alpha, nbc = nbc)
+  }
+  if (p_correct == "Friston") { 
+    p_critical <- pval_correct(input = out, type = "Friston", alpha = alpha, nbc = nbc)
   }
   
-  out$alpha <- alpha_correct
+  out$alpha <- p_critical
   
   if (plot_gate == TRUE) {
     # Graphics
@@ -208,7 +216,7 @@ rrs <- function(dat,
                                         labels = c1_plot$labels,
                                         cex.axis = 0.67),
                        main = paste("log relative risk\n(bandwidth:",
-                                    round(c1_h0, digits = 3),
+                                    round(bandw, digits = 3),
                                     "units)",
                                     sep = " "))
     par(bg = "transparent")
