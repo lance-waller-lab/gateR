@@ -15,8 +15,10 @@
 #' @param lower_lrr Optional, numeric. Lower cut-off value for the log relative risk value in the color key (typically a negative value). The default is no limit and the color key will include the minimum value of the log relative risk surface. 
 #' @param upper_lrr Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit and the color key will include the maximum value of the log relative risk surface.
 #' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
-#' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
+#' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select resolution.
+#' @param doplot `r lifecycle::badge("deprecated")` \code{doplot} is no longer supported and has been renamed \code{plot_gate}.
+#' @param verbose `r lifecycle::badge("deprecated")` \code{verbose} is no longer supported; this function will not display verbose output from internal \code{\link[sparr]{risk}} function.
 #'
 #' @details This function estimates a relative risk surface and computes the asymptotic p-value surface for a single gate and single condition using the \code{\link[sparr]{risk}} function. Bandwidth is fixed across both layers (numerator and denominator spatial densities). Basic visualization is available if \code{plot_gate = TRUE}. 
 #' 
@@ -38,6 +40,7 @@
 #' @importFrom fields image.plot
 #' @importFrom graphics close.screen par screen split.screen 
 #' @importFrom grDevices chull dev.off png
+#' @importFrom lifecycle badge deprecate_warn deprecated is_present
 #' @importFrom raster extent values
 #' @importFrom spatstat.geom owin ppp
 #' @importFrom sparr OS risk
@@ -61,9 +64,20 @@ rrs <- function(dat,
                 upper_lrr = NULL,
                 c1n = NULL,
                 win = NULL,
-                ...) {
+                ...,
+                doplot = lifecycle::deprecated(),
+                verbose = lifecycle::deprecated()) {
   
   # Checks
+  ## deprecate
+  if (lifecycle::is_present(doplot)) {
+    lifecycle::deprecate_warn("0.1.5", "gateR::rrs(doplot = )", "gateR::rrs(plot_gate = )")
+    plot_gate <- doplot
+  }
+  if (lifecycle::is_present(verbose)) {
+    lifecycle::deprecate_warn("0.1.5", "gateR::rrs(verbose = )")
+  }
+  
   ## dat
   if ("data.frame" %!in% class(dat)) { stop("'dat' must be class 'data.frame'") }
   
@@ -132,29 +146,12 @@ rrs <- function(dat,
   suppressMessages(suppressWarnings(out$lrr <- log(out$rr)))
   
   # Alpha level
-  if (p_correct == "none") { p_critical <- alpha }
-  if (p_correct == "FDR") { 
-    p_critical <- pval_correct(input = out, type = "FDR", alpha = alpha, nbc = nbc)
-  }
-  if (p_correct == "correlated Sidak") {
-    message("Please be patient... Calculating spatially dependent Sidak correction")
-    p_critical <- pval_correct(input = out, type = "correlated Sidak", alpha = alpha, nbc = nbc)
-  } 
-  if (p_correct == "correlated Bonferroni") {
-    message("Please be patient... Calculating spatially dependent Bonferroni correction")
-    p_critical <- pval_correct(input = out, type = "correlated Bonferroni", alpha = alpha, nbc = nbc)
-  }
-  if (p_correct == "uncorrelated Sidak") { 
-    p_critical <- pval_correct(input = out, type = "uncorrelated Sidak", alpha = alpha, nbc = nbc)
-  }
-  if (p_correct == "uncorrelated Bonferroni") { 
-    p_critical <- pval_correct(input = out, type = "uncorrelated Bonferroni", alpha = alpha, nbc = nbc)
-  }
-  if (p_correct == "Adler and Hasofer") { 
-    p_critical <- pval_correct(input = out, type = "Adler and Hasofer", alpha = alpha, nbc = nbc)
-  }
-  if (p_correct == "Friston") { 
-    p_critical <- pval_correct(input = out, type = "Friston", alpha = alpha, nbc = nbc)
+  if (p_correct == "none") { p_critical <- alpha 
+  } else {
+    if (p_correct == "correlated Sidak" | p_correct == "correlated Bonferroni") {
+      message("Please be patient... Calculating spatially dependent correction")
+    }
+    p_critical <- pval_correct(input = out, type = p_correct, alpha = alpha, nbc = nbc)
   }
   
   out$alpha <- p_critical

@@ -39,12 +39,16 @@ pval_correct <- function(input,
   fdr <- function(pvals, alpha) {
     m <- length(pvals)
     for (i in 1:length(pvals)) {
-      if (pvals[i] <= (i/m) * alpha) { return(pvals[i]) } 
+      if (pvals[i] <= (i/m) * alpha) { 
+        pcrit <- pvals[i]
+        return(pcrit)
+      }
     }
+    max(pcrit, min(pvals, na.rm = TRUE))
   }
   
-  p_critical <- fdr(sort_pvals, alpha)
-  return(p_critical)
+  out_alpha <- fdr(sort_pvals, alpha)
+  return(out_alpha)
   }
 
 # Correlated Bonferroni correction

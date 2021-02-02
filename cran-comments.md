@@ -1,8 +1,11 @@
-## This is the sixth resubmission
+## This is the seventh resubmission
 
-* Actions taken after feedback from Uwe Ligges:
-  * Updated URLs in gateR-package.Rd
-  * Updated year in DESCRIPTION
+* Updates since previous submission:
+  * Updated 'spatstat' dependency to include 'spatstat.core' and 'spatstat.geom' because 'spatstat' was recently subsetted
+  * Added `p_correct` arugment to `lrren()` and `perlrren()` which calls a new, internal function `pval_correct()` that calculates seven types of corrections for multiple testing
+  * Import 'lifecycle' package to document deprecated arguments `doplot` and `verbose` in `lotrrs()`, `rrs()`, and `gating()` functions
+  
+* Documentation for `pval_correct()` references a doi <https://doi.org/10.2307/2283989> that throws a NOTE in win-builder but no other environment
   
 ## Test environments
 * local OS X install, R 3.6.3

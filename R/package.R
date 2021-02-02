@@ -36,6 +36,7 @@ NULL
 #' @importFrom fields image.plot
 #' @importFrom graphics close.screen par screen split.screen 
 #' @importFrom grDevices chull colorRampPalette dev.off png
+#' @importFrom lifecycle badge deprecate_warn deprecated is_present
 #' @importFrom maptools unionSpatialPolygons
 #' @importFrom raster cut extent raster rasterToPolygons values
 #' @importFrom sp coordinates over

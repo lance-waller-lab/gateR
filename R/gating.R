@@ -19,8 +19,10 @@
 #' @param upper_lrr Optional, numeric. Upper cut-off value for the log relative risk value in the color key (typically a positive value). The default is no limit and the color key will include the maximum value of the log relative risk surface.
 #' @param c1n Optional, character. The name of the level for the numerator of condition A. The default is null and the first level is treated as the numerator. 
 #' @param c2n Optional, character. The name of the level for the numerator of condition B. The default is null and the first level is treated as the numerator.
-#' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data. 
+#' @param win Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data.
 #' @param ... Arguments passed to \code{\link[sparr]{risk}} to select resolution.
+#' @param doplot `r lifecycle::badge("deprecated")` \code{doplot} is no longer supported and has been renamed \code{plot_gate}.
+#' @param verbose `r lifecycle::badge("deprecated")` \code{verbose} is no longer supported; this function will not display verbose output from internal \code{\link[sparr]{risk}} function.
 #'
 #' @details This function performs a sequential gating strategy for mass cytometry data comparing two levels with one or two conditions. Gates are typically two-dimensional space comprised of two fluorescent markers. The two-level comparison allows for the estimation of a spatial relative risk function and the computation of p-value based on an assumption of asymptotic normality. Cells within statistically significant areas are extracted and used in the next gate. This function relies heavily upon the \code{\link[sparr]{risk}} function. Basic visualization is available if \code{plot_gate = TRUE}. 
 #' 
@@ -51,6 +53,7 @@
 #' }
 #'
 #' @importFrom grDevices chull
+#' @importFrom lifecycle badge deprecate_warn deprecated is_present
 #' @importFrom maptools unionSpatialPolygons
 #' @importFrom raster rasterToPolygons values
 #' @importFrom sp coordinates over
@@ -85,9 +88,20 @@ gating <- function(dat,
                    c1n = NULL,
                    c2n = NULL,
                    win = NULL,
-                   ...) {
+                   ...,
+                   doplot = lifecycle::deprecated(),
+                   verbose = lifecycle::deprecated()) {
   
   # Checks
+  ## deprecate
+  if (lifecycle::is_present(doplot)) {
+    lifecycle::deprecate_warn("0.1.5", "gateR::gating(doplot = )", "gateR::gating(plot_gate = )")
+    plot_gate <- doplot
+  }
+  if (lifecycle::is_present(verbose)) {
+    lifecycle::deprecate_warn("0.1.5", "gateR::gating(verbose = )")
+  }
+  
   ## dat
   if ("data.frame" %!in% class(dat)) { stop("'dat' must be class 'data.frame'") }
   

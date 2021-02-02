@@ -14,21 +14,18 @@ test_that("rrs throws error with invalid arguments", {
 
   # Odd-numbered amount of vars
   expect_error(
-    rrs(dat = randCyto[, 1:4],
-           p_correct = "none")
+    rrs(dat = randCyto[, 1:4])
   )
 
   # Non-binary second feature
   expect_error(
-    rrs(dat = fubar,
-           p_correct = "none")
+    rrs(dat = fubar)
   )
 
   # Incorrectly specified alpha
   expect_error(
     rrs(dat = randCyto,
-           alpha = 0,
-           p_correct = "none")
+           alpha = 0)
   )
 
   # Incorrectly specified p_correct
@@ -43,8 +40,7 @@ test_that("rrs throws error with invalid arguments", {
 test_that("rrs works", {
 
   expect_named(
-    rrs(dat = randCyto,
-        p_correct = "none")
+    rrs(dat = randCyto)
   )
   
   expect_named(
@@ -52,45 +48,5 @@ test_that("rrs works", {
         p_correct = "FDR")
   )
 
-  expect_named(
-    rrs(dat = randCyto,
-        p_correct = "uncorrelated Sidak")
-  )
-  
-  expect_named(
-    rrs(dat = randCyto,
-        p_correct = "uncorrelated Bonferroni")
-  )
-
-  # expect_named(
-  #   rrs(dat = randCyto,
-  #       resolution = 40,
-  #       p_correct = "correlated")
-  # )
-  # 
-  # expect_named(
-  #   rrs(dat = randCyto,
-  #       alpha = 0.1,
-  #       p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   rrs(dat = randCyto,
-  #       alpha = 0.01,
-  #       p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   rrs(dat = randCyto,
-  #       plot_gate = TRUE,
-  #       p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   rrs(dat = randCyto,
-  #       plot_gate = TRUE,
-  #       rcols = c("green", "yellow", "purple"),
-  #       p_correct = "none")
-  # )
 }
 )

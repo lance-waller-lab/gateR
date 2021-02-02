@@ -16,8 +16,7 @@ test_that("gating throws error with invalid arguments", {
   expect_error(
     gating(dat = randCyto,
            vars = c("arcsinh_CD4"),
-           n_condition = 1,
-           p_correct = "none")
+           n_condition = 1)
   )
 
   # A var not available
@@ -25,8 +24,7 @@ test_that("gating throws error with invalid arguments", {
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38",
                     "arcsinh_CD8", "x"),
-           n_condition = 1,
-           p_correct = "none")
+           n_condition = 1)
   )
 
   # Non-binary second feature
@@ -34,16 +32,14 @@ test_that("gating throws error with invalid arguments", {
     gating(dat = fubar,
            vars = c("arcsinh_CD4", "arcsinh_CD38",
                     "arcsinh_CD8", "arcsinh_CD3"),
-           n_condition = 1,
-           p_correct = "none")
+           n_condition = 1)
   )
 
   expect_error(
     gating(dat = fubar,
            vars = c("arcsinh_CD4", "arcsinh_CD38",
                     "arcsinh_CD8", "arcsinh_CD3"),
-           n_condition = 2,
-           p_correct = "none")
+           n_condition = 2)
   )
 
   # Non-binary third feature
@@ -51,8 +47,7 @@ test_that("gating throws error with invalid arguments", {
     gating(dat = fubar1,
            vars = c("arcsinh_CD4", "arcsinh_CD38",
                     "arcsinh_CD8", "arcsinh_CD3"),
-           n_condition = 2,
-           p_correct = "none")
+           n_condition = 2)
   )
 
   # Incorrectly specified alpha
@@ -61,8 +56,7 @@ test_that("gating throws error with invalid arguments", {
            vars = c("arcsinh_CD4", "arcsinh_CD38",
                     "arcsinh_CD8", "arcsinh_CD3"),
            n_condition = 1,
-           alpha = 0,
-           p_correct = "none")
+           alpha = 0)
   )
 
   # Incorrectly specified p_correct
@@ -79,16 +73,14 @@ test_that("gating throws error with invalid arguments", {
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38",
                     "arcsinh_CD8", "arcsinh_CD3"),
-           n_condition = 3,
-           p_correct = "none")
+           n_condition = 3)
   )
 
   # Missing specified n_condition
   expect_error(
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38",
-                    "arcsinh_CD8", "arcsinh_CD3"),
-           p_correct = "none")
+                    "arcsinh_CD8", "arcsinh_CD3"))
   )
   
   # no results in Gate 1
@@ -105,10 +97,9 @@ test_that("gating throws error with invalid arguments", {
 test_that("gating works", {
 
   expect_named(
-      gating(dat = randCyto,
-             vars = c("arcsinh_CD4", "arcsinh_CD38"),
-             n_condition = 1,
-             p_correct = "none")
+    gating(dat = randCyto,
+           vars = c("arcsinh_CD4", "arcsinh_CD38"),
+           n_condition = 1)
   )
 
   expect_named(
@@ -117,86 +108,65 @@ test_that("gating works", {
            n_condition = 2,
            p_correct = "none")
   )
-
+  
   expect_named(
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38"),
-           n_condition = 1,
            numerator = FALSE,
-           p_correct = "FDR")
+           n_condition = 1)
   )
   
   expect_named(
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38"),
-           n_condition = 1,
-           numerator = FALSE,
-           p_correct = "uncorrelated Sidak")
+           n_condition = 2,
+           resolution = 50,
+           p_correct = "correlated Bonferroni")
   )
   
   expect_named(
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38"),
-           n_condition = 1,
-           numerator = FALSE,
+           n_condition = 2,
            p_correct = "uncorrelated Bonferroni")
+  )
+  
+  expect_named(
+    gating(dat = randCyto,
+           vars = c("arcsinh_CD4", "arcsinh_CD38"),
+           n_condition = 2,
+           bandw = 1,
+           p_correct = "Friston")
   )
 
   expect_named(
     gating(dat = randCyto,
            vars = c("arcsinh_CD4", "arcsinh_CD38",
                     "arcsinh_CD8", "arcsinh_CD3"),
-           n_condition = 1,
-           p_correct = "none")
+           n_condition = 1)
   )
 
-  # expect_named(
-  #   gating(dat = randCyto,
-  #          vars = c("arcsinh_CD4", "arcsinh_CD38",
-  #                   "arcsinh_CD8", "arcsinh_CD3"),
-  #          n_condition = 2,
-  #          p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   gating(dat = randCyto,
-  #          vars = c("arcsinh_CD4", "arcsinh_CD38"),
-  #          n_condition = 1,
-  #          alpha = 0.1,
-  #          p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   gating(dat = randCyto,
-  #          vars = c("arcsinh_CD4", "arcsinh_CD38"),
-  #          n_condition = 1,
-  #          alpha = 0.01,
-  #          p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   gating(dat = randCyto,
-  #          vars = c("arcsinh_CD4", "arcsinh_CD38"),
-  #          n_condition = 1,
-  #          numerator = FALSE,
-  #          p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   gating(dat = randCyto,
-  #          vars = c("arcsinh_CD4", "arcsinh_CD38"),
-  #          n_condition = 2,
-  #          plot_gate = TRUE,
-  #          rcols = c("green", "yellow", "purple"),
-  #          p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   gating(dat = randCyto,
-  #          vars = c("arcsinh_CD4", "arcsinh_CD38"),
-  #          n_condition = 1,
-  #          resolution = 40,
-  #          p_correct = "correlated")
-  # )
+  expect_named(
+    gating(dat = randCyto,
+           vars = c("arcsinh_CD4", "arcsinh_CD38",
+                    "arcsinh_CD8", "arcsinh_CD3"),
+           n_condition = 2)
+  )
+
+  expect_named(
+    gating(dat = randCyto,
+           vars = c("arcsinh_CD4", "arcsinh_CD38"),
+           n_condition = 1,
+           alpha = 0.1)
+  )
+
+  expect_named(
+    gating(dat = randCyto,
+           vars = c("arcsinh_CD4", "arcsinh_CD38"),
+           n_condition = 2,
+           plot_gate = TRUE,
+           rcols = c("green", "yellow", "purple"))
+  )
+
 }
 )

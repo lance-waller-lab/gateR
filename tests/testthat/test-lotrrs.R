@@ -16,27 +16,23 @@ test_that("lotrrs throws error with invalid arguments", {
   
   # Odd-numbered amount of vars
   expect_error(
-    lotrrs(dat = randCyto[ , 1:4],
-        p_correct = "none")
+    lotrrs(dat = randCyto[ , 1:4])
   )
   
   # Non-binary second feature
   expect_error(
-    lotrrs(dat = fubar,
-        p_correct = "none")
+    lotrrs(dat = fubar)
   )
   
   # Non-binary third feature
   expect_error(
-    lotrrs(dat = fubar1,
-           p_correct = "none")
+    lotrrs(dat = fubar1)
   )
   
   # Incorrectly specified alpha
   expect_error(
     lotrrs(dat = randCyto,
-        alpha = 0,
-        p_correct = "none")
+        alpha = 0)
   )
   
   # Incorrectly specified p_correct
@@ -51,8 +47,7 @@ test_that("lotrrs throws error with invalid arguments", {
 test_that("lotrrs works", {
 
   expect_named(
-    lotrrs(dat = randCyto,
-        p_correct = "none")
+    lotrrs(dat = randCyto)
   )
 
   expect_named(
@@ -62,43 +57,19 @@ test_that("lotrrs works", {
   
   expect_named(
     lotrrs(dat = randCyto,
-           p_correct = "uncorrelated Sidak")
+           resolution = 50,
+           p_correct = "correlated Sidak")
   )
   
   expect_named(
     lotrrs(dat = randCyto,
-        p_correct = "uncorrelated Bonferroni")
+        p_correct = "uncorrelated Sidak")
   )
-
-  # expect_named(
-  #   lotrrs(dat = randCyto,
-  #       resolution = 40,
-  #       p_correct = "correlated")
-  # )
-  # 
-  # expect_named(
-  #   lotrrs(dat = randCyto,
-  #       alpha = 0.1,
-  #       p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   lotrrs(dat = randCyto,
-  #       alpha = 0.01,
-  #       p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   lotrrs(dat = randCyto,
-  #       plot_gate = TRUE,
-  #       p_correct = "none")
-  # )
-  # 
-  # expect_named(
-  #   lotrrs(dat = randCyto,
-  #       plot_gate = TRUE,
-  #       rcols = c("green", "yellow", "purple"),
-  #       p_correct = "none")
-  # )
+  
+  expect_named(
+    lotrrs(dat = randCyto,
+           p_correct = "Adler and Hasofer")
+  )
+  
 }
 )

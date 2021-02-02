@@ -23,7 +23,9 @@ gating(
   c1n = NULL,
   c2n = NULL,
   win = NULL,
-  ...
+  ...,
+  doplot = lifecycle::deprecated(),
+  verbose = lifecycle::deprecated()
 )
 }
 \arguments{
@@ -64,6 +66,10 @@ gating(
 \item{win}{Optional. Object of class \code{owin} for a custom two-dimensional window within which to estimate the surfaces. The default is NULL and calculates a convex hull around the data.}
 
 \item{...}{Arguments passed to \code{\link[sparr]{risk}} to select resolution.}
+
+\item{doplot}{\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}} \code{doplot} is no longer supported and has been renamed \code{plot_gate}.}
+
+\item{verbose}{\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}} \code{verbose} is no longer supported; this function will not display verbose output from internal \code{\link[sparr]{risk}} function.}
 }
 \value{
 An object of class \code{list}. This is a named list with the following components:
