@@ -6,6 +6,9 @@
   * The latter two corrections required a new argument `bandw` to be added to `gating()`, `lotrrs()`, and `rrs()` functions to allow users to specify bandwidth for the kernel density estimation
   * Updated the calculation of the spatial correlogram in internal `pval_correct()` function from the `correlog()` function in the 'pgrimess' package to the `modified.ttest()` function in the 'SpatialPack' package
   * Imports 'lifecycle' package to document deprecated arguments `doplot` and `verbose` in `lotrrs()`, `rrs()`, and `gating()` functions
+  * In `gating()` function, creates a categorized 'im' based on critical p-value, assigns that value to every point in a 'ppp' object, and subsets points by category
+  * Removed 'maptools' and 'sp' packages from Imports
+  * Updated links in 'gateR-package.Rd' for package updates
 
 # gateR v0.1.6
   * Updated URLs in gateR-package.Rd
