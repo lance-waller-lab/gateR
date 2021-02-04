@@ -54,20 +54,17 @@
 #'
 #' @importFrom grDevices chull
 #' @importFrom lifecycle badge deprecate_warn deprecated is_present
-#' @importFrom maptools unionSpatialPolygons
-#' @importFrom raster rasterToPolygons values
-#' @importFrom sp coordinates over
-#' @importFrom spatstat.geom owin
+#' @importFrom spatstat.geom cut.im marks owin ppp
 #' @importFrom tibble add_column
 #' @export
 #' 
 #' @examples
 #' if (interactive()) {
 #' ## Single condition, no multiple testing correction
-#'   test_gate <- gateR::gating(dat = randCyto,
-#'                              vars = c("arcsinh_CD4", "arcsinh_CD38",
-#'                                       "arcsinh_CD8", "arcsinh_CD3"),
-#'                              n_condition = 1)
+#'   test_gate <- gating(dat = randCyto,
+#'                       vars = c("arcsinh_CD4", "arcsinh_CD38",
+#'                                "arcsinh_CD8", "arcsinh_CD3"),
+#'                       n_condition = 1)
 #' }
 #' 
 gating <- function(dat,
@@ -226,15 +223,30 @@ gating <- function(dat,
                c1n = c1n,
                ...)
     }
-
-    # Convert p-value surface into a categorized raster
+    
+    # Convert p-value surface into a categorized 'im'
     ## v == 2 : significant T1 numerator;  v == 1: not
-    Ps <- pval_plot(input = out$P, alpha = out$alpha)
+    Ps <- spatstat.geom::cut.im(out$P, breaks = c(-Inf, out$alpha / 2, 1 - out$alpha / 2, Inf), labels = c("1", "2", "3")) 
     list_gate[[k]] <- out # save for output
-    rm(out, df, win_gate) # conserve memory
+    rm(out, df) # conserve memory
 
     # Go back one gate if current gate has no significant area and produce output of previous gate
-    if (all(raster::values(Ps)[!is.na(raster::values(Ps))] == 2) | all(is.na(raster::values(Ps)))) {
+    if (all(Ps$v == "2", na.rm = TRUE) | all(is.na(Ps$v))) {
+      if (k > 1) {
+      message(paste("Gate", k, "yielded no significant", type_cluster, "cluster(s)...",
+                "Returning results from Gate", k-1,
+                sep = " "))
+      output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
+      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
+      return(out_list)
+      } else {
+        stop(paste("Gate 1 yielded no significant clustering... Returning no results", sep = " "))
+      }
+    }
+
+    if (numerator == TRUE) { v <- "1" } else { v <- "3" }
+
+    if (!any(Ps$v == v, na.rm = TRUE)) {
       if (k > 1) {
       message(paste("Gate", k, "yielded no significant", type_cluster, "cluster(s)...",
                 "Returning results from Gate", k-1,
@@ -246,36 +258,16 @@ gating <- function(dat,
         stop(paste("Gate 1 yielded no significant", type_cluster, "cluster(s)... Returning no results", sep = " "))
       }
     }
-
-    # convert categorized raster to gridded polygons
-    out_pol <- raster::rasterToPolygons(Ps)
-    rm(Ps) # conserve memory
-
-    if (numerator == TRUE) { v <- 1 } else { v <- 3 }
-    # combine gridded polygons of similar categories
-    pols <- try(maptools::unionSpatialPolygons(out_pol[out_pol$layer == v, ],
-                                               IDs = rep(1, length(out_pol[out_pol$layer == v, ]))), silent = TRUE)
-    if("try-error" %in% class(pols)) {
-      if (k > 1) {
-      message(paste("Gate", k, "yielded no significant", type_cluster, "cluster(s)...",
-                "Returning results from Gate", k-1,
-                sep = " "))
-      output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
-      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
-      return(out_list)
-      } else {
-        stop(paste("Gate 1 yielded no significant", type_cluster, "cluster(s)... Returning no results", sep = " "))
-      }
-    }
-    rm(out_pol) # conserve memory
 
     # Overlay points
-    sp::coordinates(dat_gate) <- ~ cbind(dat_gate[,which(colnames(dat_gate) %in% vars[j])],
-                                         dat_gate[,which(colnames(dat_gate) %in% vars[j + 1])])
+    suppressMessages(suppressWarnings(full_ppp <- spatstat.geom::ppp(x = dat_gate[,which(colnames(dat_gate) %in% vars[j])],
+                                                                     y = dat_gate[,which(colnames(dat_gate) %in% vars[j + 1])],
+                                                                     marks = dat_gate,
+                                                                     window = win_gate)))
 
-    # extract points within significant cluster
-    dat_gate <- as.data.frame(dat_gate[!is.na(sp::over(dat_gate, pols)), ])
-    rm(pols) # conserve memory
+    # extract points within significant cluster(s)
+    spatstat.geom::marks(full_ppp)$gate <- Ps[full_ppp, drop = FALSE]
+    dat_gate <- spatstat.geom::marks(full_ppp)[spatstat.geom::marks(full_ppp)$gate == v, ]
 
     # Output for the final gate
     if (k == n_gate) {

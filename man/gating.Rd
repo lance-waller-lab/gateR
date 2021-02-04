@@ -107,10 +107,10 @@ Provides functionality for a correction for multiple testing. If \code{p_correct
 \examples{
 if (interactive()) {
 ## Single condition, no multiple testing correction
-  test_gate <- gateR::gating(dat = randCyto,
-                             vars = c("arcsinh_CD4", "arcsinh_CD38",
-                                      "arcsinh_CD8", "arcsinh_CD3"),
-                             n_condition = 1)
+  test_gate <- gating(dat = randCyto,
+                      vars = c("arcsinh_CD4", "arcsinh_CD38",
+                               "arcsinh_CD8", "arcsinh_CD3"),
+                      n_condition = 1)
 }
 
 }

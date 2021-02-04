@@ -196,7 +196,6 @@ test_gating <- gateR::gating(dat = obs_dat,
                              vars = c("arcsinh_CD4", "arcsinh_CD38",
                                       "arcsinh_CD8", "arcsinh_CD3"),
                              n_condition = 1,
-                             p_correct = "FDR",
                              plot_gate = TRUE,
                              upper_lrr = 1,
                              lower_lrr = -1)

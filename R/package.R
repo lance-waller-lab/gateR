@@ -24,7 +24,7 @@
 #' @aliases gateR-package gateR
 #' @docType package
 #' 
-#' @section Dependencies: The 'gateR' package relies heavily upon \code{\link{sparr}}, \code{\link{sp}}, and \code{\link{raster}}. For a two-level comparison, the spatial relative risk function uses the \code{\link[sparr]{risk}} function. The \code{gating} function extracts cells within significant clusters using the \code{\link[raster]{rasterToPolygons}}, \code{\link[maptools]{unionSpatialPolygons}}, and \code{\link[sp]{over}} functions. The calculation of a Bonferroni correction for multiple testing accounting for the spatial correlation of the estimated surface uses the \code{\link[SpatialPack]{modified.ttest}} function. Basic visualizations rely on the \code{\link[fields]{image.plot}} function.
+#' @section Dependencies: The 'gateR' package relies heavily upon \code{\link{sparr}}, \code{\link{spatstat.geom}}, and \code{\link{raster}}. For a two-level comparison, the spatial relative risk function uses the \code{\link[sparr]{risk}} function. The calculation of a Bonferroni correction for multiple testing accounting for the spatial correlation of the estimated surface uses the \code{\link[SpatialPack]{modified.ttest}} function. Basic visualizations rely on the \code{\link[fields]{image.plot}} function.
 #' 
 #' @author Ian D. Buller\cr \emph{Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland, USA.}
 #' 
@@ -37,12 +37,10 @@ NULL
 #' @importFrom graphics close.screen par screen split.screen 
 #' @importFrom grDevices chull colorRampPalette dev.off png
 #' @importFrom lifecycle badge deprecate_warn deprecated is_present
-#' @importFrom maptools unionSpatialPolygons
-#' @importFrom raster cut extent raster rasterToPolygons values
-#' @importFrom sp coordinates over
+#' @importFrom raster cut extent raster values
 #' @importFrom sparr OS risk
 #' @importFrom SpatialPack modified.ttest
-#' @importFrom spatstat.geom as.im owin ppp 
+#' @importFrom spatstat.geom as.im cut.im marks owin ppp
 #' @importFrom stats na.omit pnorm relevel
 #' @importFrom tibble add_column
 #' @importFrom fields image.plot
