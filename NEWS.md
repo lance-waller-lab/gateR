@@ -1,13 +1,16 @@
 # gateR (development version)
 
+# gateR v0.1.8
+  * Updated `spatstat` package to new subsetted packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). Now `spatstat.geom`, `spatstat.core`, `spatstat.linnet`, and `spatstat (>= 2.0-0)` are in Depends
+
 # gateR v0.1.7
-  * Updated 'spatstat' package to new subsetted packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). 'spatstat.geom' package replaces 'spatstat' package in Imports
+  * Updated `spatstat` package to new subsetted packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). `spatstat.geom` package replaces `spatstat` package in Imports
   * Added additional multiple testing corrections, including False Discovery Rate, spatially dependent Sidak correction, independent Sidak correction, and two corrections based on Random Field Theory (Adler and Hasofer or Friston)
   * The latter two corrections required a new argument `bandw` to be added to `gating()`, `lotrrs()`, and `rrs()` functions to allow users to specify bandwidth for the kernel density estimation
-  * Updated the calculation of the spatial correlogram in internal `pval_correct()` function from the `correlog()` function in the 'pgrimess' package to the `modified.ttest()` function in the 'SpatialPack' package
-  * Imports 'lifecycle' package to document deprecated arguments `doplot` and `verbose` in `lotrrs()`, `rrs()`, and `gating()` functions
-  * In `gating()` function, creates a categorized 'im' based on critical p-value, assigns that value to every point in a 'ppp' object, and subsets points by category
-  * Removed 'maptools' and 'sp' packages from Imports
+  * Updated the calculation of the spatial correlogram in internal `pval_correct()` function from the `correlog()` function in the `pgrimess` package to the `modified.ttest()` function in the `SpatialPack` package
+  * Imports `lifecycle` package to document deprecated arguments `doplot` and `verbose` in `lotrrs()`, `rrs()`, and `gating()` functions
+  * In `gating()` function, creates a categorized `im` based on critical p-value, assigns that value to every point in a `ppp` object, and subsets points by category
+  * Removed `maptools` and `sp` packages from Imports
   * Updated links in 'gateR-package.Rd' for package updates
 
 # gateR v0.1.6
@@ -30,7 +33,7 @@
   * Added parameters `c1n` and `c2n` in `lotrrs()`, `rrs()`, and `gating()` to specify the numerator level
 
 # gateR v0.1.3
-  * Removed 'ncdFlow', 'flowWorkspaceData', and 'knitr' packages from Suggests
+  * Removed `ncdFlow`, `flowWorkspaceData`, and `knitr` packages from Suggests
   * Created a random data set `randCyto` and all documentation
   * Updated examples and testthat to use `randCyto` data
   * Updated vignette with clearer language

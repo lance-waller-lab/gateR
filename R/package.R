@@ -40,8 +40,11 @@ NULL
 #' @importFrom raster cut extent raster values
 #' @importFrom sparr OS risk
 #' @importFrom SpatialPack modified.ttest
-#' @importFrom spatstat.geom as.im cut.im marks owin ppp
 #' @importFrom stats na.omit pnorm relevel
 #' @importFrom tibble add_column
 #' @importFrom fields image.plot
+#' @import spatstat.geom
+#' @import spatstat.core
+#' @import spatstat.linnet
+#' @import spatstat
 NULL

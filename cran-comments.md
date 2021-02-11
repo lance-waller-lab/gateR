@@ -1,12 +1,7 @@
-## This is the seventh resubmission
+## This is the eighth resubmission
 
 * Updates since previous submission:
-  * Updated 'spatstat' dependency to include 'spatstat.core' and 'spatstat.geom' in Imports because 'spatstat' was recently subsetted
-  * Added `p_correct` arugment to `lrren()` and `perlrren()` which calls a new, internal function `pval_correct()` that calculates seven types of corrections for multiple testing
-  * Import 'lifecycle' package to document deprecated arguments `doplot` and `verbose` in `lotrrs()`, `rrs()`, and `gating()` functions
-  * In `gating()` function, creates a categorized 'im' based on critical p-value, assigns that value to every point in a 'ppp' object, and subsets points by category
-  * Removed 'maptools' and 'sp' packages from Imports
-  * Updated links in 'gateR-package.Rd' for package updates
+  * Updated `spatstat` package to new subsetted packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). Now `spatstat.geom`, `spatstat.core`, `spatstat.linnet`, and `spatstat (>= 2.0-0)` are in Depends
   
 * Documentation for `pval_correct()` references a doi <https://doi.org/10.2307/2283989> that throws a NOTE in win-builder but no other environment
   

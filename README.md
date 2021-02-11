@@ -77,7 +77,7 @@ Available functions
 <td>Called within <code>gating</code>, two condition comparison. </td>
 </tr>
 <td><code>pval_correct</code></td>
-<td>Called within <code>rrs</code> and <code>lotrrs</code>, calculates various multiple testing corrections for the alpha level. Three methods account for (spatially) dependent, multiple testing.</td>
+<td>Called within <code>rrs</code> and <code>lotrrs</code>, calculates various multiple testing corrections for the alpha level. Five methods account for (spatially) dependent, multiple testing.</td>
 </tr>
 <td><code>lrr_plot</code></td>
 <td>Called within <code>rrs</code> and <code>lotrrs</code>, provides functionality for basic visualization of a log relative risk surface.</td>
