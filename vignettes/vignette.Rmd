@@ -214,7 +214,7 @@ The toy data frame has nine columns (id, groups, markers, and cytokines).
 # Initial parameters
   alpha <- 0.05
   vars <- c("V1", "V2", "V3", "V4")
-  p_correct <- "uncorrelated"
+  p_correct <- "correlated Bonferroni"
   set.seed(1234) # for reproducibility
   df_full <- as.data.frame(df_full)
 
@@ -310,7 +310,7 @@ Compare histograms before and after gating. Gating reduced the overall sample si
 # Initial parameters
   alpha <- 0.05
   vars <- c("V1", "V2", "V3", "V4")
-  p_correct <- "uncorrelated"
+  p_correct <- "correlated Bonferroni"
   set.seed(1234) # for reproducibility
   
 # Gates 1 and 2
