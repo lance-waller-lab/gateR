@@ -2,6 +2,7 @@
 
 # gateR v0.1.8
   * Updated `spatstat` package to new subsetted packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). Now `spatstat.geom`, `spatstat.core`, `spatstat.linnet`, and `spatstat (>= 2.0-0)` are in Depends
+  * Fixed check for `vars` in `dat` within the `gating()` function
 
 # gateR v0.1.7
   * Updated `spatstat` package to new subsetted packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). `spatstat.geom` package replaces `spatstat` package in Imports
