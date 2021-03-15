@@ -7,7 +7,7 @@
 * Documentation for `pval_correct()` references a doi <https://doi.org/10.2307/2283989> that throws a NOTE in win-builder but no other environment
   
 ## Test environments
-* local OS X install, R 4.0.3
+* local OS X install, R 4.0.4
 * win-builder, (devel, release, oldrelease)
 * Rhub
   * Fedora Linux, R-devel, clang, gfortran
