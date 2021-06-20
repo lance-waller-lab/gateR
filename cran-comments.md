@@ -1,10 +1,12 @@
-## This is the eighth resubmission
+## This is the nineth resubmission
 
 * Updates since previous submission:
-  * Updated `spatstat` package to new subsetted packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). Now `spatstat.geom`, `spatstat.core`, `spatstat.linnet`, and `spatstat (>= 2.0-0)` are in Depends
-  * Fixed check for `vars` in `dat` within the `gating()` function
+  * Now `rlang` is in Depends. 
+  * Output for `gating()` now includes a diagnostic message saved as a character string for reference in a slot called `note`.
+  * A diagnostic message can be viewed running `rlang::last_error()$out$note` after the unsuccessful run of `gating()`.
+  * Removed redundant `@importFrom fields image.plot` in 'package.R'
   
-* Documentation for `pval_correct()` references a doi <https://doi.org/10.2307/2283989> that throws a NOTE in win-builder but no other environment
+* Documentation for `pval_correct()` references doi <https://doi.org/10.2307/2283989> and <https://doi.org/10.1214/aop/1176996176> that throw NOTES in win-builder, Fedora Linux, and Ubuntu Linux but these are valid URLs
   
 ## Test environments
 * local OS X install, R 4.0.4

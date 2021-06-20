@@ -38,8 +38,9 @@
 #' 
 #' \describe{
 #' \item{\code{obs}}{An object of class 'tibble' of the same features as \code{dat} that includes the information for the cells extracted with significant clusters in the final gate.}
-#'  \item{\code{n}}{An object of class 'list' of the sample size of cells at each gate. The length is equal to the number of successful gates plus the final result.}
+#' \item{\code{n}}{An object of class 'list' of the sample size of cells at each gate. The length is equal to the number of successful gates plus the final result.}
 #' \item{\code{gate}}{An object of class 'list' of 'rrs' objects from each gate. The length is equal to the number of successful gates.}
+#' \item{\code{note}}{An object of class 'character' of the gating diagnostic message.}
 #' }
 #' 
 #' The objects of class 'rrs' is similar to the output of the \code{\link[sparr]{risk}} function with two additional components:
@@ -54,6 +55,7 @@
 #'
 #' @importFrom grDevices chull
 #' @importFrom lifecycle badge deprecate_warn deprecated is_present
+#' @importFrom rlang abort inform
 #' @importFrom spatstat.geom cut.im marks owin ppp
 #' @importFrom tibble add_column
 #' @export
@@ -183,44 +185,44 @@ gating <- function(dat,
 
     # Estimate significant relative risk areas
     ## Bonferroni correction only necessary in first gate
-    if (k == 1) { p_correct <- p_correct } else { p_correct <- "none"}
+    if (k == 1) { p_correct <- p_correct } else { p_correct <- "none" }
     
     n_out[[k]] <- nrow(df)
     name_gate <- paste("gate", k, sep = "_")
 
     if (n_condition == 2) {
-    out <- lotrrs(dat = df,
-                  bandw = bandw,
-                  win = win_gate,
-                  plot_gate = plot_gate,
-                  save_gate = save_gate,
-                  name_gate = name_gate,
-                  path_gate = path_gate,
-                  alpha = alpha,
-                  p_correct = p_correct,
-                  nbc = nbc,
-                  rcols = rcols,
-                  lower_lrr = lower_lrr,
-                  upper_lrr = upper_lrr,
-                  c1n = c1n,
-                  c2n = c2n,
-                  ...)
+      out <- lotrrs(dat = df,
+                    bandw = bandw,
+                    win = win_gate,
+                    plot_gate = plot_gate,
+                    save_gate = save_gate,
+                    name_gate = name_gate,
+                    path_gate = path_gate,
+                    alpha = alpha,
+                    p_correct = p_correct,
+                    nbc = nbc,
+                    rcols = rcols,
+                    lower_lrr = lower_lrr,
+                    upper_lrr = upper_lrr,
+                    c1n = c1n,
+                    c2n = c2n,
+                    ...)
     } else {
-    out <- rrs(dat = df,
-               bandw = bandw,
-               win = win_gate,
-               plot_gate = plot_gate,
-               save_gate = save_gate,
-               name_gate = name_gate,
-               path_gate = path_gate,
-               alpha = alpha,
-               p_correct = p_correct,
-               nbc = nbc,
-               rcols = rcols,
-               lower_lrr = lower_lrr,
-               upper_lrr = upper_lrr,
-               c1n = c1n,
-               ...)
+      out <- rrs(dat = df,
+                 bandw = bandw,
+                 win = win_gate,
+                 plot_gate = plot_gate,
+                 save_gate = save_gate,
+                 name_gate = name_gate,
+                 path_gate = path_gate,
+                 alpha = alpha,
+                 p_correct = p_correct,
+                 nbc = nbc,
+                 rcols = rcols,
+                 lower_lrr = lower_lrr,
+                 upper_lrr = upper_lrr,
+                 c1n = c1n,
+                 ...)
     }
     
     # Convert p-value surface into a categorized 'im'
@@ -232,14 +234,18 @@ gating <- function(dat,
     # Go back one gate if current gate has no significant area and produce output of previous gate
     if (all(Ps$v == "2", na.rm = TRUE) | all(is.na(Ps$v))) {
       if (k > 1) {
-      message(paste("Gate", k, "yielded no significant", type_cluster, "cluster(s)...",
-                "Returning results from Gate", k-1,
-                sep = " "))
-      output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
-      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
-      return(out_list)
+        mess <- paste("Gate", k, "yielded no significant", type_cluster, "cluster(s)...",
+                      "Returning results from Gate", k-1,
+                      sep = " ")
+        rlang::inform(mess, mess = mess)
+        output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
+        out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate, "note" = mess)
+        return(out_list)
       } else {
-        stop(paste("Gate 1 yielded no significant clustering... Returning no results", sep = " "))
+        mess <- paste("Gate 1 yielded no significant clustering... Returning no results", sep = " ")
+        out_list <- list("obs" = NULL, "n" = NULL, "gate" = list_gate, "note" = mess)
+        rlang::abort(mess, out = out_list)
+        return(out)
       }
     }
 
@@ -247,14 +253,18 @@ gating <- function(dat,
 
     if (!any(Ps$v == v, na.rm = TRUE)) {
       if (k > 1) {
-      message(paste("Gate", k, "yielded no significant", type_cluster, "cluster(s)...",
-                "Returning results from Gate", k-1,
-                sep = " "))
-      output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
-      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
-      return(out_list)
+        mess <- paste("Gate", k, "yielded no significant", type_cluster, "cluster(s)...",
+                      "Returning results from Gate", k-1,
+                      sep = " ")
+        rlang::inform(mess, mess = mess)
+        output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
+        out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate, "note" = mess)
+        return(out_list)
       } else {
-        stop(paste("Gate 1 yielded no significant", type_cluster, "cluster(s)... Returning no results", sep = " "))
+        mess <- paste("Gate 1 yielded no significant", type_cluster, "cluster(s)... Returning no results", sep = " ")
+        out_list <- list("obs" = NULL, "n" = NULL, "gate" = list_gate, "note" = mess)
+        rlang::abort(mess, out = out_list)
+        return(out)
       }
     }
 
@@ -270,10 +280,11 @@ gating <- function(dat,
 
     # Output for the final gate
     if (k == n_gate) {
-      message(paste("Observations within significant", type_cluster, "cluster(s) of Gate", k, sep = " "))
+      mess <- paste("Observations within significant", type_cluster, "cluster(s) of Gate", k, sep = " ")
+      rlang::inform(mess, mess = mess)
       output <- dat[which(dat[ , 1] %in% dat_gate[ , 1]), ]
       n_out[[k + 1]] <- nrow(output)
-      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate)
+      out_list <- list("obs" = output, "n" = n_out, "gate" = list_gate, "note" = mess)
       return(out_list)
     }
   }

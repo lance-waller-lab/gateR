@@ -1,5 +1,11 @@
 # gateR (development version)
 
+# gateR v0.1.9
+* Now `rlang` is in Depends. 
+* Output for `gating()` now includes a diagnostic message saved as a character string for reference in a slot called `note`.
+* A diagnostic message can be viewed running `rlang::last_error()$out$note` after the unsuccessful run of `gating()`.
+* Removed redundant `@importFrom fields image.plot` in 'package.R'
+
 # gateR v0.1.8
   * Updated `spatstat` package to new subsetted packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). Now `spatstat.geom`, `spatstat.core`, `spatstat.linnet`, and `spatstat (>= 2.0-0)` are in Depends
   * Fixed check for `vars` in `dat` within the `gating()` function
@@ -15,7 +21,7 @@
   * Updated links in 'gateR-package.Rd' for package updates
 
 # gateR v0.1.6
-  * Updated URLs in gateR-package.Rd
+  * Updated URLs in 'gateR-package.Rd'
   * Updated year in DESCRIPTION
 
 # gateR v0.1.5

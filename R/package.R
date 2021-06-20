@@ -38,11 +38,11 @@ NULL
 #' @importFrom grDevices chull colorRampPalette dev.off png
 #' @importFrom lifecycle badge deprecate_warn deprecated is_present
 #' @importFrom raster cut extent raster values
+#' @importFrom rlang abort inform
 #' @importFrom sparr OS risk
 #' @importFrom SpatialPack modified.ttest
 #' @importFrom stats na.omit pnorm relevel
 #' @importFrom tibble add_column
-#' @importFrom fields image.plot
 #' @import spatstat.geom
 #' @import spatstat.core
 #' @import spatstat.linnet

@@ -67,9 +67,9 @@ gating(
 
 \item{...}{Arguments passed to \code{\link[sparr]{risk}} to select resolution.}
 
-\item{doplot}{\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}} \code{doplot} is no longer supported and has been renamed \code{plot_gate}.}
+\item{doplot}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{doplot} is no longer supported and has been renamed \code{plot_gate}.}
 
-\item{verbose}{\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}} \code{verbose} is no longer supported; this function will not display verbose output from internal \code{\link[sparr]{risk}} function.}
+\item{verbose}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{verbose} is no longer supported; this function will not display verbose output from internal \code{\link[sparr]{risk}} function.}
 }
 \value{
 An object of class \code{list}. This is a named list with the following components:
@@ -78,6 +78,7 @@ An object of class \code{list}. This is a named list with the following componen
 \item{\code{obs}}{An object of class 'tibble' of the same features as \code{dat} that includes the information for the cells extracted with significant clusters in the final gate.}
 \item{\code{n}}{An object of class 'list' of the sample size of cells at each gate. The length is equal to the number of successful gates plus the final result.}
 \item{\code{gate}}{An object of class 'list' of 'rrs' objects from each gate. The length is equal to the number of successful gates.}
+\item{\code{note}}{An object of class 'character' of the gating diagnostic message.}
 }
 
 The objects of class 'rrs' is similar to the output of the \code{\link[sparr]{risk}} function with two additional components:

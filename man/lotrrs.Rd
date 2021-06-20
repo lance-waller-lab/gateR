@@ -58,9 +58,9 @@ lotrrs(
 
 \item{...}{Arguments passed to \code{\link[sparr]{risk}} to select resolution.}
 
-\item{doplot}{\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}} \code{doplot} is no longer supported and has been renamed \code{plot_gate}.}
+\item{doplot}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{doplot} is no longer supported and has been renamed \code{plot_gate}.}
 
-\item{verbose}{\ifelse{html}{\figure{lifecycle-deprecated.svg}{options: alt='Deprecated lifecycle'}}{\strong{Deprecated}} \code{verbose} is no longer supported; this function will not display verbose output from internal \code{\link[sparr]{risk}} function.}
+\item{verbose}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{verbose} is no longer supported; this function will not display verbose output from internal \code{\link[sparr]{risk}} function.}
 }
 \value{
 An object of class 'list' where each element is a object of class 'rrs' created by the \code{\link[sparr]{risk}} function with two additional components:
