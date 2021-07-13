@@ -85,6 +85,9 @@ Available functions
 <td><code>pval_plot</code></td>
 <td>Called within <code>rrs</code> and <code>lotrrs</code>, provides functionality for basic visualization of a significant p-value surface.</td>
 </tr>
+<td><code>fcsprocessor</code></td>
+<td>Preparation function. Processes Flow Cytometry Standard (FCS) formatted data for <code>gating</code>.</td>
+</tr>
 </tbody>
 <table>
 
@@ -122,6 +125,7 @@ Authors
 
 See also the list of [contributors](https://github.com/Waller-SUSAN/gateR/graphs/contributors) who participated in this project. Main contributors include:
 
+* **Surabhi Nair** - *University of Colorado Anschutz School of Medicine* - [GitHub](https://github.com/SubiNair)
 * **Elena Hsieh** - *Immunology & Microbiology and Pediatrics, University of Colorado Anschutz School of Medicine* - [GitHub](https://github.com/elenahsieh1407)
 * **Debashis Ghosh** - *Biostatistics & Informatics, Colorado School of Public Health, Aurora, Colorado* - [GitHub](https://github.com/ghoshd)
 * **Lance A. Waller** - *Biostatistics and Bioinformatics, Emory University, Atlanta, Georgia* - [GitHub](https://github.com/lance-waller)

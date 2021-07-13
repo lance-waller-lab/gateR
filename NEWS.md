@@ -1,5 +1,11 @@
 # gateR (development version)
 
+# gateR v0.2.0
+* New function `fcsprocessor()` to convert a collection of Flow Cytometry Standard (FCS) files to a data frame the `gateR` package can read
+* Added new contributor, Surabhi Nair, who created the `fcsprocessor()` function
+* Now `flowCore` and `tools` are in Depends
+* ...
+
 # gateR v0.1.9
 * Now `rlang` is in Depends. 
 * Output for `gating()` now includes a diagnostic message saved as a character string for reference in a slot called `note`.

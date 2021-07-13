@@ -1,15 +1,15 @@
-## This is the nineth resubmission
+## This is the tenth resubmission
 
 * Updates since previous submission:
-  * Now `rlang` is in Depends. 
-  * Output for `gating()` now includes a diagnostic message saved as a character string for reference in a slot called `note`.
-  * A diagnostic message can be viewed running `rlang::last_error()$out$note` after the unsuccessful run of `gating()`.
-  * Removed redundant `@importFrom fields image.plot` in 'package.R'
+  * New function `fcsprocessor()` to convert a collection of Flow Cytometry Standard (FCS) files to a data frame the `gateR` package can read
+  * Added new contributor, Surabhi Nair, who created the `fcsprocessor()` function
+  * Now `flowCore` and `tools` are in Depends
+  * ...
   
 * Documentation for `pval_correct()` references doi <https://doi.org/10.2307/2283989> and <https://doi.org/10.1214/aop/1176996176> that throw NOTES in win-builder, Fedora Linux, and Ubuntu Linux but these are valid URLs
   
 ## Test environments
-* local OS X install, R 4.0.4
+* local OS X install, R 4.1.0
 * win-builder, (devel, release, oldrelease)
 * Rhub
   * Fedora Linux, R-devel, clang, gfortran
