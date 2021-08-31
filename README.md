@@ -8,6 +8,7 @@ version](https://www.r-pkg.org/badges/version-ago/gateR)](https://cran.r-project
 [![CRAN RStudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/gateR?color=blue)](https://r-pkg.org/pkg/gateR)
 ![license](https://img.shields.io/badge/license-apache-yellow)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5347893.svg)](https://doi.org/10.5281/zenodo.5347893)
 
 <!-- badges: end -->
 
