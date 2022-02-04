@@ -1,8 +1,8 @@
 Package: gateR
 Type: Package
 Title: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation
-Version: 0.1.9
-Date: 2021-06-20
+Version: 0.1.10
+Date: 2022-02-04
 Authors@R: 
     c(person(given = "Ian D.",
              family = "Buller",
@@ -41,13 +41,9 @@ License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: 
-    R (>= 3.5.0),
-    spatstat.geom,
-    spatstat.core,
-    spatstat.linnet,
-    spatstat (>= 2.0-0)
+    R (>= 3.5.0)
 Imports: 
     fields,
     graphics,
@@ -57,13 +53,19 @@ Imports:
     rlang,
     sparr,
     SpatialPack,
+    spatstat.geom,
     stats,
     tibble,
+    tools,
     utils
 Suggests:
+    dplyr,
+    flowWorkspaceData,
+    ncdfFlow,
     R.rsp,
     spelling,
-    testthat
+    testthat,
+    usethis
 VignetteBuilder: R.rsp
 Language: en-US
 URL: https://github.com/Waller-SUSAN/gateR

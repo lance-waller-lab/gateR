@@ -9,7 +9,6 @@ fubar <- fubar1 <- randCyto
 fubar$g1 <- as.numeric(fubar$g1)
 fubar1$g2 <- as.numeric(fubar1$g2)
 
-
 # Tests
 
 test_that("lotrrs throws error with invalid arguments", {

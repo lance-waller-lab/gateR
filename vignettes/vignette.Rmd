@@ -36,12 +36,12 @@ This vignette provides an implementation of the gateR package using a randomly g
 We start with the necessary packages and seed for the vignette.
 
 ```{r packages}
-  loadedPackages <- c("gateR", "graphics", "maptools", "raster", "sp", "sparr", "spatstat", "stats", "tibble", "utils")
+  loadedPackages <- c("gateR", "graphics", "stats", "tibble", "utils")
   invisible(lapply(loadedPackages, library, character.only = TRUE))
   set.seed(1234) # for reproducibility
 ```
 
-### Generate random toy data using the `spatstat` package
+### Generate random toy data
 
 Unique function to randomly generate data multivariate normal (MVN) around a central point. Parameters include the centroid coordinates (`centre`), number of observations to generate (`ncell`), and the standard deviation of the normal distribution (`scalar`). 
 
