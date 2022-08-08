@@ -6,3 +6,5 @@
 ^dev$
 ^CRAN-RELEASE$
 ^data-raw$
+^CRAN-SUBMISSION$
+^man/figures

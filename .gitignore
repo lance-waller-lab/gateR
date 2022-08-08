@@ -42,3 +42,6 @@ rsconnect/
 
 # R installed data
 *.rds
+
+# CRAN
+CRAN-SUBMISSION
