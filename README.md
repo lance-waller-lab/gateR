@@ -6,11 +6,11 @@ gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation <img src
 [![CRAN version](https://www.r-pkg.org/badges/version-ago/gateR)](https://cran.r-project.org/package=gateR)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/gateR?color=blue)](https://r-pkg.org/pkg/gateR)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![GitHub last commit](https://img.shields.io/github/last-commit/Waller-SUSAN/gateR)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5347893.svg)](https://doi.org/10.5281/zenodo.5347893)
+![GitHub last commit](https://img.shields.io/github/last-commit/lance-waller-lab/gateR)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5347892.svg)](https://doi.org/10.5281/zenodo.5347892)
 <!-- badges: end -->
 
-**Date repository last updated**: August 08, 2022
+**Date repository last updated**: August 25, 2022
 
 <h2 id="overview">
 
@@ -18,23 +18,23 @@ Overview
 
 </h2>
 
-The `gateR` package is a suite of `R` functions to identify significant spatial clustering of flow and mass cytometry data used in immunological investigations. For a two-group comparison we detect clusters using the kernel-based spatial relative risk function that is estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The tests are conducted in two-dimensional space comprised of two fluorescent markers. 
+The `gateR` package is a suite of `R` functions to identify significant spatial clustering of flow and mass cytometry data used in immunological investigations. For a two-group comparison, we detect clusters using the kernel-based spatial relative risk function estimated using the [sparr](https://CRAN.R-project.org/package=sparr) package. The tests are conducted in a two-dimensional space comprised of two fluorescent markers. 
 
 Examples of a single condition with two groups:
 
-1. Disease case v. healthy control
-2. Time 2 v. Time 1 (baseline)
+1. Disease case vs. Healthy control
+2. Time 2 vs. Time 1 (baseline)
 
-For a two-group comparison of two conditions we estimate two relative risk surfaces for one condition and then a ratio of the relative risks. For example:
+For a two-group comparison of two conditions, we estimate two relative risk surfaces for one condition and then a ratio of the relative risks. For example:
 
 1. Estimate a relative risk surface for:
-    1. Condition 2B v. Condition 2A
-    2. Condition 1B v. Condition 1A
-2. Estimate relative risk surface for the ratio:
+    1. Condition 2B vs. Condition 2A
+    2. Condition 1B vs. Condition 1A
+2. Estimate the relative risk surface for the ratio:
 
 <img src="http://www.sciweavers.org/tex2img.php?eq=%5Cfrac%7B%20%5Cbig%28%5Cfrac%7BCondition2B%7D%7BCondition2A%7D%5Cbig%29%7D%7B%5Cbig%28%5Cfrac%7BCondition1B%7D%7BCondition1A%7D%5Cbig%29%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="\frac{ \big(\frac{Condition2B}{Condition2A}\big)}{\big(\frac{Condition1B}{Condition1A}\big)}" width="100" height="58" />
 
-Within areas where the relative risk exceeds an asymptotic normal assumption, the `gateR` package has functionality to examine the features of these cells. Basic visualization is also supported. 
+Within areas where the relative risk exceeds an asymptotic normal assumption, the `gateR` package has the functionality to examine the features of these cells. Basic visualization is also supported. 
 
 <h2 id="install">
 
@@ -48,7 +48,7 @@ To install the release version from CRAN:
 
 To install the development version from GitHub:
 
-    devtools::install_github("Waller-SUSAN/gateR")
+    devtools::install_github("lance-waller-lab/gateR")
 
 <h2 id="available-functions">
 
@@ -108,7 +108,7 @@ Available sample data sets
 </thead>
 <tbody>
 <td><code>randCyto</code></td>
-<td>A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the <a href="https://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html">flowWorkspaceData</a> package found on <a href="https://bioconductor.org">Bioconductor</a> and formated for `gateR` input.</td>
+<td>A sample dataset containing information about flow cytometry data with two binary conditions and four markers. The data are a random subset of the 'extdata' data in the <a href="https://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html">flowWorkspaceData</a> package found on <a href="https://bioconductor.org">Bioconductor</a> and formatted for `gateR` input.</td>
 </tr>
 </tbody>
 <table>
@@ -121,7 +121,7 @@ Authors
 
 * **Ian D. Buller** - *Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland* - [GitHub](https://github.com/idblr) - [ORCID](https://orcid.org/0000-0001-9477-8582)
 
-See also the list of [contributors](https://github.com/Waller-SUSAN/gateR/graphs/contributors) who participated in this project. Main contributors include:
+See also the list of [contributors](https://github.com/lance-waller-lab/gateR/graphs/contributors) who participated in this project. Main contributors include:
 
 * **Elena Hsieh** - *Immunology & Microbiology and Pediatrics, University of Colorado Anschutz School of Medicine* - [GitHub](https://github.com/elenahsieh1407) - [ORCID](https://orcid.org/0000-0003-3969-6597)
 * **Debashis Ghosh** - *Biostatistics & Informatics, Colorado School of Public Health, Aurora, Colorado* - [GitHub](https://github.com/ghoshd) - [ORCID](https://orcid.org/0000-0001-5672-7645)
@@ -250,7 +250,7 @@ test_lotrrs <- gateR::lotrrs(dat = obs_dat[ , -5:-4])
 
 ### Funding
 
-This package was developed while the author was a doctoral student at in the [Environmental Health Sciences doctoral program](https://www.sph.emory.edu/departments/eh/degree-programs/phd/index.html) at [Emory University](https://www.emory.edu) and a postdoctoral fellow supported by the [Cancer Prevention Fellowship Program](https://cpfp.cancer.gov/) at the [National Cancer Institute](https://www.cancer.gov/).
+This package was developed while the author was a doctoral student at in the [Environmental Health Sciences doctoral program](https://www.sph.emory.edu/departments/eh/degree-programs/phd/index.html) at [Emory University](https://www.emory.edu/home/index.html) and a postdoctoral fellow supported by the [Cancer Prevention Fellowship Program](https://cpfp.cancer.gov/) at the [National Cancer Institute](https://www.cancer.gov/).
 
 ### Acknowledgments
 
@@ -260,4 +260,4 @@ When citing this package for publication, please follow:
 
 ### Questions? Feedback?
 
-For questions about the package please contact the maintainer [Dr. Ian D. Buller](mailto:ian.buller@nih.gov) or [submit a new issue](https://github.com/Waller-SUSAN/gateR/issues).
+For questions about the package, please contact the maintainer [Dr. Ian D. Buller](mailto:ian.buller@nih.gov) or [submit a new issue](https://github.com/lance-waller-lab/gateR/issues).

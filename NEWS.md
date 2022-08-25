@@ -1,5 +1,14 @@
 # gateR (development version)
 
+# gateR v0.1.11
+  * Updated package URL and BugReports to renamed GitHub account "lance-waller-lab" (previously "Waller-SUSAN")
+  * Replaced `if()` conditions comparing `class()` to string with `inherits()` in functions
+  * `tools` is no longer Imports
+  * `utils` is now Suggests because "zzz.R" calls the `packageDescription()` function
+  * `ncdfFlow`, `flowWorkspaceData` are no longer Suggests (for generating random data set `randCyto`) because "Package suggested but not available for checking" in the some CRAN environments
+  * Added CITATION file
+  * Fixed typos in documentation throughout
+
 # gateR v0.1.10
 * Updated dependencies `spatstat.core` and `spatstat.linnet` packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). All random generators in `spatstat.core` were moved to a new package `spatstat.random`
   * `spatstat.geom`, `spatstat.core`, `spatstat.linnet`, and `spatstat (>=2.0-0)` are no longer Depends

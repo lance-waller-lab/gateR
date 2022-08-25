@@ -23,7 +23,7 @@ pval_plot <- function(input,
                       alpha) {
 
   # Inputs
-  if (class(input) != "im") {
+  if (!inherits(input, "im")) {
     stop("The 'input' argument must be an object of class 'im'")
   }
 

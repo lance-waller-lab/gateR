@@ -33,7 +33,7 @@ lrr_plot <- function(input,
                      digits = 1) {
 
   # Inputs
-  if (class(input) != "im") {
+  if (!inherits(input, "im")) {
     stop("The 'input' argument must be an object of class 'im'")
   }
 

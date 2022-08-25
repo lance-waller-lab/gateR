@@ -17,7 +17,7 @@ A data frame with 11763 rows and 7 variables:
 }
 }
 \source{
-\url{https://github.com/Waller-SUSAN/gateR/blob/master/README.md}
+\url{https://github.com/lance-waller-lab/gateR/blob/master/README.md}
 }
 \usage{
 randCyto

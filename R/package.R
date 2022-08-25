@@ -2,7 +2,7 @@
 #'
 #' Estimates statistically significant fluorescent marker combination values within which one immunologically distinctive group (i.e., disease case) is more associated than another group (i.e., healthy control), successively, using various combinations (i.e., "gates") of fluorescent markers to examine features of cells that may be different between groups.
 #'
-#' @details For a two-group comparison, the 'gateR' package uses the spatial relative risk function that is estimated using the {sparr} package. Details about the {sparr} package methods can be found in the tutorial: Davies et al. (2018) \doi{10.1002/sim.7577}. Details about kernel density estimation can be found in J. F. Bithell (1990) \doi{10.1002/sim.4780090616}. More information about relative risk functions using kernel density estimation can be found in J. F. Bithell (1991) \doi{10.1002/sim.4780101112}.
+#' @details For a two-group comparison, the 'gateR' package uses the spatial relative risk function estimated using the \code{\link{sparr}} package. Details about the \code{\link{sparr}} package methods can be found in the tutorial: Davies et al. (2018) \doi{10.1002/sim.7577}. Details about kernel density estimation can be found in J. F. Bithell (1990) \doi{10.1002/sim.4780090616}. More information about relative risk functions using kernel density estimation can be found in J. F. Bithell (1991) \doi{10.1002/sim.4780101112}.
 #' 
 #' This package provides a function to perform a gating strategy for flow cytometry data. The 'gateR' package also provides basic visualization for each gate.
 #' 
@@ -12,9 +12,9 @@
 #' 
 #' \code{\link{gating}} Extracts cells within statistically significant combinations of fluorescent markers, successively, for a set of markers. Statistically significant combinations are identified using two-tailed p-values of a relative risk surface assuming asymptotic normality. This function is currently available for two-level comparisons of a single condition (e.g., case/control) or two conditions (e.g., case/control at time 1 and time 2). Provides functionality for basic visualization and multiple testing correction.
 #' 
-#' \code{\link{rrs}} Estimates a relative risk surface and computes the asymptotic p-value surface for a single gate with a single condition. Includes features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas.  This function can also be used as a standalone function.
+#' \code{\link{rrs}} Estimates a relative risk surface and computes the asymptotic p-value surface for a single gate with a single condition, including features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas. This function can also be used as a standalone function.
 #' 
-#' \code{\link{lotrrs}} Estimates a ratio of relative risk surfaces and computes the asymptotic p-value surface for a single gate with two conditions. Includes features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas. This function can also be used as a standalone function.
+#' \code{\link{lotrrs}} Estimates a ratio of relative risk surfaces and computes the asymptotic p-value surface for a single gate with two conditions, including features for basic visualization. This function is used internally within the \code{\link{gating}} function to extract the points within the significant areas. This function can also be used as a standalone function.
 #' 
 #' \bold{Flow Cytometry Data}
 #' 

@@ -1,8 +1,8 @@
 Package: gateR
 Type: Package
 Title: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation
-Version: 0.1.10
-Date: 2022-02-04
+Version: 0.1.11
+Date: 2022-08-25
 Authors@R: 
     c(person(given = "Ian D.",
              family = "Buller",
@@ -32,7 +32,7 @@ Description: Estimates statistically significant marker combination values withi
         another group (i.e., healthy control), successively, using various combinations (i.e.,
         "gates") of markers to examine features of cells that may be different between
         groups. For a two-group comparison, the 'gateR' package uses the spatial relative risk
-        function that is estimated using the 'sparr' package. Details about the 'sparr' package
+        function estimated using the 'sparr' package. Details about the 'sparr' package
         methods can be found in the tutorial: Davies et al. (2018) <doi:10.1002/sim.7577>. Details
         about kernel density estimation can be found in J. F. Bithell (1990) <doi:10.1002/sim.4780090616>.
         More information about relative risk functions using kernel density estimation can be
@@ -41,7 +41,7 @@ License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Depends: 
     R (>= 3.5.0)
 Imports: 
@@ -55,18 +55,15 @@ Imports:
     SpatialPack,
     spatstat.geom,
     stats,
-    tibble,
-    tools,
-    utils
+    tibble
 Suggests:
     dplyr,
-    flowWorkspaceData,
-    ncdfFlow,
     R.rsp,
     spelling,
     testthat,
-    usethis
+    usethis,
+    utils
 VignetteBuilder: R.rsp
 Language: en-US
-URL: https://github.com/Waller-SUSAN/gateR
-BugReports: https://github.com/Waller-SUSAN/gateR/issues
+URL: https://github.com/lance-waller-lab/gateR
+BugReports: https://github.com/lance-waller-lab/gateR/issues

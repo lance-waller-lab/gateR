@@ -15,5 +15,5 @@
 #' @examples
 #' head(randCyto)
 #'
-#' @source \url{https://github.com/Waller-SUSAN/gateR/blob/master/README.md}
+#' @source \url{https://github.com/lance-waller-lab/gateR/blob/master/README.md}
 "randCyto"
