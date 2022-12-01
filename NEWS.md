@@ -1,5 +1,8 @@
 # gateR (development version)
 
+# gateR v0.1.12
+  * Updated maintainer contact information
+
 # gateR v0.1.11
   * Updated package URL and BugReports to renamed GitHub account "lance-waller-lab" (previously "Waller-SUSAN")
   * Replaced `if()` conditions comparing `class()` to string with `inherits()` in functions

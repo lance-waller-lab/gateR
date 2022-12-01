@@ -1,13 +1,13 @@
 Package: gateR
 Type: Package
 Title: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation
-Version: 0.1.11
-Date: 2022-08-25
+Version: 0.1.12
+Date: 2022-12-01
 Authors@R: 
     c(person(given = "Ian D.",
              family = "Buller",
              role = c("aut", "cre", "cph"),
-             email = "ian.buller@nih.gov",
+             email = "ian.buller@alumni.emory.edu",
              comment = c(ORCID = "0000-0001-9477-8582")),
       person(given = "Elena",
              family = "Hsieh",
@@ -26,7 +26,7 @@ Authors@R:
              comment = c(ORCID = "0000-0001-5002-8886")),
       person(given = "NCI",
              role = "cph"))
-Maintainer: Ian D. Buller <ian.buller@nih.gov>
+Maintainer: Ian D. Buller <ian.buller@alumni.emory.edu>
 Description: Estimates statistically significant marker combination values within
         which one immunologically distinctive group (i.e., disease case) is more associated than
         another group (i.e., healthy control), successively, using various combinations (i.e.,

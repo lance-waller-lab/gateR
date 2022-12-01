@@ -34,6 +34,6 @@ Key content of the 'gateR' package include:\cr
 \author{
 Ian D. Buller\cr \emph{Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland, USA.}
 
-Maintainer: I.D.B. \email{ian.buller@nih.gov}
+Maintainer: I.D.B. \email{ian.buller@alumni.emory.edu}
 }
 \keyword{package}

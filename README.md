@@ -10,7 +10,7 @@ gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation <img src
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5347892.svg)](https://doi.org/10.5281/zenodo.5347892)
 <!-- badges: end -->
 
-**Date repository last updated**: August 25, 2022
+**Date repository last updated**: December 01, 2022
 
 <h2 id="overview">
 
@@ -89,6 +89,8 @@ Available functions
 </tbody>
 <table>
 
+The repository also includes the code and resources to create the project hexagon sticker.
+
 <h2 id="available-data">
 
 Available sample data sets
@@ -102,7 +104,7 @@ Available sample data sets
 </colgroup>
 <thead>
 <tr class="header">
-<th>Function</th>
+<th>Data</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -260,4 +262,4 @@ When citing this package for publication, please follow:
 
 ### Questions? Feedback?
 
-For questions about the package, please contact the maintainer [Dr. Ian D. Buller](mailto:ian.buller@nih.gov) or [submit a new issue](https://github.com/lance-waller-lab/gateR/issues).
+For questions about the package, please contact the maintainer [Dr. Ian D. Buller](mailto:ian.buller@alumni.emory.edu) or [submit a new issue](https://github.com/lance-waller-lab/gateR/issues).

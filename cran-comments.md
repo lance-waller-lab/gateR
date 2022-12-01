@@ -1,23 +1,7 @@
-## This is the eleventh resubmission
-
-* First resubmission after CRAN archived `gateR` on 2022-08-08 because a dependency `SpatialPack` and its dependency `fastmatrix` were archived. Since the warning from CRAN 2022-07-20, the `gateR` maintainer worked with the maintainer of both packages. The dependencies have returned to CRAN and this maintainer is now resubmitting `gateR`.
-
-* Actions taken regarding feedback from CRAN teams' auto-check service:
-  * Replaced `if()` conditions comparing `class()` to string with `inherits()`
+## This is the twelth resubmission
 
 * Updates since previous submission:
-  * Updated package URL and BugReports to renamed GitHub account "lance-waller-lab" (previously "Waller-SUSAN")
-  * `tools` is no longer Imports
-  * `utils` is now Suggests because "zzz.R" calls the `packageDescription()` function
-  * `ncdfFlow`, `flowWorkspaceData` are no longer Suggests because "Package suggested but not available for checking" in the following CRAN environments:
-    * r-devel-linux-x86_64-fedora-clang
-    * r-devel-linux-x86_64-fedora-gcc
-    * r-devel-windows-x86_64-new-TK
-    * r-release-linux-x86_64
-    * r-release-macos-x86_64
-    * r-oldrel-macos-x86_64
-  * Added CITATION file
-  * Fixed typos in documentation throughout
+  * Updated maintainer contact information
 
 * Documentation for DESCRIPTION references the following DOIs that throw a NOTE in win-builder, Fedora Linux, and Ubuntu Linux but are valid URLs:
   * <https://doi.org/10.1002/sim.4780090616>
