@@ -18,13 +18,13 @@
 #' 
 #' \bold{Flow Cytometry Data}
 #' 
-#' \code{\link{randCyto}} A sample dataset containing information about flow cytometry data with two binary categorical variables. The data are a random subset of the 'extdata' data in the 'flowWorkspaceData' package found on Bioconductor \url{http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html} and formatted for gateR input.
+#' \code{\link{randCyto}} A sample dataset containing information about flow cytometry data with two binary categorical variables. The data are a random subset of the 'extdata' data in the 'flowWorkspaceData' package found on Bioconductor \url{http://bioconductor.org/packages/release/data/experiment/html/flowWorkspaceData.html} and formatted for 'gateR' input.
 #' 
 #' @name gateR-package
 #' @aliases gateR-package gateR
 #' @docType package
 #' 
-#' @section Dependencies: The 'gateR' package relies heavily upon \code{\link{sparr}}, \code{\link{spatstat.geom}}, and \code{\link{raster}}. For a two-level comparison, the spatial relative risk function uses the \code{\link[sparr]{risk}} function. The calculation of a Bonferroni correction for multiple testing accounting for the spatial correlation of the estimated surface uses the \code{\link[SpatialPack]{modified.ttest}} function. Basic visualizations rely on the \code{\link[fields]{image.plot}} function.
+#' @section Dependencies: The 'gateR' package relies heavily upon \code{\link{sparr}}, \code{\link{spatstat.geom}}, and \code{\link{terra}}. For a two-level comparison, the spatial relative risk function uses the \code{\link[sparr]{risk}} function. The calculation of a Bonferroni correction for multiple testing accounting for the spatial correlation of the estimated surface uses the \code{\link[SpatialPack]{modified.ttest}} function. Basic visualizations rely on the \code{\link[fields]{image.plot}} function.
 #' 
 #' @author Ian D. Buller\cr \emph{Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland, USA.}
 #' 
@@ -37,11 +37,11 @@ NULL
 #' @importFrom graphics close.screen par screen split.screen 
 #' @importFrom grDevices chull colorRampPalette dev.off png
 #' @importFrom lifecycle badge deprecate_warn deprecated is_present
-#' @importFrom raster cut extent raster values
 #' @importFrom rlang abort inform
 #' @importFrom sparr OS risk
 #' @importFrom SpatialPack modified.ttest
 #' @importFrom spatstat.geom as.im cut.im marks owin ppp
 #' @importFrom stats na.omit pnorm relevel
+#' @importFrom terra ext rast values
 #' @importFrom tibble add_column
 NULL

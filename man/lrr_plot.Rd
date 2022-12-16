@@ -30,7 +30,7 @@ lrr_plot(
 An object of class 'list'. This is a named list with the following components:
 
 \describe{
-\item{\code{v}}{An object of class 'vector' for the estimated ecological niche values.}
+\item{\code{v}}{An object of class 'SpatRaster' for the estimated gating surface.}
 \item{\code{cols}}{An object of class 'vector', returns diverging color palette values.}
 \item{\code{breaks}}{An object of class 'vector', returns diverging color palette breaks.}
 \item{\code{at}}{An object of class 'vector', returns legend breaks.}

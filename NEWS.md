@@ -1,5 +1,11 @@
 # gateR (development version)
 
+# gateR v0.1.13.9000
+  * Migrated R-spatial dependency
+  * Replaced `raster` in Imports with `terra` because of imminent package retirement
+  * Updated documentation throughout
+  * Added GitHub R-CMD-check
+
 # gateR v0.1.12
   * Updated maintainer contact information
 
@@ -13,11 +19,11 @@
   * Fixed typos in documentation throughout
 
 # gateR v0.1.10
-* Updated dependencies `spatstat.core` and `spatstat.linnet` packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). All random generators in `spatstat.core` were moved to a new package `spatstat.random`
+  * Updated dependencies `spatstat.core` and `spatstat.linnet` packages based on feedback from the Spatstat Team (Adrian Baddeley and Ege Rubak). All random generators in `spatstat.core` were moved to a new package `spatstat.random`
   * `spatstat.geom`, `spatstat.core`, `spatstat.linnet`, and `spatstat (>=2.0-0)` are no longer Depends
   * `spatstat.geom` is now Imports
-* `dplyr`, `ncdfFlow`, `flowWorkspaceData`, and `usethis` now Suggests (for generating random data set `randCyto`)
-* Fixed annotation typos in the vignette. Removed packages no longer used in the vignette 
+  * `dplyr`, `ncdfFlow`, `flowWorkspaceData`, and `usethis` now Suggests (for generating random data set `randCyto`)
+  * Fixed annotation typos in the vignette. Removed packages no longer used in the vignette 
 
 # gateR v0.1.9
 * Now `rlang` is in Depends. 

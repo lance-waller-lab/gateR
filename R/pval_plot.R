@@ -5,7 +5,7 @@
 #' @param input An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.
 #' @param alpha Numeric. The two-tailed alpha level for significance threshold (default in \code{\link{rrs}}, \code{\link{lotrrs}}, and \code{\link{gating}} functions is 0.05).
 #'
-#' @return An object of class 'raster' with categorical values:
+#' @return An object of class 'SpatRaster' with categorical values:
 #' 
 #' \itemize{
 #' \item A value of 1: Significant numerator.
@@ -13,8 +13,8 @@
 #' \item A value of 3: Significant denominator.
 #' }
 #'
-#' @importFrom raster cut raster
 #' @importFrom spatstat.geom as.im
+#' @importFrom terra rast values
 #' @export
 #'
 #' @keywords internal
@@ -27,8 +27,8 @@ pval_plot <- function(input,
     stop("The 'input' argument must be an object of class 'im'")
   }
 
-  out <- raster::raster(spatstat.geom::as.im(input))  # create raster
-  out <- raster::cut(out,
-                     breaks = c(-Inf, alpha / 2, 1 - alpha / 2, Inf))
+  out <- terra::rast(spatstat.geom::as.im(input))  # create SpatRaster
+  terra::values(out) <- cut(terra::values(out),
+                            breaks = c(-Inf, alpha / 2, 1 - alpha / 2, Inf))
   return(out)
 }

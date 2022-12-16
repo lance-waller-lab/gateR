@@ -5,7 +5,7 @@ citEntry(entry = "manual",
   author        = personList(as.person("Ian D. Buller")),
   publisher     = "The Comprehensive R Archive Network",
   year          = "2022",
-  number        = "0.1.12",
+  number        = "0.1.13.9000",
   doi           = "10.5281/zenodo.5347892",
   url           = "https://cran.r-project.org/package=gateR",
   
@@ -13,7 +13,7 @@ citEntry(entry = "manual",
   paste("Ian D. Buller (2022).",
         "gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation.",
         "The Comprehensive R Archive Network.",
-        "v0.1.12.",
+        "v0.1.13.9000.",
         "DOI:10.5281/zenodo.5347892",
         "Accessed by: https://cran.r-project.org/package=gateR")
 )

@@ -2,15 +2,17 @@ gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation <img src
 ===================================================
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/lance-waller-lab/gateR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lance-waller-lab/gateR/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](http://www.r-pkg.org/badges/version/gateR)](https://cran.r-project.org/package=gateR)
 [![CRAN version](https://www.r-pkg.org/badges/version-ago/gateR)](https://cran.r-project.org/package=gateR)
-[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/gateR?color=blue)](https://r-pkg.org/pkg/gateR)
+[![CRAN RStudio mirror downloads total](https://cranlogs.r-pkg.org/badges/grand-total/gateR?color=blue)](https://r-pkg.org/pkg/gateR)
+[![CRAN RStudio mirror downloads monthly ](http://cranlogs.r-pkg.org/badges/gateR)](https://www.r-pkg.org:443/pkg/gateR)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![GitHub last commit](https://img.shields.io/github/last-commit/lance-waller-lab/gateR)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5347892.svg)](https://doi.org/10.5281/zenodo.5347892)
 <!-- badges: end -->
 
-**Date repository last updated**: December 01, 2022
+**Date repository last updated**: December 16, 2022
 
 <h2 id="overview">
 

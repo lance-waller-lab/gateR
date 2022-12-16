@@ -48,10 +48,10 @@
 #' @importFrom graphics close.screen par screen split.screen 
 #' @importFrom grDevices chull dev.off png
 #' @importFrom lifecycle badge deprecate_warn deprecated is_present
-#' @importFrom raster extent values
 #' @importFrom spatstat.geom owin ppp 
 #' @importFrom sparr OS risk
 #' @importFrom stats relevel
+#' @importFrom terra ext values
 #' @export 
 #'
 #' @examples
@@ -248,14 +248,14 @@ lotrrs <- function(dat,
                         upper_lrr = upper_lrr,
                         lower_lrr = lower_lrr)
     ## Extent
-    blim <- as.vector(raster::extent(tr_plot$v))
+    blim <- as.vector(terra::ext(tr_plot$v))
     xlims <- blim[1:2]
     ylims <- blim[3:4]
 
     # Plot of ratio and p-values
     #Vnames <- names(dat) # axis names
     Ps <- pval_plot(out$P, alpha = out$alpha)
-    if (all(raster::values(Ps)[!is.na(raster::values(Ps))] == 2) | all(is.na(raster::values(Ps)))) {
+    if (all(terra::values(Ps)[!is.na(terra::values(Ps))] == 2) | all(is.na(terra::values(Ps)))) {
       pcols <- rcols[2]
       brp <- c(1, 3)
       atp <- 2

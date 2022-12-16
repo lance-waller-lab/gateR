@@ -12,7 +12,7 @@
 #' @return An object of class 'list'. This is a named list with the following components:
 #'
 #' \describe{
-#' \item{\code{v}}{An object of class 'vector' for the estimated ecological niche values.}
+#' \item{\code{v}}{An object of class 'SpatRaster' for the estimated gating surface.}
 #' \item{\code{cols}}{An object of class 'vector', returns diverging color palette values.}
 #' \item{\code{breaks}}{An object of class 'vector', returns diverging color palette breaks.}
 #' \item{\code{at}}{An object of class 'vector', returns legend breaks.}
@@ -20,7 +20,7 @@
 #' }
 #'
 #' @importFrom grDevices colorRampPalette
-#' @importFrom raster raster
+#' @importFrom terra rast values
 #' @export
 #'
 #' @keywords internal
@@ -41,30 +41,30 @@ lrr_plot <- function(input,
     stop("The 'cols' argument must be a vector of length 3")
   }
 
-  out <- raster::raster(input)  # create raster
+  out <- terra::rast(input)  # create SpatRaster
 
-  min_raw_value <- min(out[is.finite(out)], na.rm = TRUE) # minimum absolute value of raster
-  max_raw_value <- max(out[is.finite(out)], na.rm = TRUE) # maximum absolute value of raster
+  min_raw_value <- min(terra::values(out)[is.finite(terra::values(out))], na.rm = TRUE) # minimum absolute value of SpatRaster
+  max_raw_value <- max(terra::values(out)[is.finite(terra::values(out))], na.rm = TRUE) # maximum absolute value of SpatRaster
   
   # Restrict spurious log relative risk values
   if (!is.null(lower_lrr)) {
     if (lower_lrr >= 0) {
       stop("The 'lower_lrr' argument must be a numeric value less than zero")
     }
-    out[out <= lower_lrr] <- lower_lrr
+    terra::values(out)[terra::values(out) <= lower_lrr] <- lower_lrr
   }
   if (!is.null(upper_lrr)) {
     if (upper_lrr <= 0) {
       stop("The 'upper_lrr' argument must be a numeric value greater than zero")
     }
-    out[out >= upper_lrr] <- upper_lrr
+    terra::values(out)[terra::values(out) >= upper_lrr] <- upper_lrr
   }
 
   # Identify ramp above and below midpoint
-  lowerhalf <- length(out[out < midpoint & !is.na(out)]) # values below 0
-  upperhalf <- length(out[out > midpoint & !is.na(out)]) # values above 0
-  min_absolute_value <- min(out[is.finite(out)], na.rm = TRUE) # minimum absolute value of raster
-  max_absolute_value <- max(out[is.finite(out)], na.rm = TRUE) # maximum absolute value of raster
+  lowerhalf <- length(terra::values(out)[terra::values(out) < midpoint & !is.na(terra::values(out))]) # values below 0
+  upperhalf <- length(terra::values(out)[terra::values(out) > midpoint & !is.na(terra::values(out))]) # values above 0
+  min_absolute_value <- min(terra::values(out)[is.finite(terra::values(out))], na.rm = TRUE) # minimum absolute value of raster
+  max_absolute_value <- max(terra::values(out)[is.finite(terra::values(out))], na.rm = TRUE) # maximum absolute value of raster
 
   # Color ramp parameters
   ## Colors

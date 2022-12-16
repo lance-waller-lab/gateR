@@ -1,7 +1,9 @@
-## This is the twelth resubmission
+## This is the thirteenth resubmission
 
 * Updates since previous submission:
-  * Updated maintainer contact information
+  * Migrated R-spatial dependency
+  * Replaced `raster` in Imports with `terra` because of imminent package retirement
+  * Updated documentation throughout
 
 * Documentation for DESCRIPTION references the following DOIs that throw a NOTE in win-builder, Fedora Linux, and Ubuntu Linux but are valid URLs:
   * <https://doi.org/10.1002/sim.4780090616>
@@ -15,7 +17,7 @@
   * <https://doi.org/10.1111/j.2517-6161.1995.tb02031.x>
   
 ## Test environments
-* local OS X install, R 4.2.1
+* local Windows install, R 4.2.1
 * win-builder, (devel, release, oldrelease)
 * Rhub
   * Fedora Linux, R-devel, clang, gfortran

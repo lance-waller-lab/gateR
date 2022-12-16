@@ -12,7 +12,7 @@ pval_plot(input, alpha)
 \item{alpha}{Numeric. The two-tailed alpha level for significance threshold (default in \code{\link{rrs}}, \code{\link{lotrrs}}, and \code{\link{gating}} functions is 0.05).}
 }
 \value{
-An object of class 'raster' with categorical values:
+An object of class 'SpatRaster' with categorical values:
 
 \itemize{
 \item A value of 1: Significant numerator.
