@@ -34,7 +34,7 @@ For a two-group comparison of two conditions, we estimate two relative risk surf
     2. Condition 1B vs. Condition 1A
 2. Estimate the relative risk surface for the ratio:
 
-<img src="http://www.sciweavers.org/tex2img.php?eq=%5Cfrac%7B%20%5Cbig%28%5Cfrac%7BCondition2B%7D%7BCondition2A%7D%5Cbig%29%7D%7B%5Cbig%28%5Cfrac%7BCondition1B%7D%7BCondition1A%7D%5Cbig%29%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="\frac{ \big(\frac{Condition2B}{Condition2A}\big)}{\big(\frac{Condition1B}{Condition1A}\big)}" width="100" height="58" />
+$$\frac{ \big(\frac{Condition2B}{Condition2A}\big)}{\big(\frac{Condition1B}{Condition1A}\big)}$$
 
 Within areas where the relative risk exceeds an asymptotic normal assumption, the `gateR` package has the functionality to examine the features of these cells. Basic visualization is also supported. 
 
