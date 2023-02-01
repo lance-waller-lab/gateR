@@ -1,19 +1,19 @@
-citHeader("To cite gateR in publications, please use the following and include the version number and DOI:")
-
-citEntry(entry = "manual",
-  title         = "gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation",
-  author        = personList(as.person("Ian D. Buller")),
-  publisher     = "The Comprehensive R Archive Network",
-  year          = "2022",
-  number        = "0.1.13.9000",
-  doi           = "10.5281/zenodo.5347892",
-  url           = "https://cran.r-project.org/package=gateR",
+bibentry(bibtype = "manual",
+  title          = "gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation",
+  author         = as.person("Ian D. Buller"),
+  publisher      = "The Comprehensive R Archive Network",
+  year           = "2023",
+  number         = "0.1.13",
+  doi            = "10.5281/zenodo.5347892",
+  url            = "https://cran.r-project.org/package=gateR",
   
-  textVersion = 
-  paste("Ian D. Buller (2022).",
+  textVersion    = 
+  paste("Ian D. Buller (2023).",
         "gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation.",
         "The Comprehensive R Archive Network.",
-        "v0.1.13.9000.",
+        "v0.1.13",
         "DOI:10.5281/zenodo.5347892",
-        "Accessed by: https://cran.r-project.org/package=gateR")
+        "Accessed by: https://cran.r-project.org/package=gateR"),
+        
+  header         = "To cite gateR in publications, please use the following and include the version number and DOI:"
 )
