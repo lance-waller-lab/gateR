@@ -1,8 +1,7 @@
-## This is the fourteenth resubmission
+## This is the fifteenth resubmission
 
 * Updates since previous submission:
-  * Fixed bug in calculation of False Discovery Rate in internal `pval_correct()` function
-  * Argument `plot_cols` correctly renamed `cols` in `lrr_plot()` function
+  * Fixed 'Moved Permanently' content by replacing the old URL with the new URL
 
 * Documentation for DESCRIPTION references the following DOIs that throw a NOTE in win-builder, Fedora Linux, and Ubuntu Linux but are valid URLs:
   * <https://doi.org/10.1002/sim.4780090616>

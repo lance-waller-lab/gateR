@@ -1,5 +1,8 @@
 # gateR (development version)
 
+## gateR v0.1.15
+* Fixed 'Moved Permanently' content by replacing the old URL with the new URL
+
 ## gateR v0.1.14
 * Fixed bug in calculation of False Discovery Rate in internal `pval_correct()` function
 * Argument `plot_cols` correctly renamed `cols` in `lrr_plot()` function
