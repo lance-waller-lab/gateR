@@ -2,7 +2,7 @@
 % Please edit documentation in R/pval_correct.R
 \name{pval_correct}
 \alias{pval_correct}
-\title{Calculate p-value corrections}
+\title{Calculate p-value corrections for multiple testing}
 \usage{
 pval_correct(
   input,

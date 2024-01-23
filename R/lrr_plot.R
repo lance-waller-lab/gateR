@@ -3,7 +3,7 @@
 #' Internal function to convert an object of class 'im' to values readable by \code{\link[fields]{image.plot}} function within the \code{\link{rrs}} and \code{\link{lotrrs}} functions.
 #'
 #' @param input An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.
-#' @param plot_cols Character string of length three (3) specifying the colors for plotting: 1) numerator, 2) insignificant, and 3) denominator from the \code{\link{rrs}} or \code{\link{lotrrs}}  function.
+#' @param cols Character string of length three (3) specifying the colors for plotting: 1) numerator, 2) insignificant, and 3) denominator from the \code{\link{rrs}} or \code{\link{lotrrs}}  function.
 #' @param midpoint Numeric. The value to center the diverging color palette.
 #' @param lower_lrr Numeric. The lower value to concatenate the color key. The default (NULL) uses the minimum value from \code{input}.
 #' @param upper_lrr Numeric. The upper value to concatenate the color key. The default (NULL) uses the maximum value from \code{input}.

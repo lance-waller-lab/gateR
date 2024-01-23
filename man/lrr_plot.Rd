@@ -16,6 +16,8 @@ lrr_plot(
 \arguments{
 \item{input}{An object of class 'rrs' from the \code{\link{rrs}} or \code{\link{lotrrs}} function.}
 
+\item{cols}{Character string of length three (3) specifying the colors for plotting: 1) numerator, 2) insignificant, and 3) denominator from the \code{\link{rrs}} or \code{\link{lotrrs}}  function.}
+
 \item{midpoint}{Numeric. The value to center the diverging color palette.}
 
 \item{lower_lrr}{Numeric. The lower value to concatenate the color key. The default (NULL) uses the minimum value from \code{input}.}
@@ -23,8 +25,6 @@ lrr_plot(
 \item{upper_lrr}{Numeric. The upper value to concatenate the color key. The default (NULL) uses the maximum value from \code{input}.}
 
 \item{digits}{Integer. The number of significant digits for the labels using the \code{round} function (default is 1).}
-
-\item{plot_cols}{Character string of length three (3) specifying the colors for plotting: 1) numerator, 2) insignificant, and 3) denominator from the \code{\link{rrs}} or \code{\link{lotrrs}}  function.}
 }
 \value{
 An object of class 'list'. This is a named list with the following components:

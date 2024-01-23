@@ -1,10 +1,8 @@
-## This is the thirteenth resubmission
+## This is the fourteenth resubmission
 
 * Updates since previous submission:
-  * Migrated R-spatial dependency
-  * Replaced `raster` in Imports with `terra` because of imminent package retirement
-  * Updated documentation throughout
-  * Updated citation style for CITATION file
+  * Fixed bug in calculation of False Discovery Rate in internal `pval_correct()` function
+  * Argument `plot_cols` correctly renamed `cols` in `lrr_plot()` function
 
 * Documentation for DESCRIPTION references the following DOIs that throw a NOTE in win-builder, Fedora Linux, and Ubuntu Linux but are valid URLs:
   * <https://doi.org/10.1002/sim.4780090616>

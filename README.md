@@ -12,7 +12,7 @@ gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation <img src
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5347892.svg)](https://doi.org/10.5281/zenodo.5347892)
 <!-- badges: end -->
 
-**Date repository last updated**: February 01, 2023
+**Date repository last updated**: January 22, 2024
 
 <h2 id="overview">
 
@@ -250,6 +250,17 @@ test_rrs <- gateR::rrs(dat = obs_dat[ , -7:-6])
 ## A p-value uncorrected for multiple testing
 ## For "arcsinh_CD8" and "arcsinh_CD3"
 test_lotrrs <- gateR::lotrrs(dat = obs_dat[ , -5:-4])
+
+# ------------------------------------------ #
+# Run gateR with multiple testing correction #
+# ------------------------------------------ #
+
+## False Discovery Rate
+test_gating_fdr <- gateR::gating(dat = obs_dat,
+                              vars = c("arcsinh_CD4", "arcsinh_CD38",
+                                       "arcsinh_CD8", "arcsinh_CD3"),
+                              n_condition = 1,
+                              p_correct = "FDR")
 ```
 
 ### Funding
