@@ -1,5 +1,9 @@
 # gateR (development version)
 
+## gateR v0.1.16
+* Renamed 'package.R' to 'gateR-package.R' after Roxygen (>=7.3.0) update
+* Fixed Rd `\link{}` targets missing package within 'gateR-package.Rd'
+
 ## gateR v0.1.15
 * Fixed 'Moved Permanently' content by replacing the old URL with the new URL
 

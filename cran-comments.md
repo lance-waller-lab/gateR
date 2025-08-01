@@ -1,7 +1,8 @@
-## This is the fifteenth resubmission
+## This is the sixteenth resubmission
 
 * Updates since previous submission:
-  * Fixed 'Moved Permanently' content by replacing the old URL with the new URL
+  * Renamed 'package.R' to 'gateR-package.R' after Roxygen (>=7.3.0) update
+  * Fixed Rd `\link{}` targets missing package within 'gateR-package.Rd'
 
 * Documentation for DESCRIPTION references the following DOIs that throw a NOTE in win-builder, Fedora Linux, and Ubuntu Linux but are valid URLs:
   * <https://doi.org/10.1002/sim.4780090616>
@@ -15,7 +16,7 @@
   * <https://doi.org/10.1111/j.2517-6161.1995.tb02031.x>
   
 ## Test environments
-* local Windows install, R 4.2.1
+* local Windows install, R 4.5.1
 * win-builder, (devel, release, oldrelease)
 * Rhub
   * Fedora Linux, R-devel, clang, gfortran
