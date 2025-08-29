@@ -40,7 +40,7 @@ Useful links:
 
 }
 \author{
-Ian D. Buller\cr \emph{DLH, LLC (formerly known as Social & Scientific Systems, Inc.) Bethesda, Maryland, USA (current); Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland, USA (former); Environmental Health Sciences, James T. Laney School of Graduate Studies, Emory University, Atlanta, Georgia, USA. (original)}\cr
+Ian D. Buller\cr \emph{DLH, LLC (formerly known as Social & Scientific Systems, Inc.), Bethesda, Maryland, USA (current); Occupational and Environmental Epidemiology Branch, Division of Cancer Epidemiology and Genetics, National Cancer Institute, National Institutes of Health, Rockville, Maryland, USA (former); Environmental Health Sciences, James T. Laney School of Graduate Studies, Emory University, Atlanta, Georgia, USA. (original)}\cr
 
 Maintainer: I.D.B. \email{ian.buller@alumni.emory.edu}
 }

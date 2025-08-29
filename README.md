@@ -7,12 +7,12 @@ gateR: Flow/Mass Cytometry Gating via Spatial Kernel Density Estimation <img src
 [![CRAN version](https://www.r-pkg.org/badges/version-ago/gateR)](https://cran.r-project.org/package=gateR)
 [![CRAN RStudio mirror downloads total](https://cranlogs.r-pkg.org/badges/grand-total/gateR?color=blue)](https://r-pkg.org/pkg/gateR)
 [![CRAN RStudio mirror downloads monthly ](http://cranlogs.r-pkg.org/badges/gateR)](https://www.r-pkg.org:443/pkg/gateR)
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/license/apache-2-0/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/license/apache-2-0)
 ![GitHub last commit](https://img.shields.io/github/last-commit/lance-waller-lab/gateR)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5347892.svg)](https://doi.org/10.5281/zenodo.5347892)
+[![](https://img.shields.io/badge/DOI-10.32614/CRAN.package.gateR-1f57b6?style=flat&link=https://doi.org/10.32614/CRAN.package.gateR)](https://doi.org/10.32614/CRAN.package.gateR)
 <!-- badges: end -->
 
-**Date repository last updated**: August 01, 2025
+**Date repository last updated**: August 29, 2025
 
 <h2 id="overview">
 
@@ -265,7 +265,7 @@ test_gating_fdr <- gateR::gating(dat = obs_dat,
 
 ### Funding
 
-This package was developed while the author was originally a doctoral student at in the [Environmental Health Sciences doctoral program](https://sph.emory.edu/departments/eh/degree-programs/phd/index.html) at [Emory University](https://www.emory.edu/home/index.html) and later as a postdoctoral fellow supported by the [Cancer Prevention Fellowship Program](https://cpfp.cancer.gov/) at the [National Cancer Institute](https://www.cancer.gov/). Any modifications since December 05, 2022 were made while the author was an employee of [DLH, LLC](https://www.dlhcorp.com) (formerly Social & Scientific Systems, Inc.).
+This package was developed while the author was originally a doctoral student at in the [Environmental Health Sciences doctoral program](https://sph.emory.edu/degrees-programs/phd/environmental-health-sciences) at [Emory University](https://www.emory.edu/home/index.html) and later as a postdoctoral fellow supported by the [Cancer Prevention Fellowship Program](https://cpfp.cancer.gov/) at the [National Cancer Institute](https://www.cancer.gov/). Any modifications since December 05, 2022 were made while the author was an employee of [DLH, LLC](https://www.dlhcorp.com) (formerly Social & Scientific Systems, Inc.).
 
 ### Acknowledgments
 
